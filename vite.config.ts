@@ -13,12 +13,12 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('echarts') || id.includes('zrender')) return 'vendor-echarts'
-            if (id.includes('antd') || id.includes('@ant-design') || id.includes('@rc-component')) return 'vendor-antd'
+            if (id.includes('antd') || id.includes('@ant-design') || id.includes('@rc-component') || id.includes('dayjs')) return 'vendor-antd'
             if (id.includes('react-dom')) return 'vendor-react-dom'
             if (id.includes('react/')) return 'vendor-react'
             if (id.includes('react-router')) return 'vendor-router'
             if (id.includes('lucide-react')) return 'vendor-lucide'
-            if (id.includes('dayjs')) return 'vendor-dayjs'
+
           }
         },
       },

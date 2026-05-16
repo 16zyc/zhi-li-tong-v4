@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { ConfigProvider, Spin } from 'antd'
+import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import AppLayout from '@/components/Layout/AppLayout'
 import Home from '@/pages/Home/index'
 
@@ -20,11 +20,30 @@ const WorkflowIndex = lazy(() => import('@/pages/Workflow/index'))
 const StageDetail = lazy(() => import('@/pages/Workflow/StageDetail'))
 const Chat = lazy(() => import('@/pages/Chat/index'))
 
-const Loading = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-    <Spin size="large" tip="加载中..." />
-  </div>
-)
+function PageLoading() {
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    const t = setTimeout(() => setShow(true), 150)
+    return () => clearTimeout(t)
+  }, [])
+  if (!show) return null
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      height: '50vh', opacity: 0.6,
+      animation: 'fadeIn 0.3s ease',
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          width: 36, height: 36, margin: '0 auto 16px',
+          border: '3px solid #e2e8f0', borderTopColor: '#1a365d',
+          borderRadius: '50%', animation: 'spin 0.8s linear infinite',
+        }} />
+        <div style={{ color: '#94a3b8', fontSize: 13 }}>加载中...</div>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -50,7 +69,7 @@ export default function App() {
       }}
     >
       <BrowserRouter>
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<PageLoading />}>
           <Routes>
             <Route element={<AppLayout />}>
               <Route path="/" element={<Home />} />

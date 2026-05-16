@@ -224,7 +224,9 @@ const AppLayout = () => {
           </div>
         </Header>
         <Content style={{ margin: 24, minHeight: 280 }}>
-          <Outlet />
+          <div key={location.pathname} className="page-fade-in">
+            <Outlet />
+          </div>
         </Content>
       </Layout>
     </Layout>

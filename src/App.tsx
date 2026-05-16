@@ -67,7 +67,7 @@ export default function App() {
         },
       }}
     >
-      <BrowserRouter>
+      <BrowserRouter basename="/zhi-li-tong-v4">
         <Suspense fallback={<PageLoading />}>
           <Routes>
             <Route element={<AppLayout />}>

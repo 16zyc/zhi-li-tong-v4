@@ -11,6 +11,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          'vendor-router': ['react-router-dom'],
           'vendor-echarts': ['echarts', 'echarts-for-react'],
           'vendor-utils': ['zustand', 'clsx', 'tailwind-merge', 'lucide-react'],
         },
@@ -36,11 +37,6 @@ export default defineConfig({
           name: 'react-dom',
           var: 'ReactDOM',
           path: 'https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js',
-        },
-        {
-          name: 'react-router-dom',
-          var: 'ReactRouterDOM',
-          path: 'https://cdn.jsdelivr.net/npm/react-router-dom@7.15.1/dist/umd/react-router-dom.production.min.js',
         },
         {
           name: 'antd',

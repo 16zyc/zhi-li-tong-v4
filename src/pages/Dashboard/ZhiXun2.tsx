@@ -80,7 +80,7 @@ export default function ZhiXun2() {
   const canNext = carouselIdx + 3 < caseData.length
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
       <div style={{ marginBottom: 24 }}>
         <Title level={3} style={{ color: '#fff', margin: 0 }}>
           <BookOpen size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />

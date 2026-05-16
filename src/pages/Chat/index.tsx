@@ -125,7 +125,7 @@ export default function Chat() {
   }
 
   return (
-    <div style={{ height: '100vh', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', display: 'flex', flexDirection: 'column', color: '#fff' }}>
+    <div style={{ height: '100%', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', display: 'flex', flexDirection: 'column', color: '#fff' }}>
       <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(148,163,184,0.1)', flexShrink: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>

@@ -74,7 +74,7 @@ export default function ZhiCe() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
           <Title level={3} style={{ color: '#fff', margin: 0 }}>

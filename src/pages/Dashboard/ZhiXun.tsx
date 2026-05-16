@@ -7,9 +7,8 @@ import { departmentData } from '@/mock/departmentData'
 const { Title, Text } = Typography
 
 const glassCard: React.CSSProperties = {
-  background: 'rgba(30, 41, 59, 0.75)',
-  backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(148, 163, 184, 0.12)',
+  background: '#fff',
+  border: '1px solid #f0f0f0',
   borderRadius: 12,
 }
 
@@ -75,14 +74,14 @@ const issueLevelMap: Record<string, string> = {
 
 const pieOption = {
   tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
-  legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: '#94a3b8', fontSize: 12 } },
+  legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { color: '#8c8c8c', fontSize: 12 } },
   series: [{
     type: 'pie',
     radius: ['40%', '70%'],
     center: ['35%', '50%'],
     avoidLabelOverlap: false,
     label: { show: false },
-    emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold', color: '#fff' } },
+    emphasis: { label: { show: true, fontSize: 14, fontWeight: 'bold', color: '#1a365d' } },
     data: complianceData.map(d => ({
       name: d.name,
       value: d.value,
@@ -94,17 +93,17 @@ const pieOption = {
 }
 
 const columns = [
-  { title: '任务名称', dataIndex: 'name', key: 'name', render: (t: string) => <Text style={{ color: '#fff', fontWeight: 600 }}>{t}</Text> },
-  { title: '所属项目', dataIndex: 'project', key: 'project', render: (t: string) => <Text style={{ color: '#94a3b8' }}>{t}</Text> },
+  { title: '任务名称', dataIndex: 'name', key: 'name', render: (t: string) => <Text style={{ color: '#1a365d', fontWeight: 600 }}>{t}</Text> },
+  { title: '所属项目', dataIndex: 'project', key: 'project', render: (t: string) => <Text style={{ color: '#8c8c8c' }}>{t}</Text> },
   { title: '核验类型', dataIndex: 'type', key: 'type', render: (t: string) => <Tag color={typeColorMap[t]}>{t}</Tag> },
   { title: '状态', dataIndex: 'status', key: 'status', render: (t: string) => { const s = statusLabelMap[t]; return <Tag color={s.color}>{s.label}</Tag> } },
-  { title: '截止日期', dataIndex: 'deadline', key: 'deadline', render: (t: string) => <Space size={4}><Clock size={12} color="#94a3b8" /><Text style={{ color: '#94a3b8', fontSize: 12 }}>{t}</Text></Space> },
+  { title: '截止日期', dataIndex: 'deadline', key: 'deadline', render: (t: string) => <Space size={4}><Clock size={12} color="#8c8c8c" /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>{t}</Text></Space> },
   {
     title: '操作', key: 'action', render: (_: unknown, r: typeof verifyTasks[0]) => (
       <Space size={4}>
         {r.status !== 'completed' && <Button size="small" type="primary" style={{ borderRadius: 6 }} icon={<Search size={12} style={{ verticalAlign: -1 }} />}>开始核验</Button>}
-        <Button size="small" style={{ background: 'rgba(148,163,184,0.12)', color: '#e2e8f0', border: 'none', borderRadius: 6 }} icon={<FileCheck size={12} style={{ verticalAlign: -1 }} />}>查看材料</Button>
-        <Button size="small" style={{ background: 'rgba(148,163,184,0.12)', color: '#e2e8f0', border: 'none', borderRadius: 6 }} icon={<Shield size={12} style={{ verticalAlign: -1 }} />}>生成报告</Button>
+        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<FileCheck size={12} style={{ verticalAlign: -1 }} />}>查看材料</Button>
+        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<Shield size={12} style={{ verticalAlign: -1 }} />}>生成报告</Button>
       </Space>
     ),
   },
@@ -112,22 +111,22 @@ const columns = [
 
 export default function ZhiXun() {
   return (
-    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'transparent', padding: 24, color: '#333' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ color: '#fff', margin: 0 }}>
+          <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
             <Shield size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#8b5cf6' }} />
             智巡助手 · 审计核验工作台
           </Title>
-          <Text style={{ color: '#94a3b8', fontSize: 14, marginTop: 6, display: 'block' }}>
+          <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
             钱总监，当前有
             <Text style={{ color: '#3b82f6', fontWeight: 600 }}>3项核验任务</Text>，
             <Text style={{ color: '#f59e0b', fontWeight: 600 }}>2项问题待整改</Text>
           </Text>
         </div>
         <Space>
-          <Badge count={2}><Button type="text" style={{ color: '#94a3b8' }} icon={<AlertTriangle size={18} />} /></Badge>
-          <Badge count={3}><Button type="text" style={{ color: '#94a3b8' }} icon={<Clock size={18} />} /></Badge>
+          <Badge count={2}><Button type="text" style={{ color: '#8c8c8c' }} icon={<AlertTriangle size={18} />} /></Badge>
+          <Badge count={3}><Button type="text" style={{ color: '#8c8c8c' }} icon={<Clock size={18} />} /></Badge>
         </Space>
       </div>
 
@@ -142,7 +141,7 @@ export default function ZhiXun() {
             <Card style={glassCard} styles={{ body: { padding: 16 } }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <Text style={{ color: '#94a3b8', fontSize: 13 }}>{item.label}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 13 }}>{item.label}</Text>
                   <div style={{ fontSize: 32, fontWeight: 700, color: item.color, marginTop: 4 }}>
                     {item.value}<span style={{ fontSize: 14, fontWeight: 400, marginLeft: 2 }}>{item.suffix}</span>
                   </div>
@@ -159,9 +158,9 @@ export default function ZhiXun() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={24}>
           <Card
-            title={<Space><Search size={16} color="#3b82f6" /><Text style={{ color: '#fff', fontWeight: 600 }}>核验任务列表</Text><Tag color="blue">{verifyTasks.filter(v => v.status !== 'completed').length}项待处理</Tag></Space>}
+            title={<Space><Search size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>核验任务列表</Text><Tag color="blue">{verifyTasks.filter(v => v.status !== 'completed').length}项待处理</Tag></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: 0 } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: 0 } }}
           >
             <Table
               dataSource={verifyTasks}
@@ -178,9 +177,9 @@ export default function ZhiXun() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={14}>
           <Card
-            title={<Space><AlertTriangle size={16} color="#f59e0b" /><Text style={{ color: '#fff', fontWeight: 600 }}>问题跟踪</Text><Tag color="orange">{issues.filter(i => i.status === '待整改').length}项待整改</Tag></Space>}
+            title={<Space><AlertTriangle size={16} color="#f59e0b" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>问题跟踪</Text><Tag color="orange">{issues.filter(i => i.status === '待整改').length}项待整改</Tag></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             {issues.map(issue => {
               const sm = issueStatusMap[issue.status]
@@ -188,22 +187,22 @@ export default function ZhiXun() {
                 <div key={issue.id} style={{ padding: '10px 14px', background: sm.bg, borderRadius: 8, marginBottom: 8, borderLeft: `3px solid ${issueLevelMap[issue.level]}` }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                     <Space size={8}>
-                      <Text style={{ color: '#fff', fontWeight: 600, fontSize: 14 }}>{issue.name}</Text>
+                      <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 14 }}>{issue.name}</Text>
                       <Tag color={sm.color === '#ef4444' ? 'red' : sm.color === '#f59e0b' ? 'orange' : 'green'} style={{ margin: 0 }}>{issue.status}</Tag>
                     </Space>
                     <Space size={4}>
-                      <Clock size={12} color="#94a3b8" />
-                      <Text style={{ color: '#94a3b8', fontSize: 12 }}>{issue.deadline}</Text>
+                      <Clock size={12} color="#8c8c8c" />
+                      <Text style={{ color: '#8c8c8c', fontSize: 12 }}>{issue.deadline}</Text>
                     </Space>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Space size={4}>
-                      <MapPin size={12} color="#94a3b8" />
-                      <Text style={{ color: '#94a3b8', fontSize: 12 }}>责任部门：{issue.dept}（{deptHeadMap[issue.dept] || '—'}）</Text>
+                      <MapPin size={12} color="#8c8c8c" />
+                      <Text style={{ color: '#8c8c8c', fontSize: 12 }}>责任部门：{issue.dept}（{deptHeadMap[issue.dept] || '—'}）</Text>
                     </Space>
                     <Space size={4}>
                       {issue.status !== '已整改' && <Button size="small" type="primary" style={{ borderRadius: 6, fontSize: 12 }}>催办整改</Button>}
-                      <Button size="small" style={{ background: 'rgba(148,163,184,0.12)', color: '#e2e8f0', border: 'none', borderRadius: 6, fontSize: 12 }}>详情</Button>
+                      <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6, fontSize: 12 }}>详情</Button>
                     </Space>
                   </div>
                 </div>
@@ -213,19 +212,19 @@ export default function ZhiXun() {
         </Col>
         <Col span={10}>
           <Card
-            title={<Space><Shield size={16} color="#8b5cf6" /><Text style={{ color: '#fff', fontWeight: 600 }}>合规检查结果</Text></Space>}
+            title={<Space><Shield size={16} color="#8b5cf6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>合规检查结果</Text></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '8px 16px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 16px 16px' } }}
           >
             <ReactECharts option={pieOption} style={{ height: 240 }} />
             <div style={{ marginTop: 8 }}>
               {complianceData.map(d => (
                 <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0' }}>
-                  <Text style={{ color: '#94a3b8', fontSize: 12, width: 64 }}>{d.name}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 12, width: 64 }}>{d.name}</Text>
                   <Progress
                     percent={d.value}
                     strokeColor={d.value >= 90 ? '#22c55e' : d.value >= 85 ? '#3b82f6' : '#f59e0b'}
-                    trailColor="rgba(148,163,184,0.12)"
+                    trailColor="#f0f0f0"
                     size="small"
                     style={{ flex: 1 }}
                   />
@@ -240,23 +239,23 @@ export default function ZhiXun() {
       <Row gutter={16}>
         <Col span={24}>
           <Card
-            title={<Space><Clock size={16} color="#06b6d4" /><Text style={{ color: '#fff', fontWeight: 600 }}>近期核验记录</Text></Space>}
+            title={<Space><Clock size={16} color="#06b6d4" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>近期核验记录</Text></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             <Timeline
               items={recentRecords.map(r => ({
                 color: r.result.includes('问题') || r.result.includes('缺失') || r.result.includes('不完整') ? 'red' : 'green',
                 children: (
-                  <div style={{ padding: '10px 14px', background: 'rgba(148,163,184,0.06)', borderRadius: 8 }}>
+                  <div style={{ padding: '10px 14px', background: 'rgba(0,0,0,0.04)', borderRadius: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                       <Space size={8}>
                         {r.icon}
-                        <Text style={{ color: '#fff', fontWeight: 600, fontSize: 14 }}>{r.action}</Text>
+                        <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 14 }}>{r.action}</Text>
                       </Space>
                       <Text style={{ color: '#64748b', fontSize: 12 }}>{r.time}</Text>
                     </div>
-                    <Text style={{ color: '#94a3b8', fontSize: 13, lineHeight: 1.6 }}>{r.result}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 13, lineHeight: 1.6 }}>{r.result}</Text>
                   </div>
                 ),
               }))}
@@ -266,11 +265,10 @@ export default function ZhiXun() {
       </Row>
 
       <style>{`
-        .ant-card { background: transparent !important; }
         .ant-table { background: transparent !important; }
-        .ant-table-thead > tr > th { background: rgba(148,163,184,0.06) !important; color: #94a3b8 !important; border-bottom: 1px solid rgba(148,163,184,0.1) !important; }
-        .ant-table-tbody > tr > td { border-bottom: 1px solid rgba(148,163,184,0.06) !important; color: #e2e8f0 !important; background: transparent !important; }
-        .ant-table-tbody > tr:hover > td { background: rgba(148,163,184,0.04) !important; }
+        .ant-table-thead > tr > th { background: #fafafa !important; color: #8c8c8c !important; border-bottom: 1px solid #f0f0f0 !important; }
+        .ant-table-tbody > tr > td { border-bottom: 1px solid #f0f0f0 !important; color: #333 !important; background: transparent !important; }
+        .ant-table-tbody > tr:hover > td { background: rgba(0,0,0,0.02) !important; }
         .ant-timeline-item-content { margin-inline-start: 20px !important; }
       `}</style>
     </div>

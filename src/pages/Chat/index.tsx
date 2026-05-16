@@ -10,9 +10,8 @@ import { useAppStore } from '@/store/useAppStore'
 const { Title, Text } = Typography
 
 const glassCard: React.CSSProperties = {
-  background: 'rgba(30, 41, 59, 0.75)',
-  backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(148, 163, 184, 0.12)',
+  background: '#fff',
+  border: '1px solid #f0f0f0',
   borderRadius: 12,
 }
 
@@ -125,15 +124,15 @@ export default function Chat() {
   }
 
   return (
-    <div style={{ height: '100%', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', display: 'flex', flexDirection: 'column', color: '#fff' }}>
-      <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(148,163,184,0.1)', flexShrink: 0 }}>
+    <div style={{ height: '100%', background: 'transparent', display: 'flex', flexDirection: 'column', color: '#333' }}>
+      <div style={{ padding: '16px 24px', borderBottom: '1px solid #f0f0f0', flexShrink: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <Title level={3} style={{ color: '#fff', margin: 0 }}>
+            <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
               <Zap size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />
               对话即操作
             </Title>
-            <Text style={{ color: '#94a3b8', fontSize: 14, marginTop: 4, display: 'block' }}>
+            <Text style={{ color: '#666', fontSize: 14, marginTop: 4, display: 'block' }}>
               所有操作，一句话完成
             </Text>
           </div>
@@ -159,11 +158,11 @@ export default function Chat() {
                 style={{
                   padding: '12px 16px',
                   borderRadius: msg.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
-                  background: msg.role === 'user' ? '#3b82f6' : 'rgba(30, 41, 59, 0.9)',
-                  border: msg.role === 'user' ? 'none' : '1px solid rgba(148,163,184,0.12)',
+                  background: msg.role === 'user' ? '#3b82f6' : '#fff',
+                  border: msg.role === 'user' ? 'none' : '1px solid #f0f0f0',
                 }}
               >
-                <Text style={{ color: '#fff', fontSize: 14, lineHeight: 1.7, display: 'block' }}>{msg.content}</Text>
+                <Text style={{ color: msg.role === 'user' ? '#fff' : '#333', fontSize: 14, lineHeight: 1.7, display: 'block' }}>{msg.content}</Text>
                 {msg.actionCards && msg.actionCards.length > 0 && (
                   <div style={{ marginTop: 10 }}>
                     {msg.actionCards.map((card, i) => (
@@ -171,21 +170,21 @@ export default function Chat() {
                         key={i}
                         style={{
                           padding: '10px 14px',
-                          background: 'rgba(148,163,184,0.08)',
+                          background: 'rgba(0,0,0,0.04)',
                           borderRadius: 8,
                           marginBottom: 6,
                           borderLeft: `3px solid ${actionCardColorMap[card.type] || '#3b82f6'}`,
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                          <Text style={{ color: '#fff', fontWeight: 600, fontSize: 13 }}>{card.title}</Text>
+                          <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 13 }}>{card.title}</Text>
                           {card.status && (
                             <Tag color={card.status === '红灯' ? 'red' : card.status === '黄灯' ? 'orange' : card.status === 'A' ? 'green' : card.status === 'B' ? 'blue' : 'default'} style={{ fontSize: 11, margin: 0 }}>
                               {card.status}
                             </Tag>
                           )}
                         </div>
-                        <Text style={{ color: '#94a3b8', fontSize: 12 }}>{card.description}</Text>
+                        <Text style={{ color: '#8c8c8c', fontSize: 12 }}>{card.description}</Text>
                       </div>
                     ))}
                   </div>
@@ -203,10 +202,10 @@ export default function Chat() {
         {sending && (
           <div style={{ display: 'flex', marginBottom: 16 }}>
             <Avatar style={{ background: '#3b82f6', marginRight: 10, flexShrink: 0 }} size={36} icon={<Bot size={18} />} />
-            <div style={{ padding: '12px 16px', borderRadius: '12px 12px 12px 2px', background: 'rgba(30, 41, 59, 0.9)', border: '1px solid rgba(148,163,184,0.12)' }}>
+            <div style={{ padding: '12px 16px', borderRadius: '12px 12px 12px 2px', background: '#fff', border: '1px solid #f0f0f0' }}>
               <Space>
                 <Sparkles size={14} color="#3b82f6" style={{ animation: 'pulse 1s infinite' }} />
-                <Text style={{ color: '#94a3b8', fontSize: 14 }}>正在思考...</Text>
+                <Text style={{ color: '#8c8c8c', fontSize: 14 }}>正在思考...</Text>
               </Space>
             </div>
           </div>
@@ -214,12 +213,12 @@ export default function Chat() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div style={{ padding: '12px 24px 20px', borderTop: '1px solid rgba(148,163,184,0.1)', flexShrink: 0 }}>
+      <div style={{ padding: '12px 24px 20px', borderTop: '1px solid #f0f0f0', flexShrink: 0 }}>
         <div style={{ marginBottom: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {quickChips.map(chip => (
             <Tag
               key={chip}
-              style={{ cursor: 'pointer', borderRadius: 16, padding: '2px 12px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', color: '#93c5fd', fontSize: 12 }}
+              style={{ cursor: 'pointer', borderRadius: 16, padding: '2px 12px', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.2)', color: '#3b82f6', fontSize: 12 }}
               onClick={() => handleSend(chip)}
             >
               <MessageSquare size={11} style={{ marginRight: 4, verticalAlign: -1 }} />

@@ -9,9 +9,8 @@ import { performanceData } from '@/mock/performanceData'
 const { Title, Text } = Typography
 
 const glassCard: React.CSSProperties = {
-  background: 'rgba(30, 41, 59, 0.75)',
-  backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(148, 163, 184, 0.12)',
+  background: '#fff',
+  border: '1px solid #f0f0f0',
   borderRadius: 12,
 }
 
@@ -28,10 +27,10 @@ const ringOption = (value: number, color: string) => ({
     center: ['50%', '50%'],
     startAngle: 90,
     silent: true,
-    label: { show: true, position: 'center', formatter: `${value}%`, fontSize: 22, fontWeight: 700, color: '#fff' },
+    label: { show: true, position: 'center', formatter: `${value}%`, fontSize: 22, fontWeight: 700, color: '#1a365d' },
     data: [
       { value, itemStyle: { color } },
-      { value: 100 - value, itemStyle: { color: 'rgba(148,163,184,0.12)' } },
+      { value: 100 - value, itemStyle: { color: 'rgba(0,0,0,0.06)' } },
     ],
   }],
 })
@@ -45,13 +44,13 @@ const gaugeOption = {
     max: 100,
     radius: '90%',
     progress: { show: true, width: 14, itemStyle: { color: '#f59e0b' } },
-    axisLine: { lineStyle: { width: 14, color: [[1, 'rgba(148,163,184,0.12)']] } },
+    axisLine: { lineStyle: { width: 14, color: [[1, 'rgba(0,0,0,0.06)']] } },
     axisTick: { show: false },
     splitLine: { show: false },
     axisLabel: { show: false },
     pointer: { show: false },
     anchor: { show: false },
-    title: { show: true, offsetCenter: [0, '60%'], fontSize: 14, color: '#94a3b8' },
+    title: { show: true, offsetCenter: [0, '60%'], fontSize: 14, color: '#8c8c8c' },
     detail: { valueAnimation: true, fontSize: 32, fontWeight: 700, color: '#f59e0b', offsetCenter: [0, '20%'], formatter: '{value}%' },
     data: [{ value: 78, name: '战略目标综合完成率' }],
   }],
@@ -74,21 +73,21 @@ export default function ZhiCe() {
   }, [])
 
   return (
-    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'transparent', padding: 24, color: '#333' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ color: '#fff', margin: 0 }}>
+          <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
             <Star size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#f59e0b' }} />
             智策助手 · 领导驾驶舱
           </Title>
-          <Text style={{ color: '#94a3b8', fontSize: 14, marginTop: 6, display: 'block' }}>
+          <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
             张总，{greeting}！当前重点关注：
             <Text style={{ color: '#ef4444', fontWeight: 600 }}>{redTasks.length}个红灯项目</Text>，
             <Text style={{ color: '#f59e0b', fontWeight: 600 }}>2项临近节点</Text>
           </Text>
         </div>
         <Badge count={5}>
-          <Button type="text" style={{ color: '#94a3b8' }} icon={<Bell size={18} />} />
+          <Button type="text" style={{ color: '#8c8c8c' }} icon={<Bell size={18} />} />
         </Badge>
       </div>
 
@@ -103,7 +102,7 @@ export default function ZhiCe() {
             <Card style={glassCard} styles={{ body: { padding: 16 } }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <Text style={{ color: '#94a3b8', fontSize: 13 }}>{item.label}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 13 }}>{item.label}</Text>
                   <div style={{ fontSize: i < 2 ? 28 : 36, fontWeight: 700, color: item.color, marginTop: 4,
                     animation: item.pulse ? 'pulse 2s infinite' : undefined }}>
                     {item.value}{i < 2 ? '%' : '个'}
@@ -126,21 +125,21 @@ export default function ZhiCe() {
 
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={14}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>风险项目预警</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>风险项目预警</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
             <Text style={{ color: '#ef4444', fontWeight: 600, fontSize: 13 }}>红灯项目 {redTasks.length}个</Text>
             <div style={{ marginTop: 8 }}>
               {redTasks.map(t => (
                 <div key={t.id} style={{ borderLeft: '3px solid #ef4444', background: 'rgba(239,68,68,0.06)', padding: '10px 14px', borderRadius: '0 8px 8px 0', marginBottom: 8 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text style={{ color: '#fff', fontWeight: 600 }}>{t.name}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 600 }}>{t.name}</Text>
                     <Tag color="red" style={{ margin: 0 }}>红灯</Tag>
                   </div>
-                  <Text style={{ color: '#94a3b8', fontSize: 12, display: 'block', marginTop: 4 }}>{t.description}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginTop: 4 }}>{t.description}</Text>
                   <Space size={6} style={{ marginTop: 8 }}>
                     <Button size="small" type="primary" danger>一键督办</Button>
-                    <Button size="small" style={{ background: 'rgba(148,163,184,0.12)', color: '#e2e8f0', border: 'none' }}>查看详情</Button>
-                    <Button size="small" style={{ background: 'rgba(148,163,184,0.12)', color: '#e2e8f0', border: 'none' }}>参考案例</Button>
+                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }}>查看详情</Button>
+                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }}>参考案例</Button>
                   </Space>
                 </div>
               ))}
@@ -150,13 +149,13 @@ export default function ZhiCe() {
               {yellowTasks.map(t => (
                 <div key={t.id} style={{ borderLeft: '3px solid #f59e0b', background: 'rgba(245,158,11,0.06)', padding: '10px 14px', borderRadius: '0 8px 8px 0', marginBottom: 8 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text style={{ color: '#fff', fontWeight: 600 }}>{t.name}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 600 }}>{t.name}</Text>
                     <Tag color="orange" style={{ margin: 0 }}>黄灯</Tag>
                   </div>
-                  <Text style={{ color: '#94a3b8', fontSize: 12, display: 'block', marginTop: 4 }}>{t.description}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginTop: 4 }}>{t.description}</Text>
                   <Space size={6} style={{ marginTop: 8 }}>
                     <Button size="small" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>一键督办</Button>
-                    <Button size="small" style={{ background: 'rgba(148,163,184,0.12)', color: '#e2e8f0', border: 'none' }}>查看详情</Button>
+                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }}>查看详情</Button>
                   </Space>
                 </div>
               ))}
@@ -164,8 +163,8 @@ export default function ZhiCe() {
           </Card>
         </Col>
         <Col span={10}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>部门红黑榜</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>部门红黑榜</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
             <Text style={{ color: '#22c55e', fontWeight: 600, fontSize: 13 }}>🏆 红榜 · 表彰</Text>
             {topDepts.map((d, i) => {
               const perf = performanceData.find(p => p.department === d.name)
@@ -176,8 +175,8 @@ export default function ZhiCe() {
                     {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
                   </span>
                   <div style={{ flex: 1, marginLeft: 12 }}>
-                    <Text style={{ color: '#fff', fontWeight: 600 }}>{d.name}</Text>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, marginLeft: 8 }}>负责人：{d.head}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 600 }}>{d.name}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, marginLeft: 8 }}>负责人：{d.head}</Text>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <Text style={{ color: '#22c55e', fontWeight: 700, fontSize: 18 }}>{d.score}</Text>
@@ -197,8 +196,8 @@ export default function ZhiCe() {
                 <div key={d.id} style={{ display: 'flex', alignItems: 'center', padding: '10px 12px', background: 'rgba(239,68,68,0.06)', borderRadius: 8, marginTop: 8 }}>
                   <span style={{ fontSize: 18, width: 32, textAlign: 'center' }}>⚠️</span>
                   <div style={{ flex: 1, marginLeft: 12 }}>
-                    <Text style={{ color: '#fff', fontWeight: 600 }}>{d.name}</Text>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, marginLeft: 8 }}>负责人：{d.head}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 600 }}>{d.name}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, marginLeft: 8 }}>负责人：{d.head}</Text>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <Text style={{ color: '#ef4444', fontWeight: 700, fontSize: 18 }}>{d.score}</Text>
@@ -216,21 +215,21 @@ export default function ZhiCe() {
 
       <Row gutter={16}>
         <Col span={10}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>战略完成总览</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '8px 16px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>战略完成总览</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 16px 16px' } }}>
             <ReactECharts option={gaugeOption} style={{ height: 220 }} />
           </Card>
         </Col>
         <Col span={14}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>🤖 AI智能建议</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>🤖 AI智能建议</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
             {aiSuggestions.map((s, i) => (
-              <div key={i} style={{ padding: '12px 14px', background: 'rgba(148,163,184,0.06)', borderRadius: 8, marginBottom: i < 2 ? 10 : 0 }}>
+              <div key={i} style={{ padding: '12px 14px', background: 'rgba(0,0,0,0.04)', borderRadius: 8, marginBottom: i < 2 ? 10 : 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                   {s.icon}
-                  <Text style={{ color: '#fff', fontWeight: 600 }}>{s.title}</Text>
+                  <Text style={{ color: '#1a365d', fontWeight: 600 }}>{s.title}</Text>
                 </div>
-                <Text style={{ color: '#94a3b8', fontSize: 13, lineHeight: 1.6 }}>{s.desc}</Text>
+                <Text style={{ color: '#8c8c8c', fontSize: 13, lineHeight: 1.6 }}>{s.desc}</Text>
               </div>
             ))}
           </Card>
@@ -242,7 +241,6 @@ export default function ZhiCe() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-        .ant-card { background: transparent !important; }
       `}</style>
     </div>
   )

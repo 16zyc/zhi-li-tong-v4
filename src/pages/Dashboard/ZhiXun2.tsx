@@ -8,9 +8,8 @@ import { indicatorData } from '@/mock/indicatorData'
 const { Title, Text } = Typography
 
 const glassCard: React.CSSProperties = {
-  background: 'rgba(30, 41, 59, 0.75)',
-  backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(148, 163, 184, 0.12)',
+  background: '#fff',
+  border: '1px solid #f0f0f0',
   borderRadius: 12,
 }
 
@@ -80,13 +79,13 @@ export default function ZhiXun2() {
   const canNext = carouselIdx + 3 < caseData.length
 
   return (
-    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'transparent', padding: 24, color: '#333' }}>
       <div style={{ marginBottom: 24 }}>
-        <Title level={3} style={{ color: '#fff', margin: 0 }}>
+        <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
           <BookOpen size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />
           智训助手 · 知识助手
         </Title>
-        <Text style={{ color: '#94a3b8', fontSize: 14, marginTop: 6, display: 'block' }}>
+        <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
           智能问答、经验学习、知识检索一站式服务
         </Text>
       </div>
@@ -105,7 +104,7 @@ export default function ZhiXun2() {
                   {item.icon}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={{ color: '#fff', fontWeight: 600, fontSize: 14, display: 'block' }}>{item.question}</Text>
+                  <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 14, display: 'block' }}>{item.question}</Text>
                   <Tag color={item.color === '#3b82f6' ? 'blue' : item.color === '#22c55e' ? 'green' : item.color === '#8b5cf6' ? 'purple' : 'orange'} style={{ marginTop: 4, fontSize: 11 }}>
                     {item.source}
                   </Tag>
@@ -119,12 +118,12 @@ export default function ZhiXun2() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={24}>
           <Card
-            title={<Space><Search size={16} color="#3b82f6" /><Text style={{ color: '#fff', fontWeight: 600 }}>知识检索</Text></Space>}
+            title={<Space><Search size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>知识检索</Text></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             <Input
-              prefix={<Search size={16} color="#94a3b8" />}
+              prefix={<Search size={16} color="#8c8c8c" />}
               placeholder="输入关键词搜索指标库、知识库、绩效库、案例库..."
               size="large"
               value={searchValue}
@@ -135,15 +134,15 @@ export default function ZhiXun2() {
             {searchResults.length > 0 && (
               <div>
                 {searchResults.map(item => (
-                  <div key={item.id} style={{ padding: '10px 14px', background: 'rgba(148,163,184,0.06)', borderRadius: 8, marginBottom: 8 }}>
+                  <div key={item.id} style={{ padding: '10px 14px', background: 'rgba(0,0,0,0.04)', borderRadius: 8, marginBottom: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                       <Space size={8}>
-                        <Text style={{ color: '#fff', fontWeight: 600 }}>{item.title}</Text>
+                        <Text style={{ color: '#1a365d', fontWeight: 600 }}>{item.title}</Text>
                         <Tag color={categoryColorMap[item.category] || 'default'}>{item.category}</Tag>
                       </Space>
                       <Text style={{ color: '#64748b', fontSize: 12 }}>{item.department}</Text>
                     </div>
-                    <Text style={{ color: '#94a3b8', fontSize: 13 }}>{item.content}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 13 }}>{item.content}</Text>
                   </div>
                 ))}
               </div>
@@ -161,18 +160,18 @@ export default function ZhiXun2() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={14}>
           <Card
-            title={<Space><Bell size={16} color="#06b6d4" /><Text style={{ color: '#fff', fontWeight: 600 }}>最近更新</Text></Space>}
+            title={<Space><Bell size={16} color="#06b6d4" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>最近更新</Text></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             <Timeline
               items={recentUpdates.map(item => ({
                 color: item.color === '#3b82f6' ? 'blue' : 'green',
                 children: (
-                  <div style={{ padding: '8px 12px', background: 'rgba(148,163,184,0.06)', borderRadius: 8 }}>
+                  <div style={{ padding: '8px 12px', background: 'rgba(0,0,0,0.04)', borderRadius: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <Space size={8}>
-                        <Text style={{ color: '#fff', fontWeight: 600, fontSize: 14 }}>{item.title}</Text>
+                        <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 14 }}>{item.title}</Text>
                         <Tag color={item.color === '#3b82f6' ? 'blue' : 'green'} style={{ fontSize: 11 }}>{item.category}</Tag>
                       </Space>
                       <Text style={{ color: '#64748b', fontSize: 12 }}>{item.time}</Text>
@@ -185,16 +184,16 @@ export default function ZhiXun2() {
         </Col>
         <Col span={10}>
           <Card
-            title={<Space><Bell size={16} color="#f59e0b" /><Text style={{ color: '#fff', fontWeight: 600 }}>制度更新提醒</Text><Badge count={systemAlerts.length} /></Space>}
+            title={<Space><Bell size={16} color="#f59e0b" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>制度更新提醒</Text><Badge count={systemAlerts.length} /></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             {systemAlerts.map((alert, i) => (
               <div key={i} style={{ padding: '10px 14px', background: alert.level === 'warning' ? 'rgba(245,158,11,0.08)' : 'rgba(59,130,246,0.08)', borderRadius: 8, marginBottom: 8, borderLeft: `3px solid ${alert.level === 'warning' ? '#f59e0b' : '#3b82f6'}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Space size={8}>
                     <Bell size={14} color={alert.level === 'warning' ? '#f59e0b' : '#3b82f6'} />
-                    <Text style={{ color: '#fff', fontWeight: 600, fontSize: 13 }}>{alert.title}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 13 }}>{alert.title}</Text>
                   </Space>
                   <Text style={{ color: '#64748b', fontSize: 12 }}>{alert.date}</Text>
                 </div>
@@ -209,7 +208,7 @@ export default function ZhiXun2() {
           <Card
             title={
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Space><GraduationCap size={16} color="#8b5cf6" /><Text style={{ color: '#fff', fontWeight: 600 }}>案例学习推荐</Text></Space>
+                <Space><GraduationCap size={16} color="#8b5cf6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>案例学习推荐</Text></Space>
                 <Space>
                   <Button size="small" disabled={!canPrev} onClick={() => setCarouselIdx(Math.max(0, carouselIdx - 3))} style={{ borderRadius: 6 }}>上一组</Button>
                   <Button size="small" disabled={!canNext} onClick={() => setCarouselIdx(Math.min(caseData.length - 3, carouselIdx + 3))} style={{ borderRadius: 6 }}>下一组</Button>
@@ -217,20 +216,20 @@ export default function ZhiXun2() {
               </div>
             }
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             <Row gutter={16}>
               {carouselItems.map(item => (
                 <Col span={8} key={item.id}>
-                  <div style={{ padding: 16, background: 'rgba(148,163,184,0.06)', borderRadius: 10, height: '100%' }}>
+                  <div style={{ padding: 16, background: 'rgba(0,0,0,0.04)', borderRadius: 10, height: '100%' }}>
                     <div style={{ marginBottom: 8 }}>
                       <Space size={6}>
                         <Tag color={caseTypeColorMap[item.type] || 'default'}>{item.type}</Tag>
                         <Text style={{ color: '#64748b', fontSize: 12 }}>{item.department}</Text>
                       </Space>
                     </div>
-                    <Text style={{ color: '#fff', fontWeight: 600, fontSize: 14, display: 'block', marginBottom: 6 }}>{item.title}</Text>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8, lineHeight: 1.6, overflow: 'hidden', textOverflow: 'ellipsis', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', display: '-webkit-box' } as React.CSSProperties}>{item.result}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 14, display: 'block', marginBottom: 6 }}>{item.title}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, marginBottom: 8, lineHeight: 1.6, overflow: 'hidden', textOverflow: 'ellipsis', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', display: '-webkit-box' } as React.CSSProperties}>{item.result}</Text>
                     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                       {item.tags.map(tag => (
                         <Tag key={tag} style={{ fontSize: 11, margin: 0 }}>{tag}</Tag>
@@ -245,7 +244,6 @@ export default function ZhiXun2() {
       </Row>
 
       <style>{`
-        .ant-card { background: transparent !important; }
         .ant-timeline-item-content { margin-inline-start: 20px !important; }
       `}</style>
     </div>

@@ -7,9 +7,8 @@ import { departmentData, personData } from '@/mock/departmentData'
 const { Title, Text } = Typography
 
 const glassCard: React.CSSProperties = {
-  background: 'rgba(30, 41, 59, 0.75)',
-  backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(148, 163, 184, 0.12)',
+  background: '#fff',
+  border: '1px solid #f0f0f0',
   borderRadius: 12,
 }
 
@@ -26,8 +25,8 @@ const importantProjects = [
 const workloadOption = {
   tooltip: { trigger: 'axis' as const, axisPointer: { type: 'shadow' as const } },
   grid: { left: 60, right: 40, top: 10, bottom: 20 },
-  xAxis: { type: 'value' as const, max: 100, axisLabel: { color: '#94a3b8', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(148,163,184,0.08)' } } },
-  yAxis: { type: 'category' as const, data: personData.map(p => p.name), axisLabel: { color: '#e2e8f0', fontSize: 13 }, axisLine: { show: false }, axisTick: { show: false } },
+  xAxis: { type: 'value' as const, max: 100, axisLabel: { color: '#8c8c8c', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(0,0,0,0.06)' } } },
+  yAxis: { type: 'category' as const, data: personData.map(p => p.name), axisLabel: { color: '#333', fontSize: 13 }, axisLine: { show: false }, axisTick: { show: false } },
   series: [{
     type: 'bar',
     data: personData.map(p => ({
@@ -41,7 +40,7 @@ const workloadOption = {
     label: {
       show: true,
       position: 'right' as const,
-      color: '#e2e8f0',
+      color: '#333',
       fontSize: 12,
       formatter: (params: { value: number }) => {
         if (params.value >= 100) return `${params.value}% 建议调整`
@@ -55,14 +54,14 @@ const statusColorMap: Record<string, string> = { red: '#ef4444', orange: '#f59e0
 
 export default function ZhiGuan() {
   return (
-    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'transparent', padding: 24, color: '#333' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ color: '#fff', margin: 0 }}>
+          <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
             <ClipboardList size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />
             智管助手 · 战略部工作台
           </Title>
-          <Text style={{ color: '#94a3b8', fontSize: 14, marginTop: 6, display: 'block' }}>
+          <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
             李总，本部门在办项目
             <Text style={{ color: '#3b82f6', fontWeight: 600 }}>12个</Text>，
             其中<Text style={{ color: '#ef4444', fontWeight: 600 }}>2个延期</Text>，
@@ -70,7 +69,7 @@ export default function ZhiGuan() {
           </Text>
         </div>
         <Badge count={3}>
-          <Button type="text" style={{ color: '#94a3b8' }} icon={<Clock size={18} />} />
+          <Button type="text" style={{ color: '#8c8c8c' }} icon={<Clock size={18} />} />
         </Badge>
       </div>
 
@@ -85,7 +84,7 @@ export default function ZhiGuan() {
             <Card style={glassCard} styles={{ body: { padding: 16 } }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <Text style={{ color: '#94a3b8', fontSize: 13 }}>{item.label}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 13 }}>{item.label}</Text>
                   <div style={{ fontSize: 36, fontWeight: 700, color: item.color, marginTop: 4,
                     animation: item.pulse ? 'pulse 2s infinite' : undefined }}>
                     {item.value}
@@ -102,20 +101,20 @@ export default function ZhiGuan() {
 
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={14}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>重点项目跟踪</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>重点项目跟踪</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
             <List
               dataSource={importantProjects}
               renderItem={(p) => (
                 <List.Item style={{ border: 'none', padding: '10px 0' }}>
-                  <div style={{ width: '100%', padding: 12, background: 'rgba(148,163,184,0.06)', borderRadius: 8 }}>
+                  <div style={{ width: '100%', padding: 12, background: 'rgba(0,0,0,0.04)', borderRadius: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                      <Text style={{ color: '#fff', fontWeight: 600 }}>{p.name}</Text>
+                      <Text style={{ color: '#1a365d', fontWeight: 600 }}>{p.name}</Text>
                       <Tag color={p.tag} style={{ margin: 0 }}>{p.status}</Tag>
                     </div>
-                    <Progress percent={p.progress} strokeColor={statusColorMap[p.tag] || '#3b82f6'} trailColor="rgba(148,163,184,0.12)" size="small" />
+                    <Progress percent={p.progress} strokeColor={statusColorMap[p.tag] || '#3b82f6'} trailColor="#f0f0f0" size="small" />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-                      <Text style={{ color: '#94a3b8', fontSize: 12 }}>负责人：{p.person} ｜ 截止：{p.deadline}</Text>
+                      <Text style={{ color: '#8c8c8c', fontSize: 12 }}>负责人：{p.person} ｜ 截止：{p.deadline}</Text>
                       {p.lag > 0 && (
                         <Text style={{ color: '#ef4444', fontSize: 12, fontWeight: 600 }}>滞后{p.lag}%</Text>
                       )}
@@ -132,13 +131,13 @@ export default function ZhiGuan() {
           </Card>
         </Col>
         <Col span={10}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>人员工作负荷</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>人员工作负荷</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
             <ReactECharts option={workloadOption} style={{ height: 260 }} />
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 8 }}>
-              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#3b82f6', display: 'inline-block' }} /><Text style={{ color: '#94a3b8', fontSize: 12 }}>正常</Text></Space>
-              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#f59e0b', display: 'inline-block' }} /><Text style={{ color: '#94a3b8', fontSize: 12 }}>偏高</Text></Space>
-              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#ef4444', display: 'inline-block' }} /><Text style={{ color: '#94a3b8', fontSize: 12 }}>超载</Text></Space>
+              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#3b82f6', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>正常</Text></Space>
+              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#f59e0b', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>偏高</Text></Space>
+              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#ef4444', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>超载</Text></Space>
             </div>
           </Card>
         </Col>
@@ -146,33 +145,33 @@ export default function ZhiGuan() {
 
       <Row gutter={16}>
         <Col span={10}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>部门知识库动态</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>部门知识库动态</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '16px' } }}>
             <div style={{ display: 'flex', gap: 24, marginBottom: 16 }}>
               <div style={{ textAlign: 'center', flex: 1, padding: 16, background: 'rgba(59,130,246,0.08)', borderRadius: 8 }}>
                 <div style={{ fontSize: 28, fontWeight: 700, color: '#3b82f6' }}>23</div>
-                <Text style={{ color: '#94a3b8', fontSize: 13 }}>本月新增材料</Text>
+                <Text style={{ color: '#8c8c8c', fontSize: 13 }}>本月新增材料</Text>
               </div>
               <div style={{ textAlign: 'center', flex: 1, padding: 16, background: 'rgba(34,197,94,0.08)', borderRadius: 8 }}>
                 <div style={{ fontSize: 28, fontWeight: 700, color: '#22c55e' }}>2</div>
-                <Text style={{ color: '#94a3b8', fontSize: 13 }}>新增经验案例</Text>
+                <Text style={{ color: '#8c8c8c', fontSize: 13 }}>新增经验案例</Text>
               </div>
             </div>
-            <div style={{ padding: '10px 12px', background: 'rgba(148,163,184,0.06)', borderRadius: 8 }}>
+            <div style={{ padding: '10px 12px', background: 'rgba(0,0,0,0.04)', borderRadius: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                 <CheckCircle size={14} color="#22c55e" />
-                <Text style={{ color: '#e2e8f0', fontSize: 13 }}>产业园审批流程优化案例已入库</Text>
+                <Text style={{ color: '#333', fontSize: 13 }}>产业园审批流程优化案例已入库</Text>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <CheckCircle size={14} color="#22c55e" />
-                <Text style={{ color: '#e2e8f0', fontSize: 13 }}>招商引资专项攻坚经验已沉淀</Text>
+                <Text style={{ color: '#333', fontSize: 13 }}>招商引资专项攻坚经验已沉淀</Text>
               </div>
             </div>
           </Card>
         </Col>
         <Col span={14}>
-          <Card title={<Text style={{ color: '#fff', fontWeight: 600 }}>快捷操作</Text>} style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '20px 16px' } }}>
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>快捷操作</Text>} style={glassCard}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '20px 16px' } }}>
             <div style={{ display: 'flex', gap: 16 }}>
               {[
                 { label: '新建任务', icon: <FilePlus size={24} color="#3b82f6" />, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
@@ -194,7 +193,6 @@ export default function ZhiGuan() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-        .ant-card { background: transparent !important; }
       `}</style>
     </div>
   )

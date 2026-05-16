@@ -8,9 +8,8 @@ import { departmentData } from '@/mock/departmentData'
 const { Title, Text } = Typography
 
 const glassCard: React.CSSProperties = {
-  background: 'rgba(30, 41, 59, 0.75)',
-  backdropFilter: 'blur(16px)',
-  border: '1px solid rgba(148, 163, 184, 0.12)',
+  background: '#fff',
+  border: '1px solid #f0f0f0',
   borderRadius: 12,
 }
 
@@ -57,10 +56,10 @@ export default function ZhiPing() {
       indicator: selectedDept.dimensions.map(d => ({ name: d.name, max: d.maxScore })),
       shape: 'polygon' as const,
       splitNumber: 4,
-      axisName: { color: '#94a3b8', fontSize: 12 },
-      splitLine: { lineStyle: { color: 'rgba(148,163,184,0.12)' } },
+      axisName: { color: '#8c8c8c', fontSize: 12 },
+      splitLine: { lineStyle: { color: 'rgba(0,0,0,0.06)' } },
       splitArea: { areaStyle: { color: ['rgba(59,130,246,0.02)', 'rgba(59,130,246,0.04)'] } },
-      axisLine: { lineStyle: { color: 'rgba(148,163,184,0.15)' } },
+      axisLine: { lineStyle: { color: 'rgba(0,0,0,0.08)' } },
     },
     series: [{
       type: 'radar',
@@ -80,7 +79,7 @@ export default function ZhiPing() {
       dataIndex: 'department',
       key: 'department',
       render: (t: string, r: typeof deptStatusList[0]) => (
-        <Button type="text" size="small" style={{ color: '#fff', fontWeight: 600, padding: 0 }} onClick={() => setSelectedDept(r)}>{t}</Button>
+        <Button type="text" size="small" style={{ color: '#1a365d', fontWeight: 600, padding: 0 }} onClick={() => setSelectedDept(r)}>{t}</Button>
       ),
     },
     {
@@ -88,7 +87,7 @@ export default function ZhiPing() {
       dataIndex: 'score',
       key: 'score',
       sorter: (a: typeof deptStatusList[0], b: typeof deptStatusList[0]) => a.score - b.score,
-      render: (t: number) => <Text style={{ color: '#fff', fontWeight: 700, fontSize: 16 }}>{t}</Text>,
+      render: (t: number) => <Text style={{ color: '#1a365d', fontWeight: 700, fontSize: 16 }}>{t}</Text>,
     },
     {
       title: '等级',
@@ -104,11 +103,11 @@ export default function ZhiPing() {
         <Space direction="vertical" size={2} style={{ width: '100%' }}>
           {r.dimensions.map(d => (
             <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Text style={{ color: '#94a3b8', fontSize: 11, width: 48, flexShrink: 0 }}>{d.name}</Text>
+              <Text style={{ color: '#8c8c8c', fontSize: 11, width: 48, flexShrink: 0 }}>{d.name}</Text>
               <Progress
                 percent={Math.round((d.score / d.maxScore) * 100)}
                 strokeColor={d.score / d.maxScore >= 0.9 ? '#22c55e' : d.score / d.maxScore >= 0.8 ? '#3b82f6' : '#f59e0b'}
-                trailColor="rgba(148,163,184,0.1)"
+                trailColor="#f0f0f0"
                 size="small"
                 style={{ flex: 1 }}
               />
@@ -132,21 +131,21 @@ export default function ZhiPing() {
   const aLevelCount = performanceData.filter(d => d.level === 'A').length
 
   return (
-    <div style={{ minHeight: 'auto', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: 24, color: '#fff' }}>
+    <div style={{ minHeight: 'auto', background: 'transparent', padding: 24, color: '#333' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
         <div>
-          <Title level={3} style={{ color: '#fff', margin: 0 }}>
+          <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
             <Award size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />
             智评助手 · 考核评价工作台
           </Title>
-          <Text style={{ color: '#94a3b8', fontSize: 14, marginTop: 6, display: 'block' }}>
+          <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
             赵总监，Q2绩效考核进行中，已完成
             <Text style={{ color: '#3b82f6', fontWeight: 600 }}>5/8</Text>部门评分
           </Text>
         </div>
         <Space>
-          <Badge count={3}><Button type="text" style={{ color: '#94a3b8' }} icon={<AlertTriangle size={18} />} /></Badge>
-          <Badge count={5}><Button type="text" style={{ color: '#94a3b8' }} icon={<CheckCircle size={18} />} /></Badge>
+          <Badge count={3}><Button type="text" style={{ color: '#8c8c8c' }} icon={<AlertTriangle size={18} />} /></Badge>
+          <Badge count={5}><Button type="text" style={{ color: '#8c8c8c' }} icon={<CheckCircle size={18} />} /></Badge>
         </Space>
       </div>
 
@@ -161,7 +160,7 @@ export default function ZhiPing() {
             <Card style={glassCard} styles={{ body: { padding: 16 } }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
-                  <Text style={{ color: '#94a3b8', fontSize: 13 }}>{item.label}</Text>
+                  <Text style={{ color: '#8c8c8c', fontSize: 13 }}>{item.label}</Text>
                   <div style={{ fontSize: 32, fontWeight: 700, color: item.color, marginTop: 4 }}>
                     {item.value}<span style={{ fontSize: 14, fontWeight: 400, marginLeft: 2 }}>{item.suffix}</span>
                   </div>
@@ -178,9 +177,9 @@ export default function ZhiPing() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={24}>
           <Card
-            title={<Space><BarChart3 size={16} color="#3b82f6" /><Text style={{ color: '#fff', fontWeight: 600 }}>智能评分面板</Text><Tag color="blue">点击部门查看画像</Tag></Space>}
+            title={<Space><BarChart3 size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>智能评分面板</Text><Tag color="blue">点击部门查看画像</Tag></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: 0 } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: 0 } }}
           >
             <Table
               dataSource={deptStatusList}
@@ -197,16 +196,16 @@ export default function ZhiPing() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={10}>
           <Card
-            title={<Space><UserCheck size={16} color="#8b5cf6" /><Text style={{ color: '#fff', fontWeight: 600 }}>{selectedDept.department} · 部门画像</Text></Space>}
+            title={<Space><UserCheck size={16} color="#8b5cf6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>{selectedDept.department} · 部门画像</Text></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '8px 16px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 16px 16px' } }}
           >
             <ReactECharts option={radarOption} style={{ height: 280 }} />
             <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 8 }}>
               {selectedDept.dimensions.map(d => (
                 <div key={d.name} style={{ textAlign: 'center' }}>
                   <Text style={{ color: levelColorMap[selectedDept.level], fontWeight: 700, fontSize: 16 }}>{d.score}</Text>
-                  <div><Text style={{ color: '#94a3b8', fontSize: 11 }}>{d.name}</Text></div>
+                  <div><Text style={{ color: '#8c8c8c', fontSize: 11 }}>{d.name}</Text></div>
                 </div>
               ))}
             </div>
@@ -216,9 +215,9 @@ export default function ZhiPing() {
           <Row gutter={16}>
             <Col span={12}>
               <Card
-                title={<Space><Star size={16} color="#f59e0b" /><Text style={{ color: '#fff', fontWeight: 600 }}>亮点识别</Text></Space>}
+                title={<Space><Star size={16} color="#f59e0b" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>亮点识别</Text></Space>}
                 style={glassCard}
-                styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '8px 12px' } }}
+                styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 12px' } }}
               >
                 {highlights.map((h, i) => (
                   <div key={i} style={{ padding: '8px 10px', background: 'rgba(34,197,94,0.06)', borderRadius: 8, marginBottom: 6 }}>
@@ -226,24 +225,24 @@ export default function ZhiPing() {
                       {h.icon}
                       <Text style={{ color: '#22c55e', fontWeight: 600, fontSize: 13 }}>{h.dept}</Text>
                     </div>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.6 }}>{h.text}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, lineHeight: 1.6 }}>{h.text}</Text>
                   </div>
                 ))}
               </Card>
             </Col>
             <Col span={12}>
               <Card
-                title={<Space><AlertTriangle size={16} color="#ef4444" /><Text style={{ color: '#fff', fontWeight: 600 }}>风险预警</Text></Space>}
+                title={<Space><AlertTriangle size={16} color="#ef4444" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>风险预警</Text></Space>}
                 style={glassCard}
-                styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '8px 12px' } }}
+                styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 12px' } }}
               >
                 {risks.map((r, i) => (
                   <div key={i} style={{ padding: '8px 10px', background: 'rgba(239,68,68,0.06)', borderRadius: 8, marginBottom: 6, borderLeft: `3px solid ${r.level === 'high' ? '#ef4444' : r.level === 'medium' ? '#f59e0b' : '#3b82f6'}` }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
                       <Tag color={r.level === 'high' ? 'red' : r.level === 'medium' ? 'orange' : 'blue'} style={{ margin: 0, fontSize: 11 }}>{r.level === 'high' ? '高' : r.level === 'medium' ? '中' : '低'}</Tag>
-                      <Text style={{ color: '#fff', fontWeight: 600, fontSize: 13 }}>{r.dept}</Text>
+                      <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 13 }}>{r.dept}</Text>
                     </div>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.6 }}>{r.text}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, lineHeight: 1.6 }}>{r.text}</Text>
                   </div>
                 ))}
               </Card>
@@ -255,9 +254,9 @@ export default function ZhiPing() {
       <Row gutter={16}>
         <Col span={24}>
           <Card
-            title={<Space><Award size={16} color="#f59e0b" /><Text style={{ color: '#fff', fontWeight: 600 }}>卓越推荐</Text><Tag color="gold">AI智能推荐</Tag></Space>}
+            title={<Space><Award size={16} color="#f59e0b" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>卓越推荐</Text><Tag color="gold">AI智能推荐</Tag></Space>}
             style={glassCard}
-            styles={{ header: { borderBottom: '1px solid rgba(148,163,184,0.1)' }, body: { padding: '12px 16px' } }}
+            styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}
           >
             <Row gutter={16}>
               {excellenceCandidates.map((c, i) => (
@@ -266,10 +265,10 @@ export default function ZhiPing() {
                     <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 8px' }}>
                       <Award size={22} color="#f59e0b" />
                     </div>
-                    <Text style={{ color: '#fff', fontWeight: 700, fontSize: 16, display: 'block' }}>{c.name}</Text>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, display: 'block', marginBottom: 4 }}>{c.dept}</Text>
+                    <Text style={{ color: '#1a365d', fontWeight: 700, fontSize: 16, display: 'block' }}>{c.name}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginBottom: 4 }}>{c.dept}</Text>
                     <Tag color="gold" style={{ marginBottom: 8 }}>{c.score}分</Tag>
-                    <Text style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.6, display: 'block' }}>{c.reason}</Text>
+                    <Text style={{ color: '#8c8c8c', fontSize: 12, lineHeight: 1.6, display: 'block' }}>{c.reason}</Text>
                     <Button size="small" type="primary" style={{ borderRadius: 6, marginTop: 10 }} icon={<Star size={12} style={{ verticalAlign: -1 }} />}>推荐评优</Button>
                   </div>
                 </Col>
@@ -280,11 +279,10 @@ export default function ZhiPing() {
       </Row>
 
       <style>{`
-        .ant-card { background: transparent !important; }
         .ant-table { background: transparent !important; }
-        .ant-table-thead > tr > th { background: rgba(148,163,184,0.06) !important; color: #94a3b8 !important; border-bottom: 1px solid rgba(148,163,184,0.1) !important; }
-        .ant-table-tbody > tr > td { border-bottom: 1px solid rgba(148,163,184,0.06) !important; color: #e2e8f0 !important; background: transparent !important; }
-        .ant-table-tbody > tr:hover > td { background: rgba(148,163,184,0.04) !important; }
+        .ant-table-thead > tr > th { background: #fafafa !important; color: #8c8c8c !important; border-bottom: 1px solid #f0f0f0 !important; }
+        .ant-table-tbody > tr > td { border-bottom: 1px solid #f0f0f0 !important; color: #333 !important; background: transparent !important; }
+        .ant-table-tbody > tr:hover > td { background: rgba(0,0,0,0.02) !important; }
       `}</style>
     </div>
   )

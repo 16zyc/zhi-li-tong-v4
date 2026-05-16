@@ -2,18 +2,24 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from "vite-tsconfig-paths";
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
-import cdn from 'vite-plugin-cdn-import'
 
 export default defineConfig({
   base: './',
   build: {
     sourcemap: false,
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-router': ['react-router-dom'],
-          'vendor-echarts': ['echarts', 'echarts-for-react'],
-          'vendor-utils': ['zustand', 'clsx', 'tailwind-merge', 'lucide-react'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('echarts') || id.includes('zrender')) return 'vendor-echarts'
+            if (id.includes('antd') || id.includes('@ant-design') || id.includes('@rc-component')) return 'vendor-antd'
+            if (id.includes('react-dom')) return 'vendor-react-dom'
+            if (id.includes('react/')) return 'vendor-react'
+            if (id.includes('react-router')) return 'vendor-router'
+            if (id.includes('lucide-react')) return 'vendor-lucide'
+            if (id.includes('dayjs')) return 'vendor-dayjs'
+          }
         },
       },
     },
@@ -25,31 +31,6 @@ export default defineConfig({
           'react-dev-locator',
         ],
       },
-    }),
-    cdn({
-      modules: [
-        {
-          name: 'react',
-          var: 'React',
-          path: 'https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js',
-        },
-        {
-          name: 'react-dom',
-          var: 'ReactDOM',
-          path: 'https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js',
-        },
-        {
-          name: 'antd',
-          var: 'antd',
-          path: 'https://cdn.jsdelivr.net/npm/antd@5.29.3/dist/antd.min.js',
-          css: 'https://cdn.jsdelivr.net/npm/antd@5.29.3/dist/reset.min.css',
-        },
-        {
-          name: 'dayjs',
-          var: 'dayjs',
-          path: 'https://cdn.jsdelivr.net/npm/dayjs@1.11.20/dayjs.min.js',
-        },
-      ],
     }),
     traeBadgePlugin({
       variant: 'dark',

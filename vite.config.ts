@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tsconfigPaths from "vite-tsconfig-paths";
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
+import cdn from 'vite-plugin-cdn-import'
 
 export default defineConfig({
   base: './',
@@ -10,10 +11,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-antd': ['antd', '@ant-design/icons'],
           'vendor-echarts': ['echarts', 'echarts-for-react'],
-          'vendor-utils': ['zustand', 'dayjs', 'clsx', 'tailwind-merge', 'lucide-react'],
+          'vendor-utils': ['zustand', 'clsx', 'tailwind-merge', 'lucide-react'],
         },
       },
     },
@@ -25,6 +24,36 @@ export default defineConfig({
           'react-dev-locator',
         ],
       },
+    }),
+    cdn({
+      modules: [
+        {
+          name: 'react',
+          var: 'React',
+          path: 'https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js',
+        },
+        {
+          name: 'react-dom',
+          var: 'ReactDOM',
+          path: 'https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js',
+        },
+        {
+          name: 'react-router-dom',
+          var: 'ReactRouterDOM',
+          path: 'https://cdn.jsdelivr.net/npm/react-router-dom@7.15.1/dist/umd/react-router-dom.production.min.js',
+        },
+        {
+          name: 'antd',
+          var: 'antd',
+          path: 'https://cdn.jsdelivr.net/npm/antd@5.29.3/dist/antd.min.js',
+          css: 'https://cdn.jsdelivr.net/npm/antd@5.29.3/dist/reset.min.css',
+        },
+        {
+          name: 'dayjs',
+          var: 'dayjs',
+          path: 'https://cdn.jsdelivr.net/npm/dayjs@1.11.20/dayjs.min.js',
+        },
+      ],
     }),
     traeBadgePlugin({
       variant: 'dark',

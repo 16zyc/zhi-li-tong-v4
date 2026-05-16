@@ -1,16 +1,9 @@
 import { Card, Row, Col, Tag, Button, Progress, Badge, Typography, Space, List } from 'antd'
-import ReactEChartsCore from 'echarts-for-react/lib/core'
-import * as echarts from 'echarts/core'
-import { PieChart } from 'echarts/charts'
-import { TitleComponent, TooltipComponent, LegendComponent, GraphicComponent } from 'echarts/components'
-import { CanvasRenderer } from 'echarts/renderers'
 import { TrendingUp, TrendingDown, AlertTriangle, Target, CheckCircle, Clock, Activity, Minus } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
 import { departmentData } from '@/mock/departmentData'
 
 const { Title, Text } = Typography
-
-echarts.use([PieChart, CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent, GraphicComponent])
 
 const redTasks = taskData.filter(t => t.riskLevel === 'red')
 const yellowTasks = taskData.filter(t => t.riskLevel === 'yellow')
@@ -40,29 +33,30 @@ const statCards = [
   { title: '待办任务', value: pendingCount, suffix: '项', icon: <Clock size={22} />, bg: 'linear-gradient(135deg, #8b6914 0%, #c9820a 100%)', accent: '#fa8c16', pulse: false },
 ]
 
-const getRingOption = () => ({
-  tooltip: { trigger: 'item' as const },
-  legend: { show: false },
-  series: [{
-    type: 'pie',
-    radius: ['62%', '82%'],
-    center: ['50%', '50%'],
-    avoidLabelOverlap: false,
-    label: { show: false },
-    emphasis: { label: { show: false } },
-    data: [
-      { value: 78, name: '已完成', itemStyle: { color: '#d4a853' } },
-      { value: 22, name: '未完成', itemStyle: { color: 'rgba(26,54,93,0.12)' } },
-    ],
-  }],
-  graphic: [
-    { type: 'text', left: 'center', top: '38%', style: { text: '78%', fontSize: 30, fontWeight: 700, fill: '#1a365d', textAlign: 'center' as const } },
-    { type: 'text', left: 'center', top: '54%', style: { text: '战略目标完成率', fontSize: 12, fill: '#8c8c8c', textAlign: 'center' as const } },
-  ],
-})
-
 const suggestionBgMap = { warning: '#fff7e6', error: '#fff1f0', success: '#f6ffed', info: '#e6f7ff' }
 const suggestionColorMap = { warning: '#fa8c16', error: '#ff4d4f', success: '#52c41a', info: '#1890ff' }
+
+function RingChart({ percent, size = 160, strokeWidth = 14, color = '#d4a853', label, subLabel }: {
+  percent: number; size?: number; strokeWidth?: number; color?: string; label: string; subLabel: string
+}) {
+  const r = (size - strokeWidth) / 2
+  const circ = 2 * Math.PI * r
+  const offset = circ * (1 - percent / 100)
+  return (
+    <div style={{ width: size, height: size, margin: '0 auto', position: 'relative' }}>
+      <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(26,54,93,0.08)" strokeWidth={strokeWidth} />
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={strokeWidth}
+          strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round"
+          style={{ transition: 'stroke-dashoffset 1s ease' }} />
+      </svg>
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ fontSize: 30, fontWeight: 700, color: '#1a365d', lineHeight: 1.2 }}>{label}</div>
+        <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 4 }}>{subLabel}</div>
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   return (
@@ -204,7 +198,7 @@ export default function Home() {
         <Col span={10}>
           <Card style={{ borderRadius: 12 }} styles={{ body: { padding: '16px 24px' } }}>
             <div style={{ fontSize: 16, fontWeight: 600, color: '#1a365d', marginBottom: 8 }}>战略目标完成总览</div>
-            <ReactEChartsCore echarts={echarts} option={getRingOption()} style={{ height: 240 }} />
+            <RingChart percent={78} label="78%" subLabel="战略目标完成率" />
           </Card>
         </Col>
         <Col span={14}>

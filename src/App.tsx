@@ -3,8 +3,8 @@ import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import AppLayout from '@/components/Layout/AppLayout'
-import Home from '@/pages/Home/index'
 
+const Home = lazy(() => import('@/pages/Home/index'))
 const ZhiCe = lazy(() => import('@/pages/Dashboard/ZhiCe'))
 const ZhiGuan = lazy(() => import('@/pages/Dashboard/ZhiGuan'))
 const ZhiBan = lazy(() => import('@/pages/Dashboard/ZhiBan'))
@@ -23,7 +23,7 @@ const Chat = lazy(() => import('@/pages/Chat/index'))
 function PageLoading() {
   const [show, setShow] = useState(false)
   useEffect(() => {
-    const t = setTimeout(() => setShow(true), 150)
+    const t = setTimeout(() => setShow(true), 200)
     return () => clearTimeout(t)
   }, [])
   if (!show) return null
@@ -31,11 +31,10 @@ function PageLoading() {
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       height: '50vh', opacity: 0.6,
-      animation: 'fadeIn 0.3s ease',
     }}>
       <div style={{ textAlign: 'center' }}>
         <div style={{
-          width: 36, height: 36, margin: '0 auto 16px',
+          width: 32, height: 32, margin: '0 auto 12px',
           border: '3px solid #e2e8f0', borderTopColor: '#1a365d',
           borderRadius: '50%', animation: 'spin 0.8s linear infinite',
         }} />

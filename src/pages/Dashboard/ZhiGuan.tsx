@@ -1,4 +1,4 @@
-import { Card, Row, Col, Tag, Button, Badge, Typography, Space, Progress, List } from 'antd'
+import { Card, Row, Col, Tag, Button, Badge, Typography, Space, Progress, List, message } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { Users, FilePlus, ClipboardList, Clock, AlertTriangle, CheckCircle } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
@@ -174,11 +174,11 @@ export default function ZhiGuan() {
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '20px 16px' } }}>
             <div style={{ display: 'flex', gap: 16 }}>
               {[
-                { label: '新建任务', icon: <FilePlus size={24} color="#3b82f6" />, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
-                { label: '分配工作', icon: <Users size={24} color="#22c55e" />, color: '#22c55e', bg: 'rgba(34,197,94,0.1)' },
-                { label: '生成汇报', icon: <ClipboardList size={24} color="#f59e0b" />, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)' },
+                { label: '新建任务', icon: <FilePlus size={24} color="#3b82f6" />, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)', onClick: () => message.info('正在打开新建任务表单...') },
+                { label: '分配工作', icon: <Users size={24} color="#22c55e" />, color: '#22c55e', bg: 'rgba(34,197,94,0.1)', onClick: () => message.info('正在打开工作分配界面...') },
+                { label: '生成汇报', icon: <ClipboardList size={24} color="#f59e0b" />, color: '#f59e0b', bg: 'rgba(245,158,11,0.1)', onClick: () => message.info('正在生成本部门工作汇报...') },
               ].map((a, i) => (
-                <Button key={i} style={{ flex: 1, height: 80, background: a.bg, border: `1px solid ${a.color}30`, borderRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <Button key={i} style={{ flex: 1, height: 80, background: a.bg, border: `1px solid ${a.color}30`, borderRadius: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }} onClick={a.onClick}>
                   {a.icon}
                   <span style={{ color: a.color, fontWeight: 600, fontSize: 14 }}>{a.label}</span>
                 </Button>

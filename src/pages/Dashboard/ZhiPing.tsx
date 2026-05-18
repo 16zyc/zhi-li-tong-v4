@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Card, Table, Tag, Progress, Row, Col, Typography, Space, Badge, Button } from 'antd'
+import { Card, Table, Tag, Progress, Row, Col, Typography, Space, Badge, Button, message } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { Award, Star, TrendingUp, AlertTriangle, CheckCircle, BarChart3, UserCheck } from 'lucide-react'
 import { performanceData, departmentRankHistory } from '@/mock/performanceData'
@@ -269,7 +269,7 @@ export default function ZhiPing() {
                     <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginBottom: 4 }}>{c.dept}</Text>
                     <Tag color="gold" style={{ marginBottom: 8 }}>{c.score}分</Tag>
                     <Text style={{ color: '#8c8c8c', fontSize: 12, lineHeight: 1.6, display: 'block' }}>{c.reason}</Text>
-                    <Button size="small" type="primary" style={{ borderRadius: 6, marginTop: 10 }} icon={<Star size={12} style={{ verticalAlign: -1 }} />}>推荐评优</Button>
+                    <Button size="small" type="primary" style={{ borderRadius: 6, marginTop: 10 }} icon={<Star size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.success('已生成本季度评优推荐名单')}>推荐评优</Button>
                   </div>
                 </Col>
               ))}

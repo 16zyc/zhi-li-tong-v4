@@ -1,4 +1,5 @@
-import { Card, Row, Col, Tag, Button, Progress, Badge, Typography, Space, List } from 'antd'
+import { Card, Row, Col, Tag, Button, Progress, Badge, Typography, Space, List, message } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import { TrendingUp, TrendingDown, AlertTriangle, Target, CheckCircle, Clock, Activity, Minus } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
 import { departmentData } from '@/mock/departmentData'
@@ -59,6 +60,7 @@ function RingChart({ percent, size = 160, strokeWidth = 14, color = '#d4a853', l
 }
 
 export default function Home() {
+  const navigate = useNavigate()
   return (
     <div className="space-y-6">
       <div className="rounded-xl p-6" style={{ background: 'linear-gradient(135deg, #1a365d 0%, #2a5298 50%, #1a365d 100%)' }}>
@@ -72,8 +74,8 @@ export default function Home() {
             </Text>
           </div>
           <Space>
-            <Button type="primary" ghost style={{ color: '#d4a853', borderColor: '#d4a853' }}>查看风险看板</Button>
-            <Button type="primary" ghost style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }}>今日待办</Button>
+            <Button type="primary" ghost style={{ color: '#d4a853', borderColor: '#d4a853' }} onClick={() => navigate('/dashboard/zhice')}>查看风险看板</Button>
+            <Button type="primary" ghost style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.4)' }} onClick={() => navigate('/dashboard/zhiban')}>今日待办</Button>
           </Space>
         </div>
       </div>

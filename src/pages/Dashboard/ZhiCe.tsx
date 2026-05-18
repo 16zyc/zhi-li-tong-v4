@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Card, Row, Col, Tag, Button, Badge, Typography, Space } from 'antd'
+import { Card, Row, Col, Tag, Button, Badge, Typography, Space, message } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { Shield, AlertTriangle, TrendingUp, TrendingDown, Eye, Zap, Star, Award, Bell } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
@@ -137,9 +137,9 @@ export default function ZhiCe() {
                   </div>
                   <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginTop: 4 }}>{t.description}</Text>
                   <Space size={6} style={{ marginTop: 8 }}>
-                    <Button size="small" type="primary" danger>一键督办</Button>
-                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }}>查看详情</Button>
-                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }}>参考案例</Button>
+                    <Button size="small" type="primary" danger onClick={() => message.success('已发送督办通知')}>一键督办</Button>
+                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }} onClick={() => message.info('正在加载任务详情...')}>查看详情</Button>
+                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }} onClick={() => message.info('正在检索相关案例...')}>参考案例</Button>
                   </Space>
                 </div>
               ))}
@@ -154,8 +154,8 @@ export default function ZhiCe() {
                   </div>
                   <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginTop: 4 }}>{t.description}</Text>
                   <Space size={6} style={{ marginTop: 8 }}>
-                    <Button size="small" style={{ background: '#f59e0b', color: '#fff', border: 'none' }}>一键督办</Button>
-                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }}>查看详情</Button>
+                    <Button size="small" style={{ background: '#f59e0b', color: '#fff', border: 'none' }} onClick={() => message.success('已发送督办通知')}>一键督办</Button>
+                    <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none' }} onClick={() => message.info('正在加载任务详情...')}>查看详情</Button>
                   </Space>
                 </div>
               ))}

@@ -1,4 +1,4 @@
-import { Card, List, Tag, Button, Input, Progress, Row, Col, Typography, Space, Badge, Checkbox, Timeline } from 'antd'
+import { Card, List, Tag, Button, Input, Progress, Row, Col, Typography, Space, Badge, Checkbox, Timeline, message } from 'antd'
 import { ClipboardCheck, Upload, Search, FileText, Shield, Lightbulb, Clock, AlertCircle, CheckCircle } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
 import { caseData } from '@/mock/caseData'
@@ -114,9 +114,9 @@ export default function ZhiBan() {
                         style={{ marginBottom: 8 }}
                       />
                       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-                        <Button size="small" type="primary" icon={<Upload size={12} style={{ verticalAlign: -1 }} />} style={{ borderRadius: 6 }}>更新进度</Button>
-                        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<FileText size={12} style={{ verticalAlign: -1 }} />}>上传材料</Button>
-                        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }}>查看详情</Button>
+                        <Button size="small" type="primary" icon={<Upload size={12} style={{ verticalAlign: -1 }} />} style={{ borderRadius: 6 }} onClick={() => message.info('正在打开进度更新表单...')}>更新进度</Button>
+                        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<FileText size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.info('正在打开材料上传界面...')}>上传材料</Button>
+                        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} onClick={() => message.info('正在加载任务详情...')}>查看详情</Button>
                       </div>
                     </div>
                   </List.Item>
@@ -182,7 +182,7 @@ export default function ZhiBan() {
                 </Space>
               </div>
             ))}
-            <Button type="primary" block style={{ marginTop: 12, borderRadius: 8, height: 36 }}>一键填报</Button>
+            <Button type="primary" block style={{ marginTop: 12, borderRadius: 8, height: 36 }} onClick={() => message.success('已启动智能填报流程')}>一键填报</Button>
           </Card>
         </Col>
         <Col span={12}>

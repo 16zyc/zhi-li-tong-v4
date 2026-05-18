@@ -1,4 +1,4 @@
-import { Card, Table, Tag, Button, Timeline, Row, Col, Typography, Space, Badge, Progress } from 'antd'
+import { Card, Table, Tag, Button, Timeline, Row, Col, Typography, Space, Badge, Progress, message } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { Search, Shield, FileCheck, AlertTriangle, CheckCircle, Clock, Camera, MapPin } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
@@ -101,9 +101,9 @@ const columns = [
   {
     title: '操作', key: 'action', render: (_: unknown, r: typeof verifyTasks[0]) => (
       <Space size={4}>
-        {r.status !== 'completed' && <Button size="small" type="primary" style={{ borderRadius: 6 }} icon={<Search size={12} style={{ verticalAlign: -1 }} />}>开始核验</Button>}
-        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<FileCheck size={12} style={{ verticalAlign: -1 }} />}>查看材料</Button>
-        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<Shield size={12} style={{ verticalAlign: -1 }} />}>生成报告</Button>
+        {r.status !== 'completed' && <Button size="small" type="primary" style={{ borderRadius: 6 }} icon={<Search size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.info('正在启动核验流程...')}>开始核验</Button>}
+        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<FileCheck size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.info('正在加载相关材料...')}>查看材料</Button>
+        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<Shield size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.info('正在生成核验报告...')}>生成报告</Button>
       </Space>
     ),
   },
@@ -201,8 +201,8 @@ export default function ZhiXun() {
                       <Text style={{ color: '#8c8c8c', fontSize: 12 }}>责任部门：{issue.dept}（{deptHeadMap[issue.dept] || '—'}）</Text>
                     </Space>
                     <Space size={4}>
-                      {issue.status !== '已整改' && <Button size="small" type="primary" style={{ borderRadius: 6, fontSize: 12 }}>催办整改</Button>}
-                      <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6, fontSize: 12 }}>详情</Button>
+                      {issue.status !== '已整改' && <Button size="small" type="primary" style={{ borderRadius: 6, fontSize: 12 }} onClick={() => message.success('已发送催办通知')}>催办整改</Button>}
+                      <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6, fontSize: 12 }} onClick={() => message.info('正在加载整改详情...')}>详情</Button>
                     </Space>
                   </div>
                 </div>

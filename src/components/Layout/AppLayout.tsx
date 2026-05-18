@@ -73,6 +73,11 @@ const menuItems = [
     label: '十大环节',
   },
   {
+    key: '/workflow/task-decompose',
+    icon: <ClipboardList size={14} />,
+    label: '任务分解',
+  },
+  {
     key: '/chat',
     icon: <MessageSquare size={16} />,
     label: '对话即操作',
@@ -96,6 +101,7 @@ const breadcrumbNameMap: Record<string, string> = {
   '/repository/case': '经验案例库',
   '/repository/graph': '知识图谱',
   '/workflow': '十大环节',
+  '/workflow/task-decompose': '任务分解',
   '/chat': '对话即操作',
 }
 

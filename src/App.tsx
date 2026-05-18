@@ -21,6 +21,7 @@ const Case = lazy(() => import('@/pages/Repository/Case'))
 const Graph = lazy(() => import('@/pages/Repository/Graph'))
 const WorkflowIndex = lazy(() => import('@/pages/Workflow/index'))
 const StageDetail = lazy(() => import('@/pages/Workflow/StageDetail'))
+const TaskDecompose = lazy(() => import('@/pages/Workflow/TaskDecompose'))
 const Chat = lazy(() => import('@/pages/Chat/index'))
 
 function PageLoading() {
@@ -92,6 +93,7 @@ export default function App() {
               <Route path="/repository/graph" element={<Graph />} />
               <Route path="/workflow" element={<WorkflowIndex />} />
               <Route path="/workflow/:stage" element={<StageDetail />} />
+              <Route path="/workflow/task-decompose" element={<TaskDecompose />} />
               <Route path="/chat" element={<Chat />} />
             </Route>
           </Routes>

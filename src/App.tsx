@@ -23,6 +23,9 @@ const WorkflowIndex = lazy(() => import('@/pages/Workflow/index'))
 const StageDetail = lazy(() => import('@/pages/Workflow/StageDetail'))
 const TaskDecompose = lazy(() => import('@/pages/Workflow/TaskDecompose'))
 const Chat = lazy(() => import('@/pages/Chat/index'))
+const SystemUsers = lazy(() => import('@/pages/System/Users'))
+const SystemConfig = lazy(() => import('@/pages/System/Config'))
+const SystemLogs = lazy(() => import('@/pages/System/Logs'))
 
 function PageLoading() {
   const [show, setShow] = useState(false)
@@ -95,6 +98,9 @@ export default function App() {
               <Route path="/workflow/:stage" element={<StageDetail />} />
               <Route path="/workflow/task-decompose" element={<TaskDecompose />} />
               <Route path="/chat" element={<Chat />} />
+              <Route path="/system/users" element={<SystemUsers />} />
+              <Route path="/system/config" element={<SystemConfig />} />
+              <Route path="/system/logs" element={<SystemLogs />} />
             </Route>
           </Routes>
         </Suspense>

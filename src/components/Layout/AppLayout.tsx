@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
-import { Layout, Menu, Breadcrumb, Select, Avatar, Badge, Button, Dropdown } from 'antd'
+import { Layout, Menu, Breadcrumb, Avatar, Badge, Button, Dropdown, Tag } from 'antd'
 import {
   Home,
   Users,
@@ -23,66 +23,114 @@ import {
   Share2,
   LogOut,
   Star,
+  FileText,
+  Sliders,
+  ScrollText,
 } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 
 const { Sider, Header, Content } = Layout
 
-const roleOptions = [
-  { value: '集团领导', label: '集团领导' },
-  { value: '部门负责人', label: '部门负责人' },
-  { value: '经办人', label: '经办人' },
-  { value: '审计员', label: '审计员' },
-]
+const roleLabelMap: Record<string, { label: string; color: string }> = {
+  admin: { label: '系统管理员', color: 'blue' },
+  pfm: { label: '绩效管理员', color: 'green' },
+  pfl: { label: '绩效领导', color: 'gold' },
+}
 
-const menuItems = [
-  {
-    key: '/',
-    icon: <Home size={16} />,
-    label: '总览首页',
-  },
-  {
-    key: 'dashboard',
-    icon: <Users size={16} />,
-    label: '六员工作台',
-    children: [
-      { key: '/dashboard/zhice', icon: <Target size={14} />, label: '智策' },
-      { key: '/dashboard/zhiguan', icon: <Settings size={14} />, label: '智管' },
-      { key: '/dashboard/zhiban', icon: <ClipboardList size={14} />, label: '智办' },
-      { key: '/dashboard/zhixun', icon: <Eye size={14} />, label: '智巡' },
-      { key: '/dashboard/zhiping', icon: <Award size={14} />, label: '智评' },
-      { key: '/dashboard/zhixun2', icon: <BookOpen size={14} />, label: '智训' },
-      { key: '/dashboard/skill-profile', icon: <Star size={14} />, label: '能力画像' },
-    ],
-  },
-  {
-    key: 'repository',
-    icon: <Database size={16} />,
-    label: '四库一图',
-    children: [
-      { key: '/repository/indicator', icon: <BarChart3 size={14} />, label: '指标库' },
-      { key: '/repository/knowledge', icon: <BookOpen size={14} />, label: '知识库' },
-      { key: '/repository/performance', icon: <TrendingUp size={14} />, label: '绩效库' },
-      { key: '/repository/case', icon: <FolderOpen size={14} />, label: '经验案例库' },
-      { key: '/repository/graph', icon: <Share2 size={14} />, label: '知识图谱' },
-    ],
-  },
-  {
-    key: '/workflow',
-    icon: <GitBranch size={16} />,
-    label: '十大环节',
-  },
-  {
-    key: '/workflow/task-decompose',
-    icon: <ClipboardList size={14} />,
-    label: '任务分解',
-  },
-  {
-    key: '/chat',
-    icon: <MessageSquare size={16} />,
-    label: '对话即操作',
-  },
-]
+type MenuItemType = NonNullable<Parameters<typeof Menu>[0]['items']>[number]
+
+const getMenuByRole = (role: string): MenuItemType[] => {
+  const allDashboardChildren = [
+    { key: '/dashboard/zhice', icon: <Target size={14} />, label: '智策' },
+    { key: '/dashboard/zhiguan', icon: <Settings size={14} />, label: '智管' },
+    { key: '/dashboard/zhiban', icon: <ClipboardList size={14} />, label: '智办' },
+    { key: '/dashboard/zhixun', icon: <Eye size={14} />, label: '智巡' },
+    { key: '/dashboard/zhiping', icon: <Award size={14} />, label: '智评' },
+    { key: '/dashboard/zhixun2', icon: <BookOpen size={14} />, label: '智训' },
+    { key: '/dashboard/skill-profile', icon: <Star size={14} />, label: '能力画像' },
+  ]
+
+  const allRepositoryChildren = [
+    { key: '/repository/indicator', icon: <BarChart3 size={14} />, label: '指标库' },
+    { key: '/repository/knowledge', icon: <BookOpen size={14} />, label: '知识库' },
+    { key: '/repository/performance', icon: <TrendingUp size={14} />, label: '绩效库' },
+    { key: '/repository/case', icon: <FolderOpen size={14} />, label: '经验案例库' },
+    { key: '/repository/graph', icon: <Share2 size={14} />, label: '知识图谱' },
+  ]
+
+  const systemChildren = [
+    { key: '/system/users', icon: <Users size={14} />, label: '用户管理' },
+    { key: '/system/config', icon: <Sliders size={14} />, label: '系统配置' },
+    { key: '/system/logs', icon: <ScrollText size={14} />, label: '操作日志' },
+  ]
+
+  if (role === 'admin') {
+    return [
+      { key: '/', icon: <Home size={16} />, label: '总览首页' },
+      { key: 'dashboard', icon: <Users size={16} />, label: '六员工作台', children: allDashboardChildren },
+      { key: 'repository', icon: <Database size={16} />, label: '四库一图', children: allRepositoryChildren },
+      { key: '/workflow', icon: <GitBranch size={16} />, label: '十大环节' },
+      { key: '/workflow/task-decompose', icon: <ClipboardList size={14} />, label: '任务分解' },
+      { key: '/chat', icon: <MessageSquare size={16} />, label: '对话即操作' },
+      { key: 'system', icon: <FileText size={16} />, label: '系统管理', children: systemChildren },
+    ]
+  }
+
+  if (role === 'pfm') {
+    return [
+      {
+        key: 'dashboard',
+        icon: <Users size={16} />,
+        label: '工作台',
+        children: [
+          { key: '/dashboard/zhiguan', icon: <Settings size={14} />, label: '智管（部门工作台）' },
+          { key: '/dashboard/zhiban', icon: <ClipboardList size={14} />, label: '智办（经办人助手）' },
+          { key: '/dashboard/zhiping', icon: <Award size={14} />, label: '智评（考核评价）' },
+          { key: '/dashboard/zhixun2', icon: <BookOpen size={14} />, label: '智训（知识助手）' },
+        ],
+      },
+      { key: 'repository', icon: <Database size={16} />, label: '四库一图', children: allRepositoryChildren },
+      { key: '/workflow/task-decompose', icon: <ClipboardList size={14} />, label: '任务分解' },
+      { key: '/chat', icon: <MessageSquare size={16} />, label: '对话即操作' },
+    ]
+  }
+
+  if (role === 'pfl') {
+    return [
+      {
+        key: 'dashboard',
+        icon: <Users size={16} />,
+        label: '领导驾驶舱',
+        children: [
+          { key: '/dashboard/zhice', icon: <Target size={14} />, label: '智策（领导驾驶舱）' },
+          { key: '/dashboard/zhixun', icon: <Eye size={14} />, label: '智巡（审计核验）' },
+          { key: '/dashboard/skill-profile', icon: <Star size={14} />, label: '能力画像' },
+        ],
+      },
+      {
+        key: 'repository',
+        icon: <Database size={16} />,
+        label: '四库一图',
+        children: [
+          { key: '/repository/indicator', icon: <BarChart3 size={14} />, label: '指标库' },
+          { key: '/repository/performance', icon: <TrendingUp size={14} />, label: '绩效库' },
+          { key: '/repository/graph', icon: <Share2 size={14} />, label: '知识图谱' },
+        ],
+      },
+      { key: '/chat', icon: <MessageSquare size={16} />, label: '对话即操作' },
+    ]
+  }
+
+  return [
+    { key: '/', icon: <Home size={16} />, label: '总览首页' },
+    { key: 'dashboard', icon: <Users size={16} />, label: '六员工作台', children: allDashboardChildren },
+    { key: 'repository', icon: <Database size={16} />, label: '四库一图', children: allRepositoryChildren },
+    { key: '/workflow', icon: <GitBranch size={16} />, label: '十大环节' },
+    { key: '/workflow/task-decompose', icon: <ClipboardList size={14} />, label: '任务分解' },
+    { key: '/chat', icon: <MessageSquare size={16} />, label: '对话即操作' },
+    { key: 'system', icon: <FileText size={16} />, label: '系统管理', children: systemChildren },
+  ]
+}
 
 const breadcrumbNameMap: Record<string, string> = {
   '/': '总览首页',
@@ -103,12 +151,20 @@ const breadcrumbNameMap: Record<string, string> = {
   '/workflow': '十大环节',
   '/workflow/task-decompose': '任务分解',
   '/chat': '对话即操作',
+  '/system': '系统管理',
+  '/system/users': '用户管理',
+  '/system/config': '系统配置',
+  '/system/logs': '操作日志',
 }
 
 const AppLayout = () => {
-  const { collapsed, toggleCollapsed, currentRole, setCurrentRole, currentUser, logout } = useAppStore()
+  const { collapsed, toggleCollapsed, currentUser, logout } = useAppStore()
   const navigate = useNavigate()
   const location = useLocation()
+
+  const role = currentUser?.role || 'admin'
+  const menuItems = getMenuByRole(role)
+  const roleInfo = roleLabelMap[role] || { label: '未知角色', color: 'default' }
 
   const handleLogout = () => {
     logout()
@@ -130,6 +186,7 @@ const AppLayout = () => {
   const defaultOpenKeys = (() => {
     if (location.pathname.startsWith('/dashboard')) return ['dashboard']
     if (location.pathname.startsWith('/repository')) return ['repository']
+    if (location.pathname.startsWith('/system')) return ['system']
     return []
   })()
 
@@ -220,13 +277,7 @@ const AppLayout = () => {
             <Breadcrumb items={breadcrumbItems} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <Select
-              value={currentRole}
-              onChange={setCurrentRole}
-              options={roleOptions}
-              style={{ width: 130 }}
-              size="small"
-            />
+            <Tag color={roleInfo.color} style={{ margin: 0, fontSize: 13 }}>{roleInfo.label}</Tag>
             <Badge count={5} size="small">
               <Bell size={18} color="#64748b" style={{ cursor: 'pointer' }} />
             </Badge>
@@ -249,12 +300,12 @@ const AppLayout = () => {
               }}
               placement="bottomRight"
             >
-              <Avatar
-                size={32}
-                style={{ backgroundColor: '#1a365d', cursor: 'pointer' }}
-              >
-                <User size={16} color="#fff" />
-              </Avatar>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <Avatar size={32} style={{ backgroundColor: '#1a365d' }}>
+                  <User size={16} color="#fff" />
+                </Avatar>
+                {currentUser && <span style={{ fontSize: 14, color: '#333' }}>{currentUser.displayName}</span>}
+              </div>
             </Dropdown>
           </div>
         </Header>

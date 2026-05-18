@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom'
-import { Layout, Menu, Breadcrumb, Select, Avatar, Badge } from 'antd'
+import { Layout, Menu, Breadcrumb, Select, Avatar, Badge, Button, Dropdown } from 'antd'
 import {
   Home,
   Users,
@@ -21,6 +21,8 @@ import {
   TrendingUp,
   FolderOpen,
   Share2,
+  LogOut,
+  Star,
 } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 
@@ -50,6 +52,7 @@ const menuItems = [
       { key: '/dashboard/zhixun', icon: <Eye size={14} />, label: '智巡' },
       { key: '/dashboard/zhiping', icon: <Award size={14} />, label: '智评' },
       { key: '/dashboard/zhixun2', icon: <BookOpen size={14} />, label: '智训' },
+      { key: '/dashboard/skill-profile', icon: <Star size={14} />, label: '能力画像' },
     ],
   },
   {
@@ -85,6 +88,7 @@ const breadcrumbNameMap: Record<string, string> = {
   '/dashboard/zhixun': '智巡',
   '/dashboard/zhiping': '智评',
   '/dashboard/zhixun2': '智训',
+  '/dashboard/skill-profile': '能力画像',
   '/repository': '四库一图',
   '/repository/indicator': '指标库',
   '/repository/knowledge': '知识库',
@@ -96,9 +100,14 @@ const breadcrumbNameMap: Record<string, string> = {
 }
 
 const AppLayout = () => {
+  const { collapsed, toggleCollapsed, currentRole, setCurrentRole, currentUser, logout } = useAppStore()
   const navigate = useNavigate()
   const location = useLocation()
-  const { collapsed, toggleCollapsed, currentRole, setCurrentRole } = useAppStore()
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
+  }
 
   const pathSnippets = location.pathname.split('/').filter(Boolean)
   const breadcrumbItems = [
@@ -215,12 +224,32 @@ const AppLayout = () => {
             <Badge count={5} size="small">
               <Bell size={18} color="#64748b" style={{ cursor: 'pointer' }} />
             </Badge>
-            <Avatar
-              size={32}
-              style={{ backgroundColor: '#1a365d', cursor: 'pointer' }}
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 'userInfo',
+                    label: currentUser ? `${currentUser.displayName} (${currentUser.username})` : '',
+                    disabled: true,
+                  },
+                  { type: 'divider' },
+                  {
+                    key: 'logout',
+                    icon: <LogOut size={14} />,
+                    label: '退出登录',
+                    onClick: handleLogout,
+                  },
+                ],
+              }}
+              placement="bottomRight"
             >
-              <User size={16} color="#fff" />
-            </Avatar>
+              <Avatar
+                size={32}
+                style={{ backgroundColor: '#1a365d', cursor: 'pointer' }}
+              >
+                <User size={16} color="#fff" />
+              </Avatar>
+            </Dropdown>
           </div>
         </Header>
         <Content style={{ margin: 24, minHeight: 280 }}>

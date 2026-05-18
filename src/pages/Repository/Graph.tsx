@@ -7,14 +7,9 @@ import { graphNodes, graphLinks, graphCategories } from '@/mock/graphData'
 const { Title, Text } = Typography
 
 const categoryColorMap: Record<string, string> = {
-  '项目': '#3b82f6',
-  '部门': '#22c55e',
-  '人员': '#f97316',
-  '文件': '#a855f7',
-  '制度': '#ef4444',
-  '指标': '#06b6d4',
-  '任务': '#eab308',
-  '案例': '#ec4899',
+  '战略层': '#1a365d',
+  '管理层': '#3b82f6',
+  '执行层': '#93c5fd',
 }
 
 const echartsCategories = graphCategories.map(c => ({
@@ -28,7 +23,7 @@ function getOption(highlightId: string | null) {
     name: n.name,
     category: graphCategories.findIndex(c => c.name === n.category),
     symbolSize: n.symbolSize,
-    label: { show: true, fontSize: 11, color: '#e2e8f0' },
+    label: { show: true, fontSize: 12, color: '#333' },
     itemStyle: highlightId
       ? (n.id === highlightId || graphLinks.some(
           l => (l.source === highlightId && l.target === n.id) || (l.target === highlightId && l.source === n.id)
@@ -45,35 +40,42 @@ function getOption(highlightId: string | null) {
       ? (l.source === highlightId || l.target === highlightId
         ? { color: '#94a3b8', width: 2, opacity: 1 }
         : { opacity: 0.06 })
-      : { color: '#475569', width: 1, opacity: 0.5, curveness: 0.1 },
+      : { color: '#94a3b8', width: 1, opacity: 0.5, curveness: 0.1 },
     label: {
-      show: highlightId === l.source || highlightId === l.target,
+      show: true,
       formatter: l.relation,
       fontSize: 10,
-      color: '#cbd5e1',
+      color: '#64748b',
     },
   }))
 
   return {
-    backgroundColor: '#0f172a',
+    backgroundColor: '#fff',
     tooltip: {
       trigger: 'item',
-      backgroundColor: '#1e293b',
-      borderColor: '#334155',
-      textStyle: { color: '#e2e8f0', fontSize: 12 },
+      backgroundColor: '#fff',
+      borderColor: '#e2e8f0',
+      textStyle: { color: '#333', fontSize: 12 },
       formatter: (params: any) => {
         if (params.dataType === 'edge') return params.data.label?.formatter || ''
         const cat = graphCategories[params.data.category]?.name || ''
         return `<b>${params.name}</b><br/>类别：${cat}`
       },
     },
+    legend: [{
+      data: graphCategories.map(c => c.name),
+      orient: 'vertical',
+      right: 10,
+      top: 20,
+      textStyle: { color: '#333', fontSize: 12 },
+    }],
     series: [{
       type: 'graph',
       layout: 'force',
       data: nodes,
       links,
       categories: echartsCategories,
-      force: { repulsion: 300, edgeLength: [100, 200] },
+      force: { repulsion: 400, edgeLength: [120, 250] },
       roam: true,
       draggable: true,
       emphasis: {
@@ -128,10 +130,10 @@ export default function GraphPage() {
       <div style={{ marginBottom: 20 }}>
         <Space align="center" size={8}>
           <Share2 size={22} color="#3b82f6" />
-          <Title level={3} style={{ margin: 0 }}>业务知识图谱</Title>
+          <Title level={3} style={{ margin: 0 }}>考评知识本体关系图</Title>
         </Space>
         <Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-          将散落在各库中的信息连接成网，让知识从点变成面
+          北京市发改委考评知识本体关系图谱，展示战略层、管理层与执行层之间的关联
         </Text>
       </div>
 
@@ -145,16 +147,16 @@ export default function GraphPage() {
 
       <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
         <Card size="small" style={{ flex: 1, textAlign: 'center' }}>
-          <Badge count={graphNodes.length} overflowCount={999} color="#3b82f6" />
-          <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>节点总数</div>
+          <Badge count={graphNodes.length} overflowCount={999} color="#1a365d" />
+          <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>本体实体</div>
         </Card>
         <Card size="small" style={{ flex: 1, textAlign: 'center' }}>
-          <Badge count={graphLinks.length} overflowCount={999} color="#22c55e" />
+          <Badge count={graphLinks.length} overflowCount={999} color="#3b82f6" />
           <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>关系总数</div>
         </Card>
         <Card size="small" style={{ flex: 1, textAlign: 'center' }}>
-          <Badge count={uniqueCategories} overflowCount={999} color="#f97316" />
-          <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>类别数</div>
+          <Badge count={uniqueCategories} overflowCount={999} color="#93c5fd" />
+          <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>概念类别</div>
         </Card>
       </div>
 
@@ -171,17 +173,17 @@ export default function GraphPage() {
           />
         </Card>
         <div style={{ position: 'absolute', top: 12, right: 12, display: 'flex', gap: 8 }}>
-          <Card size="small" style={{ padding: '4px 8px', background: 'rgba(15,23,42,0.8)', border: 'none' }}>
+          <Card size="small" style={{ padding: '4px 8px', background: 'rgba(255,255,255,0.9)', border: 'none' }}>
             <Space size={6}>
-              <Info size={14} color="#94a3b8" />
-              <Text style={{ fontSize: 11, color: '#94a3b8' }}>点击节点查看详情</Text>
+              <Info size={14} color="#64748b" />
+              <Text style={{ fontSize: 11, color: '#64748b' }}>点击节点查看详情</Text>
             </Space>
           </Card>
           <Card
             size="small"
-            style={{ padding: '4px 8px', background: 'rgba(15,23,42,0.8)', border: 'none', cursor: 'pointer' }}
+            style={{ padding: '4px 8px', background: 'rgba(255,255,255,0.9)', border: 'none', cursor: 'pointer' }}
           >
-            <Maximize2 size={14} color="#94a3b8" />
+            <Maximize2 size={14} color="#64748b" />
           </Card>
         </div>
       </div>

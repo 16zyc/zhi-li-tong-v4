@@ -52,7 +52,7 @@ export interface CaseItem {
 export interface GraphNode {
   id: string
   name: string
-  category: '项目' | '部门' | '人员' | '文件' | '制度' | '指标' | '任务' | '案例'
+  category: '战略层' | '管理层' | '执行层'
   symbolSize: number
   value?: number
 }

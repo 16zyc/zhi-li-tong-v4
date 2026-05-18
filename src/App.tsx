@@ -1,9 +1,11 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/locale/zh_CN'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import AppLayout from '@/components/Layout/AppLayout'
+import { useAppStore } from '@/store/useAppStore'
 
+const Login = lazy(() => import('@/pages/Login/index'))
 const Home = lazy(() => import('@/pages/Home/index'))
 const ZhiCe = lazy(() => import('@/pages/Dashboard/ZhiCe'))
 const ZhiGuan = lazy(() => import('@/pages/Dashboard/ZhiGuan'))
@@ -11,6 +13,7 @@ const ZhiBan = lazy(() => import('@/pages/Dashboard/ZhiBan'))
 const ZhiXun = lazy(() => import('@/pages/Dashboard/ZhiXun'))
 const ZhiPing = lazy(() => import('@/pages/Dashboard/ZhiPing'))
 const ZhiXun2 = lazy(() => import('@/pages/Dashboard/ZhiXun2'))
+const SkillProfile = lazy(() => import('@/pages/Dashboard/SkillProfile'))
 const Indicator = lazy(() => import('@/pages/Repository/Indicator'))
 const Knowledge = lazy(() => import('@/pages/Repository/Knowledge'))
 const Performance = lazy(() => import('@/pages/Repository/Performance'))
@@ -45,6 +48,8 @@ function PageLoading() {
 }
 
 export default function App() {
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated)
+
   return (
     <ConfigProvider
       locale={zhCN}
@@ -70,7 +75,8 @@ export default function App() {
       <BrowserRouter basename="/zhi-li-tong-v4">
         <Suspense fallback={<PageLoading />}>
           <Routes>
-            <Route element={<AppLayout />}>
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+            <Route element={isAuthenticated ? <AppLayout /> : <Navigate to="/login" replace />}>
               <Route path="/" element={<Home />} />
               <Route path="/dashboard/zhice" element={<ZhiCe />} />
               <Route path="/dashboard/zhiguan" element={<ZhiGuan />} />
@@ -78,6 +84,7 @@ export default function App() {
               <Route path="/dashboard/zhixun" element={<ZhiXun />} />
               <Route path="/dashboard/zhiping" element={<ZhiPing />} />
               <Route path="/dashboard/zhixun2" element={<ZhiXun2 />} />
+              <Route path="/dashboard/skill-profile" element={<SkillProfile />} />
               <Route path="/repository/indicator" element={<Indicator />} />
               <Route path="/repository/knowledge" element={<Knowledge />} />
               <Route path="/repository/performance" element={<Performance />} />

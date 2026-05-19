@@ -8,7 +8,7 @@ interface DecomposedTask {
   source: string
   objective: string
   department: string
-  status: 'normal' | 'warning' | 'danger'
+  status: 'decomposed' | 'cross_dept' | 'pending_confirm'
 }
 
 interface ChatMessage {
@@ -17,27 +17,28 @@ interface ChatMessage {
 }
 
 const decomposedTasks: DecomposedTask[] = [
-  { id: 1, task: '配合自然资源部编制京津冀国土空间规划，会同天津、河北编制现代化首都都市圈空间协同规划', source: '市政府工作报告重点任务清单第2项', objective: '1.配合市规划自然资源委提出本市关于京津冀国土空间规划有关意见\n2.发挥京津冀联合办工作机制作用，配合编制现代化首都都市圈空间协同规划', department: '市京津冀协同办', status: 'normal' },
-  { id: 2, task: '积极融入、主动服务共建"一带一路"，出台落实"八项行动"的具体措施', source: '市政府工作报告重点任务清单第9项', objective: '1.一季度研究出台北京市积极融入共建"一带一路"高质量发展实施方案\n2.搭建"一带一路"综合服务平台，建立企业服务机制', department: '开放处、空铁处', status: 'normal' },
-  { id: 3, task: '支持、协调和保障中央标志性项目落地，完成第二批市属行政事业单位搬迁', source: '市政府工作报告重点任务清单第13项', objective: '1.加强与国家发改委沟通衔接\n2.协调市国资委、市教委、市卫健委等部门，主动对接搬迁单位', department: '协同疏解处', status: 'warning' },
-  { id: 4, task: '加快重点产业集聚区建设，推动数字经济标杆城市建设', source: '市政府工作报告重点任务清单第18项', objective: '1.制定数字经济标杆城市建设年度工作要点\n2.推进重点产业集聚区基础设施建设和项目落地', department: '高技术处', status: 'normal' },
-  { id: 5, task: '深化营商环境改革，落实新一轮改革任务', source: '市政府工作报告重点任务清单第25项', objective: '1.制定营商环境6.0版改革实施方案\n2.推进审批制度改革，提升政务服务效能', department: '营商改革处', status: 'danger' },
-  { id: 6, task: '推进碳达峰碳中和，完善双碳"1+N"政策体系', source: '市政府工作报告重点任务清单第31项', objective: '1.出台碳达峰实施方案配套文件\n2.推进重点领域节能降碳改造', department: '资环处', status: 'normal' },
-  { id: 7, task: '加强重要民生商品保供稳价，做好价格监测预警', source: '市政府工作报告重点任务清单第42项', objective: '1.完善价格监测预警体系\n2.落实社会救助和保障标准与物价上涨挂钩联动机制', department: '价格处', status: 'warning' },
-  { id: 8, task: '推动京津冀协同发展，支持雄安新区建设', source: '市政府工作报告重点任务清单第3项', objective: '1.制定年度京津冀协同发展工作要点\n2.推进雄安新区"三校一院"交钥匙项目后续工作', department: '市京津冀协同办', status: 'normal' },
-  { id: 9, task: '加快国际科技创新中心建设，推动中关村先行先试改革', source: '市政府工作报告重点任务清单第15项', objective: '1.推动中关村24条先行先试改革措施落地\n2.支持新型研发机构建设', department: '高技术处、科创中心', status: 'normal' },
-  { id: 10, task: '推进城市更新行动，加快老旧小区改造', source: '市政府工作报告重点任务清单第50项', objective: '1.制定城市更新年度计划\n2.推进老旧小区改造新开工项目', department: '投资处', status: 'danger' },
+  { id: 1, task: '配合自然资源部编制京津冀国土空间规划，会同天津、河北编制现代化首都都市圈空间协同规划', source: '市政府工作报告重点任务清单第2项', objective: '1.配合市规划自然资源委提出本市关于京津冀国土空间规划有关意见\n2.发挥京津冀联合办工作机制作用，配合编制现代化首都都市圈空间协同规划', department: '市京津冀协同办', status: 'decomposed' },
+  { id: 2, task: '积极融入、主动服务共建"一带一路"，出台落实"八项行动"的具体措施', source: '市政府工作报告重点任务清单第9项', objective: '1.一季度研究出台北京市积极融入共建"一带一路"高质量发展实施方案\n2.搭建"一带一路"综合服务平台，建立企业服务机制', department: '开放处、空铁处', status: 'cross_dept' },
+  { id: 3, task: '支持、协调和保障中央标志性项目落地，完成第二批市属行政事业单位搬迁', source: '市政府工作报告重点任务清单第13项', objective: '1.加强与国家发改委沟通衔接\n2.协调市国资委、市教委、市卫健委等部门，主动对接搬迁单位', department: '协同疏解处', status: 'pending_confirm' },
+  { id: 4, task: '加快重点产业集聚区建设，推动数字经济标杆城市建设', source: '市政府工作报告重点任务清单第18项', objective: '1.制定数字经济标杆城市建设年度工作要点\n2.推进重点产业集聚区基础设施建设和项目落地', department: '高技术处', status: 'decomposed' },
+  { id: 5, task: '深化营商环境改革，落实新一轮改革任务', source: '市政府工作报告重点任务清单第25项', objective: '1.制定营商环境6.0版改革实施方案\n2.推进审批制度改革，提升政务服务效能', department: '营商改革处', status: 'decomposed' },
+  { id: 6, task: '推进碳达峰碳中和，完善双碳"1+N"政策体系', source: '市政府工作报告重点任务清单第31项', objective: '1.出台碳达峰实施方案配套文件\n2.推进重点领域节能降碳改造', department: '资环处', status: 'decomposed' },
+  { id: 7, task: '加强重要民生商品保供稳价，做好价格监测预警', source: '市政府工作报告重点任务清单第42项', objective: '1.完善价格监测预警体系\n2.落实社会救助和保障标准与物价上涨挂钩联动机制', department: '价格处', status: 'pending_confirm' },
+  { id: 8, task: '推动京津冀协同发展，支持雄安新区建设', source: '市政府工作报告重点任务清单第3项', objective: '1.制定年度京津冀协同发展工作要点\n2.推进雄安新区"三校一院"交钥匙项目后续工作', department: '市京津冀协同办', status: 'decomposed' },
+  { id: 9, task: '加快国际科技创新中心建设，推动中关村先行先试改革', source: '市政府工作报告重点任务清单第15项', objective: '1.推动中关村24条先行先试改革措施落地\n2.支持新型研发机构建设', department: '高技术处、科创中心', status: 'cross_dept' },
+  { id: 10, task: '推进城市更新行动，加快老旧小区改造', source: '市政府工作报告重点任务清单第50项', objective: '1.制定城市更新年度计划\n2.推进老旧小区改造新开工项目', department: '投资处', status: 'decomposed' },
 ]
 
 const statusMap: Record<string, { color: string; label: string }> = {
-  normal: { color: 'green', label: '正常' },
-  warning: { color: 'orange', label: '关注' },
-  danger: { color: 'red', label: '预警' },
+  decomposed: { color: 'green', label: '已分解' },
+  cross_dept: { color: 'blue', label: '跨处室' },
+  pending_confirm: { color: 'orange', label: '待确认' },
 }
 
 const mockReplies: Record<string, string> = {
-  分解: '任务分解已基于市政府工作报告重点任务清单、发改委综合考评实施方案和各处室职责目录三份材料完成。共生成10条分解结果，涉及8个处室，其中2条红灯预警任务（营商改革处、投资处）和2条黄灯关注任务（协同疏解处、价格处），建议优先关注。',
-  红灯: '当前有2条红灯预警任务：\n1. 营商改革处——深化营商环境改革，落实新一轮改革任务（第25项），主要风险为改革方案制定进度滞后；\n2. 投资处——推进城市更新行动，加快老旧小区改造（第50项），主要风险为项目开工率不足。\n建议立即召开专题协调会推进。',
+  分解: '任务分解已基于市政府工作报告重点任务清单、发改委综合考评实施方案和各处室职责目录三份材料完成。共生成10条分解结果，涉及8个处室，其中2条跨处室协作任务（开放处/空铁处、高技术处/科创中心）和2条待确认任务（协同疏解处、价格处），建议尽快与相关处室确认职责归属。',
+  跨处室: '当前有2条跨处室协作任务：\n1. 开放处/空铁处——积极融入"一带一路"（第9项），涉及国际经贸和航空两个领域；\n2. 高技术处/科创中心——国际科技创新中心建设（第15项），涉及产业和科研两个方向。\n建议召开跨处室协调会明确主次责任。',
+  待确认: '当前有2条待确认任务：\n1. 协同疏解处——中央标志性项目落地（第13项），需确认是否需其他处室配合；\n2. 价格处——民生商品保供稳价（第42项），需确认与市场监管部门的协作边界。\n建议尽快与相关处室沟通确认。',
   处室: '本次分解涉及8个处室：市京津冀协同办（2项）、开放处/空铁处（1项）、协同疏解处（1项）、高技术处（1项）、营商改革处（1项）、资环处（1项）、价格处（1项）、高技术处/科创中心（1项）、投资处（1项）。其中市京津冀协同办承担任务最多。',
   考评: '根据发改委综合考评实施方案，分解结果已与考评指标对齐。每条分解任务的"任务目标"字段均包含可量化的考核要点，便于后续跟踪和评价。建议结合考评周期设置里程碑节点。',
 }
@@ -46,7 +47,7 @@ function getMockReply(input: string): string {
   for (const [key, reply] of Object.entries(mockReplies)) {
     if (input.includes(key)) return reply
   }
-  return '感谢您的提问。我可以帮您分析任务分解结果、处室负载情况、风险预警详情等。请尝试输入"红灯任务"、"处室分布"或"考评对接"等关键词获取详细信息。'
+  return '感谢您的提问。我可以帮您分析任务分解结果、处室负载情况、跨处室协作详情等。请尝试输入"跨处室任务"、"待确认任务"或"处室分布"等关键词获取详细信息。'
 }
 
 const inputMaterials = [
@@ -107,9 +108,9 @@ export default function TaskDecompose() {
     }, 800)
   }
 
-  const normalCount = decomposedTasks.filter(t => t.status === 'normal').length
-  const warningCount = decomposedTasks.filter(t => t.status === 'warning').length
-  const dangerCount = decomposedTasks.filter(t => t.status === 'danger').length
+  const normalCount = decomposedTasks.filter(t => t.status === 'decomposed').length
+  const crossDeptCount = decomposedTasks.filter(t => t.status === 'cross_dept').length
+  const pendingCount = decomposedTasks.filter(t => t.status === 'pending_confirm').length
   const deptSet = new Set(decomposedTasks.flatMap(t => t.department.split('、')))
 
   const columns = [
@@ -220,13 +221,13 @@ export default function TaskDecompose() {
                 </Card>
               </Col>
               <Col span={6}>
-                <Card size="small" style={{ borderRadius: 10, borderLeft: '3px solid #ff4d4f' }} styles={{ body: { padding: '12px 16px' } }}>
-                  <Statistic title="红灯任务" value={dangerCount} valueStyle={{ color: '#ff4d4f', fontSize: 24 }} />
+                <Card size="small" style={{ borderRadius: 10, borderLeft: '3px solid #1890ff' }} styles={{ body: { padding: '12px 16px' } }}>
+                  <Statistic title="跨处室协作" value={crossDeptCount} valueStyle={{ color: '#1890ff', fontSize: 24 }} />
                 </Card>
               </Col>
               <Col span={6}>
                 <Card size="small" style={{ borderRadius: 10, borderLeft: '3px solid #faad14' }} styles={{ body: { padding: '12px 16px' } }}>
-                  <Statistic title="黄灯任务" value={warningCount} valueStyle={{ color: '#faad14', fontSize: 24 }} />
+                  <Statistic title="待确认" value={pendingCount} valueStyle={{ color: '#faad14', fontSize: 24 }} />
                 </Card>
               </Col>
             </Row>
@@ -315,7 +316,7 @@ export default function TaskDecompose() {
               value={chatInput}
               onChange={e => setChatInput(e.target.value)}
               onPressEnter={handleSend}
-              placeholder='输入问题，如"红灯任务详情"'
+              placeholder='输入问题，如"跨处室任务详情"'
               style={{ borderRadius: 8 }}
             />
             <Button

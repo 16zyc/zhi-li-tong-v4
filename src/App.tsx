@@ -99,8 +99,8 @@ export default function App() {
               <Route path="/workflow" element={<WorkflowIndex />} />
               <Route path="/workflow/goal" element={<GoalSetting />} />
               <Route path="/workflow/report" element={<ReportGeneration />} />
-              <Route path="/workflow/:stage" element={<StageDetail />} />
               <Route path="/workflow/task-decompose" element={<TaskDecompose />} />
+              <Route path="/workflow/:stage" element={<StageDetail />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/system/users" element={<SystemUsers />} />
               <Route path="/system/config" element={<SystemConfig />} />

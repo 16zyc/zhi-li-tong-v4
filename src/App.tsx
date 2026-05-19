@@ -21,6 +21,8 @@ const Case = lazy(() => import('@/pages/Repository/Case'))
 const Graph = lazy(() => import('@/pages/Repository/Graph'))
 const WorkflowIndex = lazy(() => import('@/pages/Workflow/index'))
 const StageDetail = lazy(() => import('@/pages/Workflow/StageDetail'))
+const GoalSetting = lazy(() => import('@/pages/Workflow/GoalSetting'))
+const ReportGeneration = lazy(() => import('@/pages/Workflow/ReportGeneration'))
 const TaskDecompose = lazy(() => import('@/pages/Workflow/TaskDecompose'))
 const Chat = lazy(() => import('@/pages/Chat/index'))
 const SystemUsers = lazy(() => import('@/pages/System/Users'))
@@ -95,6 +97,8 @@ export default function App() {
               <Route path="/repository/case" element={<Case />} />
               <Route path="/repository/graph" element={<Graph />} />
               <Route path="/workflow" element={<WorkflowIndex />} />
+              <Route path="/workflow/goal" element={<GoalSetting />} />
+              <Route path="/workflow/report" element={<ReportGeneration />} />
               <Route path="/workflow/:stage" element={<StageDetail />} />
               <Route path="/workflow/task-decompose" element={<TaskDecompose />} />
               <Route path="/chat" element={<Chat />} />

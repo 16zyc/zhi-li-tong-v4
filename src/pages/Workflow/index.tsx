@@ -101,7 +101,7 @@ export default function WorkflowIndex() {
       >
         <Title level={4} style={{ color: '#fff', margin: 0 }}>十大环节</Title>
         <Text style={{ color: 'rgba(255,255,255,0.75)', fontSize: 14, marginTop: 4, display: 'block' }}>
-          全链路作战条令——从任务捕获到效能优化
+          全链路作战条令——从任务捕获到报告生成
         </Text>
       </div>
 

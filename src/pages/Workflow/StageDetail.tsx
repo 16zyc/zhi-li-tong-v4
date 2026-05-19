@@ -43,16 +43,16 @@ const priorityMap: Record<string, { color: string; label: string }> = {
 }
 
 const aiSuggestionMap: Record<string, { title: string; items: string[] }> = {
-  capture: { title: '任务捕获优化建议', items: ['建议接入OA系统自动同步待办任务', '语音转文字识别率可提升至95%以上', '新增信访渠道任务自动归类功能'] },
-  goal: { title: '目标建立优化建议', items: ['3项批示待解析，建议优先处理', '招商引资目标与战略规划关联度不足', '建议增加目标可量化性校验'] },
-  decompose: { title: '任务分解优化建议', items: ['XX产业园项目子任务粒度偏粗，建议进一步拆分', '运营部负载已达85%，建议重新分配', '2项外部协同任务需确认接收方'] },
-  indicator: { title: '指标生成优化建议', items: ['3项指标与职责匹配度低于70%', '建议增加过程性指标权重', '数据采集自动化率可提升至80%'] },
-  process: { title: '过程管理优化建议', items: ['2项任务近7天无进度更新', '设计招标环节平均耗时超出基准30%', '建议启用自动汇报生成功能'] },
-  risk: { title: '风险预警优化建议', items: ['数据治理项目已触发红灯，建议立即介入', '3项任务临近节点但进度不足50%', '建议调整风险阈值，降低误报率'] },
-  verify: { title: '查访核验优化建议', items: ['审计整改落实材料完整度仅60%', '建议启用OCR自动比对功能', '2项核验报告待生成'] },
-  evaluate: { title: '考核评价优化建议', items: ['Q2评分进度30%，建议加速推进', '3个部门自评数据尚未提交', '建议启用AI辅助评分功能'] },
-  feedback: { title: '绩效反馈优化建议', items: ['制度文件更新反馈报告待发送', '1项申诉待处理', '建议增加可视化对比图表'] },
-  optimize: { title: '效能优化建议', items: ['审批流程平均耗时3.2天，可优化至2.5天', '目标设定环节为当前瓶颈', '建议沉淀3项最佳实践案例'] },
+  capture: { title: '任务捕获优化建议', items: ['建议接入OA系统自动同步公文任务', '领导批示语义识别准确率达93%', '新增信访渠道任务自动归类功能'] },
+  goal: { title: '目标制定优化建议', items: ['5项批示待解析为可量化目标', '建议增加目标与考评指标的关联校验', '3项目标缺少明确时间节点'] },
+  decompose: { title: '任务分解优化建议', items: ['营商环境改革任务粒度偏粗，建议进一步拆分', '开放处负载已达80%，建议重新评估分配', '2项跨处室任务需确认主次责任'] },
+  indicator: { title: '指标生成优化建议', items: ['4项指标与处室职责匹配度低于75%', '建议增加过程性指标权重至40%', '数据采集自动化率可提升至85%'] },
+  process: { title: '过程跟踪优化建议', items: ['2项政策研究任务近7天无进度更新', '规划编制环节平均耗时超出基准25%', '建议启用自动汇报生成功能'] },
+  risk: { title: '风险预警优化建议', items: ['节能降碳改造已触发红灯，建议立即介入', '3项任务临近节点但进度不足50%', '建议调整风险阈值，降低误报率'] },
+  verify: { title: '查访核验优化建议', items: ['价格监测体系建设材料完整度仅65%', '建议启用OCR自动比对功能', '2项核验报告待生成'] },
+  evaluate: { title: '考核评价优化建议', items: ['Q2评分进度60%，建议加速推进', '3个处室自评数据尚未提交', '建议启用AI辅助评分功能'] },
+  feedback: { title: '绩效反馈优化建议', items: ['Q1反馈报告已发送至8个处室', '1项申诉待处理（资环处）', '建议增加可视化对比图表'] },
+  report: { title: '报告生成优化建议', items: ['年度报告模板已更新为2025版', '建议增加跨年度趋势对比分析', '3个处室数据尚未汇总完成'] },
 }
 
 const capturePieOption = () => ({
@@ -62,11 +62,11 @@ const capturePieOption = () => ({
     type: 'pie', radius: ['40%', '65%'],
     label: { fontSize: 12 },
     data: [
-      { value: 3, name: '集团领导交办', itemStyle: { color: '#1a365d' } },
-      { value: 2, name: '上级单位文件', itemStyle: { color: '#2a5298' } },
-      { value: 1, name: '客户投诉', itemStyle: { color: '#d4a853' } },
+      { value: 5, name: '市政府工作报告', itemStyle: { color: '#1a365d' } },
+      { value: 3, name: '上级单位文件', itemStyle: { color: '#2a5298' } },
+      { value: 2, name: '领导批示', itemStyle: { color: '#d4a853' } },
       { value: 2, name: '内部审计报告', itemStyle: { color: '#e8983e' } },
-      { value: 1, name: '制度规定', itemStyle: { color: '#52c41a' } },
+      { value: 3, name: '制度规定', itemStyle: { color: '#52c41a' } },
     ],
   }],
 })
@@ -80,7 +80,7 @@ const riskCards = [
 const evaluateBarOption = () => ({
   tooltip: { trigger: 'axis' as const },
   grid: { left: 40, right: 20, top: 20, bottom: 30 },
-  xAxis: { type: 'category' as const, data: ['战略部', '运营部', '信息中心', '审计部', '人力资源部', '法务部'], axisLabel: { fontSize: 11 } },
+  xAxis: { type: 'category' as const, data: ['协同政策处', '开放处', '营商改革处', '资环处', '高技术处', '投资处'], axisLabel: { fontSize: 11 } },
   yAxis: { type: 'value' as const, max: 100, axisLabel: { fontSize: 11 } },
   series: [{
     type: 'bar', barWidth: 28,
@@ -95,14 +95,14 @@ const evaluateBarOption = () => ({
   }],
 })
 
-const optimizeBarOption = () => ({
+const reportBarOption = () => ({
   tooltip: { trigger: 'axis' as const },
-  grid: { left: 80, right: 20, top: 20, bottom: 30 },
-  xAxis: { type: 'value' as const, axisLabel: { fontSize: 11 } },
-  yAxis: { type: 'category' as const, data: ['目标设定', '任务分解', '过程跟踪', '材料归档', '考核评分', '反馈沟通'], axisLabel: { fontSize: 11 } },
+  grid: { left: 100, right: 20, top: 20, bottom: 30 },
+  xAxis: { type: 'value' as const, max: 100, axisLabel: { fontSize: 11 } },
+  yAxis: { type: 'category' as const, data: ['绩效分析报告', '处室画像报告', '风险预警报告', '改进建议报告', '年度总结报告', '专项分析报告'], axisLabel: { fontSize: 11 } },
   series: [{
     type: 'bar', barWidth: 18,
-    data: [4.2, 3.8, 3.1, 2.9, 2.5, 2.1],
+    data: [85, 72, 90, 65, 20, 55],
     itemStyle: { color: '#d4a853', borderRadius: [0, 4, 4, 0] },
   }],
 })
@@ -179,11 +179,11 @@ export default function StageDetail() {
             <ReactEChartsCore echarts={echarts} option={evaluateBarOption()} style={{ height: 260 }} />
           </Card>
         )
-      case 'optimize':
+      case 'report':
         return (
           <Card style={{ borderRadius: 12 }} styles={{ body: { padding: '16px 24px' } }}>
-            <div style={{ fontSize: 15, fontWeight: 600, color: '#1a365d', marginBottom: 12 }}>瓶颈分析（平均耗时/天）</div>
-            <ReactEChartsCore echarts={echarts} option={optimizeBarOption()} style={{ height: 260 }} />
+            <div style={{ fontSize: 15, fontWeight: 600, color: '#1a365d', marginBottom: 12 }}>报告完成度分布</div>
+            <ReactEChartsCore echarts={echarts} option={reportBarOption()} style={{ height: 260 }} />
           </Card>
         )
       default:

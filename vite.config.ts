@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
 
 export default defineConfig({
-  base: './',
+  base: '/zhi-li-tong-v4/',
   build: {
     sourcemap: false,
     cssCodeSplit: true,

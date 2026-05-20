@@ -29,6 +29,7 @@
       </div>
     </div>
     <script>
+      (function(){var r=sessionStorage.redirect;delete sessionStorage.redirect;if(r&&r!=='/zhi-li-tong-v4/'){history.replaceState(null,null,r)}});
       window.addEventListener('load',function(){var e=document.getElementById('app-loading');if(e){e.classList.add('hide');setTimeout(function(){e.remove()},500)}});
     </script>
     <script type="module" src="./src/main.tsx"></script>

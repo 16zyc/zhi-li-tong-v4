@@ -1,5 +1,6 @@
-import { Card, List, Tag, Button, Input, Progress, Row, Col, Typography, Space, Badge, Checkbox, Timeline, message } from 'antd'
+import { Card, List, Tag, Button, Input, Progress, Row, Col, Typography, Space, Badge, Checkbox, Timeline, message, Modal, Form, InputNumber } from 'antd'
 import { ClipboardCheck, Upload, Search, FileText, Shield, Lightbulb, Clock, AlertCircle, CheckCircle } from 'lucide-react'
+import { useState } from 'react'
 import { taskData } from '@/mock/taskData'
 import { caseData } from '@/mock/caseData'
 
@@ -55,11 +56,20 @@ const complianceItems = [
   { label: '社会稳定风险评估', done: false },
 ]
 
+const pendingTasks = [
+  { id: 'T-002', name: '研究出台"一带一路"高质量发展实施方案', department: '开放处/空铁处', deadline: '2025-06-30', urgency: 'high' },
+  { id: 'T-005', name: '制定营商环境6.0版改革实施方案', department: '营商政策处/营商协调处', deadline: '2025-09-30', urgency: 'high' },
+  { id: 'T-006', name: '推进碳达峰碳中和政策体系建设', department: '资环处/能源处', deadline: '2025-12-31', urgency: 'medium' },
+  { id: 'T-009', name: '推动中关村先行先试改革落地', department: '高技术处', deadline: '2025-12-31', urgency: 'medium' },
+  { id: 'T-010', name: '推进城市更新年度计划', department: '投资处', deadline: '2025-11-30', urgency: 'medium' },
+]
+
 const relatedCases = caseData.filter(c =>
   c.tags.some(tag => ['项目管理', '协同', '审批', '协作'].includes(tag))
 ).slice(0, 3)
 
 export default function ZhiBan() {
+  const [fillModalOpen, setFillModalOpen] = useState(false)
   return (
     <div style={{ minHeight: 'auto', background: 'transparent', padding: 24, color: '#333' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
@@ -83,46 +93,40 @@ export default function ZhiBan() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={24}>
           <Card
-            title={<Space><ClipboardCheck size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>我的待办</Text><Tag color="blue">{myTasks.length}项</Tag></Space>}
+            title={<Space><ClipboardCheck size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>我的待办</Text><Tag color="blue">{pendingTasks.length}项</Tag></Space>}
             style={glassCard}
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 16px' } }}
           >
-            <List
-              dataSource={myTasks}
-              renderItem={task => {
-                const p = priorityMap[task.priority] || priorityMap.medium
-                const s = statusMap[task.status] || statusMap.pending
-                return (
-                  <List.Item style={{ border: 'none', padding: '8px 0' }}>
-                    <div style={{ width: '100%', padding: 12, background: 'rgba(0,0,0,0.04)', borderRadius: 8 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                        <Space size={8}>
-                          <Text style={{ color: '#1a365d', fontWeight: 600, fontSize: 14 }} ellipsis>{task.name}</Text>
-                          <Tag color={p.color} style={{ margin: 0 }}>{p.label}</Tag>
-                          <Tag color={s.color} style={{ margin: 0 }}>{s.label}</Tag>
+            {pendingTasks.map(task => {
+              const urgencyConfig: Record<string, { color: string; label: string }> = {
+                high: { color: '#ef4444', label: '紧急' },
+                medium: { color: '#f59e0b', label: '一般' },
+              }
+              const u = urgencyConfig[task.urgency] || urgencyConfig.medium
+              return (
+                <div key={task.id} style={{ padding: 12, background: 'rgba(0,0,0,0.04)', borderRadius: 8, marginBottom: 8 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <Text style={{ color: '#1a365d', fontWeight: 700, fontSize: 14 }}>{task.name}</Text>
+                        <Tag color={task.urgency === 'high' ? 'red' : 'orange'} style={{ margin: 0 }}>{u.label}</Tag>
+                      </div>
+                      <Space size={16}>
+                        <Space size={4}>
+                          <Text style={{ color: '#8c8c8c', fontSize: 12 }}>处室：</Text>
+                          <Text style={{ color: '#333', fontSize: 12 }}>{task.department}</Text>
                         </Space>
                         <Space size={4}>
                           <Clock size={12} color="#8c8c8c" />
-                          <Text style={{ color: '#8c8c8c', fontSize: 12 }}>{task.deadline}</Text>
+                          <Text style={{ color: '#8c8c8c', fontSize: 12 }}>截止：{task.deadline}</Text>
                         </Space>
-                      </div>
-                      <Progress
-                        percent={task.progress}
-                        strokeColor={task.progress >= 80 ? '#22c55e' : task.progress >= 50 ? '#3b82f6' : '#f59e0b'}
-                        trailColor="#f0f0f0"
-                        size="small"
-                        style={{ marginBottom: 8 }}
-                      />
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-                        <Button size="small" type="primary" icon={<Upload size={12} style={{ verticalAlign: -1 }} />} style={{ borderRadius: 6 }} onClick={() => message.info('正在打开进度更新表单...')}>更新进度</Button>
-                        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} icon={<FileText size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.info('正在打开材料上传界面...')}>上传材料</Button>
-                        <Button size="small" style={{ background: '#f5f5f5', color: '#666', border: 'none', borderRadius: 6 }} onClick={() => message.info('正在加载任务详情...')}>查看详情</Button>
-                      </div>
+                      </Space>
                     </div>
-                  </List.Item>
-                )
-              }}
-            />
+                    <Button size="small" type="primary" style={{ borderRadius: 6, flexShrink: 0 }} onClick={() => message.info(`正在打开任务 ${task.id} 处理界面...`)}>处理</Button>
+                  </div>
+                </div>
+              )
+            })}
           </Card>
         </Col>
       </Row>
@@ -182,7 +186,7 @@ export default function ZhiBan() {
                 </Space>
               </div>
             ))}
-            <Button type="primary" block style={{ marginTop: 12, borderRadius: 8, height: 36 }} onClick={() => message.success('已启动智能填报流程')}>一键填报</Button>
+            <Button type="primary" block style={{ marginTop: 12, borderRadius: 8, height: 36 }} onClick={() => setFillModalOpen(true)}>一键填报</Button>
           </Card>
         </Col>
         <Col span={12}>
@@ -247,6 +251,41 @@ export default function ZhiBan() {
           </Card>
         </Col>
       </Row>
+
+      <Modal
+        title="智能填报 · AI辅助"
+        open={fillModalOpen}
+        onCancel={() => setFillModalOpen(false)}
+        onOk={() => { message.success('填报已提交'); setFillModalOpen(false) }}
+        width={640}
+      >
+        <Form layout="vertical">
+          <Form.Item label="任务名称" initialValue="推进碳达峰碳中和政策体系建设">
+            <Input />
+          </Form.Item>
+          <Form.Item label="牵头处室" initialValue="资环处/能源处">
+            <Input />
+          </Form.Item>
+          <Form.Item label="当前进度(%)" initialValue={55}>
+            <InputNumber min={0} max={100} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item label="本季度完成情况">
+            <Input.TextArea rows={3} defaultValue="1.出台碳达峰实施方案配套文件（进行中）\n2.推进重点领域节能降碳改造（滞后）" />
+          </Form.Item>
+          <Form.Item label="存在问题">
+            <Input.TextArea rows={2} defaultValue="节能降碳改造子项进度不均衡，工业领域改造滞后" />
+          </Form.Item>
+          <Form.Item label="下一步计划">
+            <Input.TextArea rows={2} defaultValue="1.召开专题协调会推进工业领域改造\n2.加强资金保障和项目调度" />
+          </Form.Item>
+        </Form>
+        <div style={{ background: '#f0f4f8', padding: 12, borderRadius: 8, marginTop: 8 }}>
+          <div style={{ fontSize: 12, color: '#1a365d', fontWeight: 600, marginBottom: 4 }}>🤖 AI填报建议</div>
+          <div style={{ fontSize: 12, color: '#666' }}>
+            基于任务分解目标和过程跟踪数据，AI已自动填充：进度55%（与跟踪系统一致）、存在问题（识别为红灯项目）、下一步计划（基于同类任务经验生成）
+          </div>
+        </div>
+      </Modal>
 
       <style>{`
         .ant-checkbox-inner { background: transparent !important; }

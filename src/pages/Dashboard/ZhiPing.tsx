@@ -16,6 +16,17 @@ const glassCard: React.CSSProperties = {
 const levelColorMap: Record<string, string> = { A: '#22c55e', B: '#3b82f6', C: '#f59e0b', D: '#ef4444' }
 const levelTagColor: Record<string, string> = { A: 'success', B: 'processing', C: 'warning', D: 'error' }
 
+const deptCategoryMap: Record<string, { label: string; color: string }> = {
+  '市京津冀协同办': { label: '业务管理类', color: 'blue' },
+  '高技术处': { label: '业务管理类', color: 'blue' },
+  '开放处': { label: '业务管理类', color: 'blue' },
+  '营商政策处': { label: '业务管理类', color: 'blue' },
+  '资环处': { label: '业务管理类', color: 'blue' },
+  '投资处': { label: '业务管理类', color: 'blue' },
+  '市疏整促专项办': { label: '业务管理类', color: 'blue' },
+  '价格处': { label: '业务管理类', color: 'blue' },
+}
+
 const statusMap: Record<string, { color: string; label: string }> = {
   completed: { color: 'success', label: '已评分' },
   in_progress: { color: 'processing', label: '评分中' },
@@ -28,23 +39,23 @@ const deptStatusList = performanceData.map((p, i) => ({
 }))
 
 const highlights = [
-  { dept: '财务部', text: '预算执行率95%，连续三季度排名上升', icon: <TrendingUp size={14} color="#22c55e" /> },
-  { dept: '战略部', text: '战略目标完成率98%，重点项目按期交付', icon: <Star size={14} color="#f59e0b" /> },
-  { dept: '运营部', text: '安全生产零事故，客户满意度提升5%', icon: <CheckCircle size={14} color="#3b82f6" /> },
-  { dept: '审计部', text: '审计问题整改率92%，风险防控成效显著', icon: <BarChart3 size={14} color="#8b5cf6" /> },
+  { dept: '市京津冀协同办', text: '党建得分96，高效履职42分，综合排名第一', icon: <TrendingUp size={14} color="#22c55e" /> },
+  { dept: '高技术处', text: '创新平台建设超额完成，加减分项获3分加分', icon: <Star size={14} color="#f59e0b" /> },
+  { dept: '开放处', text: '对外开放政策落地顺利，依法行政满分9分', icon: <CheckCircle size={14} color="#3b82f6" /> },
+  { dept: '营商政策处', text: '营商环境优化措施获好评，高效履职37分', icon: <BarChart3 size={14} color="#8b5cf6" /> },
 ]
 
 const risks = [
-  { dept: '行政部', text: '连续两季度排名下降，文档归档及时率低', level: 'high' },
-  { dept: '人力资源部', text: '人才引进目标未完成，员工满意度需提升', level: 'medium' },
-  { dept: '信息中心', text: '数字化转型进度滞后，系统响应待优化', level: 'medium' },
-  { dept: '法务部', text: '法务审核周期偏长，影响业务推进效率', level: 'low' },
+  { dept: '投资处', text: '高效履职得分偏低(32/45)，建议加强重点任务推进力度', level: 'high' },
+  { dept: '价格处', text: '依法行政扣分较多，建议加强规范性文件合法性审核', level: 'high' },
+  { dept: '市疏整促专项办', text: '党建得分低于90(80分)，总成绩受系数影响较大', level: 'medium' },
+  { dept: '资环处', text: '加减分项被扣1分，需关注减分事项整改', level: 'low' },
 ]
 
 const excellenceCandidates = [
-  { name: '张总监', dept: '财务部', score: 90.1, reason: '综合评分排名第一，预算执行与资金效率双优' },
-  { name: '李总监', dept: '运营部', score: 88.3, reason: '安全生产零事故，客户满意度持续提升' },
-  { name: '张总监', dept: '战略部', score: 92.5, reason: '战略目标完成率98%，重点项目按期交付' },
+  { name: '市京津冀协同办', dept: '业务管理类', score: 92, reason: '党建得分96，高效履职42分，综合排名第一' },
+  { name: '高技术处', dept: '业务管理类', score: 90, reason: '创新平台建设超额完成，加减分项获3分加分' },
+  { name: '开放处', dept: '业务管理类', score: 88, reason: '对外开放政策落地顺利，依法行政得分8/10' },
 ]
 
 export default function ZhiPing() {
@@ -75,12 +86,18 @@ export default function ZhiPing() {
 
   const columns = [
     {
-      title: '部门',
+      title: '处室',
       dataIndex: 'department',
       key: 'department',
-      render: (t: string, r: typeof deptStatusList[0]) => (
-        <Button type="text" size="small" style={{ color: '#1a365d', fontWeight: 600, padding: 0 }} onClick={() => setSelectedDept(r)}>{t}</Button>
-      ),
+      render: (t: string, r: typeof deptStatusList[0]) => {
+        const cat = deptCategoryMap[t]
+        return (
+          <Space size={4}>
+            <Button type="text" size="small" style={{ color: '#1a365d', fontWeight: 600, padding: 0 }} onClick={() => setSelectedDept(r)}>{t}</Button>
+            {cat && <Tag color={cat.color} style={{ fontSize: 10, lineHeight: '16px', padding: '0 4px', margin: 0 }}>{cat.label}</Tag>}
+          </Space>
+        )
+      },
     },
     {
       title: '总分',
@@ -136,11 +153,11 @@ export default function ZhiPing() {
         <div>
           <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
             <Award size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />
-            智评助手 · 考核评价工作台
+            智评助手 · 综合考评工作台
           </Title>
           <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
-            赵总监，Q2绩效考核进行中，已完成
-            <Text style={{ color: '#3b82f6', fontWeight: 600 }}>5/8</Text>部门评分
+            2025年度综合考评进行中，48个处室单位参评，已完成
+            <Text style={{ color: '#3b82f6', fontWeight: 600 }}>29/48</Text>处室评分
           </Text>
         </div>
         <Space>
@@ -149,11 +166,22 @@ export default function ZhiPing() {
         </Space>
       </div>
 
+      <div style={{ background: '#f0f4f8', padding: 12, borderRadius: 8, marginBottom: 16, display: 'flex', gap: 16, alignItems: 'center' }}>
+        <span style={{ fontSize: 12, color: '#1a365d', fontWeight: 600 }}>📊 数据来源</span>
+        <span style={{ fontSize: 12, color: '#666' }}>指标体系 ← 指标生成环节</span>
+        <span style={{ fontSize: 12, color: '#999' }}>→</span>
+        <span style={{ fontSize: 12, color: '#666' }}>过程数据 ← 过程跟踪/智巡核验</span>
+        <span style={{ fontSize: 12, color: '#999' }}>→</span>
+        <span style={{ fontSize: 12, color: '#666' }}>处室自评 ← 处室提交</span>
+        <span style={{ fontSize: 12, color: '#999' }}>→</span>
+        <span style={{ fontSize: 12, color: '#1a365d', fontWeight: 600 }}>智评汇总</span>
+      </div>
+
       <Row gutter={16} style={{ marginBottom: 20 }}>
         {[
-          { label: '参评部门', value: 8, suffix: '个', color: '#3b82f6', icon: <BarChart3 size={20} color="#3b82f6" /> },
-          { label: '已完成', value: 5, suffix: '个', color: '#22c55e', icon: <CheckCircle size={20} color="#22c55e" /> },
-          { label: 'A级部门', value: aLevelCount, suffix: '个', color: '#f59e0b', icon: <Star size={20} color="#f59e0b" /> },
+          { label: '参评处室', value: 48, suffix: '个', color: '#3b82f6', icon: <BarChart3 size={20} color="#3b82f6" /> },
+          { label: '已完成', value: 29, suffix: '个', color: '#22c55e', icon: <CheckCircle size={20} color="#22c55e" /> },
+          { label: 'A级处室', value: aLevelCount, suffix: '个', color: '#f59e0b', icon: <Star size={20} color="#f59e0b" /> },
           { label: '平均得分', value: avgScore, suffix: '分', color: '#8b5cf6', icon: <TrendingUp size={20} color="#8b5cf6" /> },
         ].map((item, i) => (
           <Col span={6} key={i}>
@@ -174,10 +202,20 @@ export default function ZhiPing() {
         ))}
       </Row>
 
+      <Card style={{ ...glassCard, marginBottom: 20 }} styles={{ body: { padding: '12px 20px' } }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 13, color: '#1a365d', fontWeight: 600 }}>📐 考评成绩计算公式</span>
+          <span style={{ fontSize: 13, color: '#333', fontFamily: 'monospace' }}>
+            年度考评成绩 = (工作实绩得分 + 履职测评得分 + 加分项得分 - 减分得分) × (党的建设得分 ÷ 90)
+          </span>
+          <Tag color="blue" style={{ marginLeft: 'auto' }}>党建系数调节</Tag>
+        </div>
+      </Card>
+
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={24}>
           <Card
-            title={<Space><BarChart3 size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>智能评分面板</Text><Tag color="blue">点击部门查看画像</Tag></Space>}
+            title={<Space><BarChart3 size={16} color="#3b82f6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>智能评分面板</Text><Tag color="blue">点击处室查看画像</Tag></Space>}
             style={glassCard}
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: 0 } }}
           >
@@ -196,7 +234,7 @@ export default function ZhiPing() {
       <Row gutter={16} style={{ marginBottom: 20 }}>
         <Col span={10}>
           <Card
-            title={<Space><UserCheck size={16} color="#8b5cf6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>{selectedDept.department} · 部门画像</Text></Space>}
+            title={<Space><UserCheck size={16} color="#8b5cf6" /><Text style={{ color: '#1a365d', fontWeight: 600 }}>{selectedDept.department} · 处室画像</Text></Space>}
             style={glassCard}
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '8px 16px 16px' } }}
           >
@@ -269,7 +307,7 @@ export default function ZhiPing() {
                     <Text style={{ color: '#8c8c8c', fontSize: 12, display: 'block', marginBottom: 4 }}>{c.dept}</Text>
                     <Tag color="gold" style={{ marginBottom: 8 }}>{c.score}分</Tag>
                     <Text style={{ color: '#8c8c8c', fontSize: 12, lineHeight: 1.6, display: 'block' }}>{c.reason}</Text>
-                    <Button size="small" type="primary" style={{ borderRadius: 6, marginTop: 10 }} icon={<Star size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.success('已生成本季度评优推荐名单')}>推荐评优</Button>
+                    <Button size="small" type="primary" style={{ borderRadius: 6, marginTop: 10 }} icon={<Star size={12} style={{ verticalAlign: -1 }} />} onClick={() => message.success('已生成本年度评优推荐名单')}>推荐评优</Button>
                   </div>
                 </Col>
               ))}

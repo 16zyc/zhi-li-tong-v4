@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Card, Tag, Progress, Row, Col, Typography } from 'antd'
+import { Card, Tag, Progress, Row, Col, Typography, Button, Input, Select, Divider } from 'antd'
 import ReactEChartsCore from 'echarts-for-react/lib/core'
 import * as echarts from 'echarts/core'
 import { RadarChart } from 'echarts/charts'
@@ -9,6 +9,7 @@ import { ChevronLeft, Target, Lightbulb, Bot, CheckCircle, Clock, AlertCircle } 
 import { useNavigate } from 'react-router-dom'
 
 const { Title, Text } = Typography
+const { TextArea } = Input
 
 echarts.use([RadarChart, CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent])
 
@@ -22,6 +23,24 @@ interface Goal {
   indicators: number
   quality: number
   description: string
+}
+
+interface GeneratedGoalPlan {
+  category: string
+  annualGoal: string
+  junePlan: string
+  septemberPlan: string
+  score: number
+  checks: { name: string; passed: boolean; desc: string }[]
+}
+
+interface ProgressJudgement {
+  status: 'green' | 'yellow' | 'red'
+  label: string
+  conclusion: string
+  evidence: string[]
+  deduction: string
+  suggestion: string
 }
 
 const goals: Goal[] = [
@@ -73,6 +92,119 @@ const aiSuggestions = [
   '营商环境改革目标建议增加企业满意度指标',
 ]
 
+const demoTaskSamples = [
+  {
+    label: '指标数值类：建设规模减量',
+    value: '扎实推进建设规模减量，治理违法建设2000万平方米，实现城乡建设用地再减量约5.4平方公里。',
+  },
+  {
+    label: '文件印发类：协同规划',
+    value: '编制出台现代化首都都市圈空间协同规划，加强重点领域协同发展政策对接，着力建设通勤圈、功能圈、产业协同圈。',
+  },
+  {
+    label: '工程项目类：副中心枢纽',
+    value: '基本建成副中心站综合交通枢纽，推进轨道交通M101线一期、六环高线公园等重点工程建设。',
+  },
+]
+
+const defaultTaskInput = demoTaskSamples[0].value
+const defaultTargetInput = '现代化首都都市圈空间协同规划：6月底前完成征求意见，9月底前正式印发。'
+const defaultProgressInput = '当前进展：已完成部门征求意见并经委党组会审定，已报送市政府常务会议待审议，尚未正式印发。佐证材料包括委党组会会议纪要、市政府常务会议审议请示。'
+
+function buildGoalPlan(task: string): GeneratedGoalPlan {
+  if (/违法建设|万平方米|平方公里|指标/.test(task)) {
+    return {
+      category: '指标数值类',
+      annualGoal: '完成治理违法建设2000万平方米，实现城乡建设用地再减量约5.4平方公里，并完成年度核验归档。',
+      junePlan: '6月底前完成年度治理任务的60%，同步形成阶段性台账和问题清单。',
+      septemberPlan: '9月底前全面完成治理任务，完成场清地净核验和用地减量数据复核。',
+      score: 94,
+      checks: [
+        { name: '目标量化', passed: true, desc: '已提取2000万平方米、5.4平方公里两个量化指标' },
+        { name: '节点明确', passed: true, desc: '已形成6月、9月两个季度预案' },
+        { name: '可核验', passed: true, desc: '可通过治理台账、用地数据和现场核验材料验证' },
+      ],
+    }
+  }
+
+  if (/规划|办法|方案|印发|出台/.test(task)) {
+    return {
+      category: '文件印发类',
+      annualGoal: '完成文件调研起草、征求意见、合法性审查、会议审议和正式印发实施。',
+      junePlan: '6月底前完成调研起草、征求意见和委内会议审议。',
+      septemberPlan: '9月底前完成合法性审查、政策一致性评估并正式印发。',
+      score: 88,
+      checks: [
+        { name: '程序完整', passed: true, desc: '已按文件印发流程倒排关键节点' },
+        { name: '节点明确', passed: true, desc: '已明确6月审议、9月印发' },
+        { name: '风险提示', passed: false, desc: '上级会议审议时间存在不确定性，需预留缓冲' },
+      ],
+    }
+  }
+
+  return {
+    category: '工程项目类',
+    annualGoal: '完成项目入库、立项申报、批复、招投标、开工建设及阶段性进度目标。',
+    junePlan: '6月底前完成项目入库、立项申报和前期审批手续。',
+    septemberPlan: '9月底前完成招投标并形成实质性建设进展。',
+    score: 84,
+    checks: [
+      { name: '流程匹配', passed: true, desc: '已按工程项目审批建设流程倒排工期' },
+      { name: '数据来源', passed: true, desc: '可关联项目库、审批系统和建设进展材料' },
+      { name: '目标细化', passed: false, desc: '需责任处室补充具体工程量和投资进度' },
+    ],
+  }
+}
+
+function judgeProgress(target: string, progress: string): ProgressJudgement {
+  const targetNeedsIssue = /印发|出台/.test(target)
+  const hasIssued = /已印发|正式印发|发布实施/.test(progress)
+  const hasSubmitted = /报送|待审议|会议待审|常务会议/.test(progress)
+  const hasDraft = /起草|征求意见|党组会|审定/.test(progress)
+
+  if (targetNeedsIssue && hasIssued) {
+    return {
+      status: 'green',
+      label: '已达标',
+      conclusion: '对照年度目标和季度预案，该任务已完成正式印发要求，目标实现情况为已按计划实现。',
+      evidence: ['正式印发文件', '发文流程记录', '任务办结材料'],
+      deduction: '建议不扣分，可进入办结核验。',
+      suggestion: '归档印发文件和实施反馈材料，作为年度评价依据。',
+    }
+  }
+
+  if (targetNeedsIssue && hasSubmitted) {
+    return {
+      status: 'red',
+      label: '部分滞后',
+      conclusion: '对照9月底正式印发目标，当前处于上级会议审议前置环节，尚未达到正式印发要求。',
+      evidence: ['委党组会会议纪要', '报送市政府常务会议审议请示'],
+      deduction: '按文件印发类评分规则，建议按“完成会议审议前置工作”计70分左右，扣减30分；最终以考评主体复核为准。',
+      suggestion: '建议发出督办提醒，明确会议审议时间和正式印发倒排节点。',
+    }
+  }
+
+  if (hasDraft) {
+    return {
+      status: 'yellow',
+      label: '存在风险',
+      conclusion: '当前已形成阶段性成果，但距离季度目标仍有关键程序未完成。',
+      evidence: ['调研起草材料', '征求意见记录', '委内审议材料'],
+      deduction: '建议暂不直接扣分，纳入黄灯跟踪；若到期仍未完成，按滞后节点扣10-30分。',
+      suggestion: '建议补齐后续审查、评估和会议审议节点计划。',
+    }
+  }
+
+  return {
+    status: 'yellow',
+    label: '需补充材料',
+    conclusion: '当前进展描述不足，无法完整证明目标实现情况。',
+    evidence: ['需补充会议纪要、请示、公告或产出物'],
+    deduction: '建议先退回补充材料，暂缓评分。',
+    suggestion: '请责任处室补充关键节点佐证材料后重新研判。',
+  }
+}
+
 const alignmentData = [
   { goal: '京津冀协同发展年度目标', indicators: ['协同规划完成率', '疏解项目落地数', '区域协作机制建立'], rate: 95 },
   { goal: '"一带一路"高质量发展目标', indicators: ['实施方案出台', '平台注册企业数'], rate: 70 },
@@ -85,11 +217,25 @@ const alignmentData = [
 export default function GoalSetting() {
   const navigate = useNavigate()
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null)
+  const [taskInput, setTaskInput] = useState(defaultTaskInput)
+  const [goalPlan, setGoalPlan] = useState<GeneratedGoalPlan>(() => buildGoalPlan(defaultTaskInput))
+  const [targetInput, setTargetInput] = useState(defaultTargetInput)
+  const [progressInput, setProgressInput] = useState(defaultProgressInput)
+  const [judgement, setJudgement] = useState<ProgressJudgement>(() => judgeProgress(defaultTargetInput, defaultProgressInput))
 
   const confirmedCount = goals.filter(g => g.status === 'confirmed').length
   const draftCount = goals.filter(g => g.status === 'draft').length
   const reviewCount = goals.filter(g => g.status === 'review').length
   const avgQuality = Math.round(goals.reduce((s, g) => s + g.quality, 0) / goals.length)
+  const statusColor = judgement.status === 'green' ? '#52c41a' : judgement.status === 'yellow' ? '#faad14' : '#ff4d4f'
+
+  const handleGenerateGoal = () => {
+    setGoalPlan(buildGoalPlan(taskInput))
+  }
+
+  const handleJudgeProgress = () => {
+    setJudgement(judgeProgress(targetInput, progressInput))
+  }
 
   return (
     <div className="space-y-6">
@@ -243,6 +389,126 @@ export default function GoalSetting() {
           </div>
         </Col>
       </Row>
+
+      <Card style={{ borderRadius: 12 }} styles={{ body: { padding: '18px 24px' } }}>
+        <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: '#1a365d' }}>现场演示：输入任务后自动制定目标</div>
+            <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>按任务类型识别、倒排季度预案，并输出目标质量校验</div>
+          </div>
+          <Tag color="blue">Demo2 目标制定与调整</Tag>
+        </div>
+        <Row gutter={20}>
+          <Col span={11}>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>任务内容</div>
+            <Select
+              value={taskInput}
+              onChange={value => setTaskInput(value)}
+              options={demoTaskSamples}
+              style={{ width: '100%', marginBottom: 10 }}
+            />
+            <TextArea
+              value={taskInput}
+              onChange={e => setTaskInput(e.target.value)}
+              autoSize={{ minRows: 5, maxRows: 7 }}
+              style={{ borderRadius: 8 }}
+            />
+            <Button type="primary" onClick={handleGenerateGoal} style={{ marginTop: 12, borderRadius: 8, background: '#1a365d' }}>
+              自动制定目标
+            </Button>
+          </Col>
+          <Col span={13}>
+            <div className="flex items-center gap-2" style={{ marginBottom: 12 }}>
+              <Tag color="gold">{goalPlan.category}</Tag>
+              <span style={{ fontSize: 13, color: '#8c8c8c' }}>目标质量分</span>
+              <span style={{ fontSize: 20, fontWeight: 700, color: goalPlan.score >= 90 ? '#52c41a' : '#faad14' }}>{goalPlan.score}</span>
+            </div>
+            <div className="space-y-2">
+              {[
+                { label: '年度目标', value: goalPlan.annualGoal },
+                { label: '6月预案', value: goalPlan.junePlan },
+                { label: '9月预案', value: goalPlan.septemberPlan },
+              ].map(item => (
+                <div key={item.label} style={{ padding: '10px 12px', background: '#f8fafc', border: '1px solid #eef2f7', borderRadius: 8 }}>
+                  <div style={{ fontSize: 12, color: '#8c8c8c', marginBottom: 4 }}>{item.label}</div>
+                  <div style={{ fontSize: 14, color: '#1a365d', lineHeight: '22px' }}>{item.value}</div>
+                </div>
+              ))}
+            </div>
+            <Divider style={{ margin: '14px 0' }} />
+            <Row gutter={10}>
+              {goalPlan.checks.map(check => (
+                <Col span={8} key={check.name}>
+                  <div style={{ padding: 10, borderRadius: 8, background: check.passed ? '#f6ffed' : '#fff7e6', border: `1px solid ${check.passed ? '#b7eb8f' : '#ffd591'}`, minHeight: 86 }}>
+                    <Tag color={check.passed ? 'success' : 'warning'} style={{ marginBottom: 6 }}>{check.name}</Tag>
+                    <div style={{ fontSize: 12, color: '#666', lineHeight: '18px' }}>{check.desc}</div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          </Col>
+        </Row>
+      </Card>
+
+      <Card style={{ borderRadius: 12 }} styles={{ body: { padding: '18px 24px' } }}>
+        <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: '#1a365d' }}>现场演示：目标与进展自动比对研判</div>
+            <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>输入目标和当前进展，系统输出达标结论、支撑依据、扣分建议和督办建议</div>
+          </div>
+          <Tag color="red">Demo3/Demo4 过程预警与评价</Tag>
+        </div>
+        <Row gutter={20}>
+          <Col span={11}>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>目标/季度预案</div>
+            <TextArea
+              value={targetInput}
+              onChange={e => setTargetInput(e.target.value)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              style={{ borderRadius: 8, marginBottom: 12 }}
+            />
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>当前进展及佐证材料</div>
+            <TextArea
+              value={progressInput}
+              onChange={e => setProgressInput(e.target.value)}
+              autoSize={{ minRows: 5, maxRows: 7 }}
+              style={{ borderRadius: 8 }}
+            />
+            <Button type="primary" onClick={handleJudgeProgress} style={{ marginTop: 12, borderRadius: 8, background: '#1a365d' }}>
+              研判是否达标
+            </Button>
+          </Col>
+          <Col span={13}>
+            <div style={{ padding: '14px 16px', borderRadius: 10, background: judgement.status === 'green' ? '#f6ffed' : judgement.status === 'yellow' ? '#fff7e6' : '#fff1f0', border: `1px solid ${statusColor}55` }}>
+              <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
+                <span style={{ fontSize: 15, fontWeight: 600, color: '#1a365d' }}>研判结论</span>
+                <Tag color={judgement.status === 'green' ? 'success' : judgement.status === 'yellow' ? 'warning' : 'error'}>{judgement.label}</Tag>
+              </div>
+              <div style={{ fontSize: 14, color: '#333', lineHeight: '22px' }}>{judgement.conclusion}</div>
+            </div>
+            <Row gutter={12} style={{ marginTop: 12 }}>
+              <Col span={12}>
+                <div style={{ padding: 12, borderRadius: 8, background: '#f8fafc', minHeight: 132 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#1a365d', marginBottom: 8 }}>校验依据</div>
+                  {judgement.evidence.map(item => (
+                    <div key={item} style={{ fontSize: 13, color: '#555', lineHeight: '22px' }}>· {item}</div>
+                  ))}
+                </div>
+              </Col>
+              <Col span={12}>
+                <div style={{ padding: 12, borderRadius: 8, background: '#f8fafc', minHeight: 132 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: '#1a365d', marginBottom: 8 }}>扣分建议</div>
+                  <div style={{ fontSize: 13, color: '#555', lineHeight: '22px' }}>{judgement.deduction}</div>
+                </div>
+              </Col>
+            </Row>
+            <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: '#fdf8ef', border: '1px solid #f2dfb8' }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#8a5a00', marginBottom: 6 }}>督办建议</div>
+              <div style={{ fontSize: 13, color: '#555', lineHeight: '22px' }}>{judgement.suggestion}</div>
+            </div>
+          </Col>
+        </Row>
+      </Card>
 
       <Card style={{ borderRadius: 12 }} styles={{ body: { padding: '16px 24px' } }}>
         <div style={{ fontSize: 15, fontWeight: 600, color: '#1a365d', marginBottom: 16 }}>目标与考评指标对齐情况</div>

@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import { Card, Tag, Button, Progress, Input, Typography } from 'antd'
+import { Card, Tag, Button, Progress, Input, Typography, Row, Col, Select, Divider } from 'antd'
 import { ChevronLeft, FileText, Bot, Send, CheckCircle, Clock, Loader, Inbox } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { performanceData } from '@/mock/performanceData'
 
 const { Title, Text } = Typography
 
@@ -17,6 +18,20 @@ interface ReportTemplate {
 interface ChatMessage {
   role: 'user' | 'ai'
   content: string
+}
+
+function getDimensionAverage(name: string) {
+  const values = performanceData
+    .map(item => item.dimensions.find(d => d.name === name)?.score)
+    .filter((value): value is number => typeof value === 'number')
+  if (!values.length) return 0
+  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+}
+
+function getScoreColor(score: number) {
+  if (score >= 90) return '#52c41a'
+  if (score >= 80) return '#d4a853'
+  return '#ff4d4f'
 }
 
 const reportTemplates: ReportTemplate[] = [
@@ -60,6 +75,8 @@ const sectionStatusMap: Record<string, boolean> = {
 export default function ReportGeneration() {
   const navigate = useNavigate()
   const [selectedTemplate, setSelectedTemplate] = useState<string>('R-001')
+  const [selectedDepartment, setSelectedDepartment] = useState<string>('投资处')
+  const [reportGenerated, setReportGenerated] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
     { role: 'ai', content: '我是报告生成助手，可以帮您选择模板、定制章节、生成报告。请告诉我您需要什么类型的报告？' },
@@ -74,11 +91,22 @@ export default function ReportGeneration() {
   }, [chatMessages])
 
   const currentTemplate = reportTemplates.find(t => t.id === selectedTemplate)
+  const currentRecord = performanceData.find(item => item.department === selectedDepartment) ?? performanceData[0]
+  const averageScore = Math.round(performanceData.reduce((sum, item) => sum + item.score, 0) / performanceData.length)
+  const scoreDiff = currentRecord.score - averageScore
+  const topDimensions = currentRecord.dimensions
+    .filter(item => item.score >= getDimensionAverage(item.name))
+    .slice(0, 3)
+    .map(item => item.name)
+  const weakDimensions = currentRecord.dimensions
+    .filter(item => item.score < getDimensionAverage(item.name))
+    .map(item => item.name)
 
   const handleGenerate = () => {
     setGenerating(true)
     setTimeout(() => {
       setGenerating(false)
+      setReportGenerated(true)
     }, 3000)
   }
 
@@ -139,6 +167,113 @@ export default function ReportGeneration() {
           </div>
         </div>
       </div>
+
+      <Card style={{ borderRadius: 12 }} styles={{ body: { padding: '18px 24px' } }}>
+        <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: '#1a365d' }}>现场演示：输入年度结果后自动生成处室体检报告</div>
+            <div style={{ fontSize: 12, color: '#8c8c8c', marginTop: 2 }}>基于年度考评结果，自动生成总体评价、同类对比、优势事项、关注事项和整改建议</div>
+          </div>
+          <Tag color="purple">Demo5 分析报告自动生成</Tag>
+        </div>
+        <Row gutter={20}>
+          <Col span={7}>
+            <div style={{ fontSize: 13, color: '#666', marginBottom: 8 }}>选择处室年度结果</div>
+            <Select
+              value={selectedDepartment}
+              onChange={value => {
+                setSelectedDepartment(value)
+                setReportGenerated(false)
+              }}
+              options={performanceData.map(item => ({ label: item.department, value: item.department }))}
+              style={{ width: '100%', marginBottom: 12 }}
+            />
+            <div style={{ display: 'grid', gap: 10 }}>
+              <div style={{ padding: 12, borderRadius: 8, background: '#f8fafc' }}>
+                <div style={{ fontSize: 12, color: '#8c8c8c' }}>总成绩</div>
+                <div style={{ fontSize: 30, fontWeight: 700, color: getScoreColor(currentRecord.score) }}>{currentRecord.score}</div>
+              </div>
+              <div style={{ padding: 12, borderRadius: 8, background: '#f8fafc' }}>
+                <div style={{ fontSize: 12, color: '#8c8c8c' }}>同类平均</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: '#1a365d' }}>{averageScore}</div>
+              </div>
+              <div style={{ padding: 12, borderRadius: 8, background: '#f8fafc' }}>
+                <div style={{ fontSize: 12, color: '#8c8c8c' }}>排名/等级</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: '#1a365d' }}>第{currentRecord.rank} / {currentRecord.level}</div>
+              </div>
+            </div>
+            <Button type="primary" loading={generating} onClick={handleGenerate} style={{ marginTop: 12, borderRadius: 8, background: '#1a365d', width: '100%' }}>
+              {generating ? '正在生成体检报告...' : '生成体检报告'}
+            </Button>
+          </Col>
+          <Col span={17}>
+            <div style={{ border: '1px solid #eef2f7', borderRadius: 10, padding: '16px 18px', minHeight: 348, background: reportGenerated ? '#fff' : '#fbfcfe' }}>
+              {!reportGenerated && !generating && (
+                <div className="flex items-center justify-center" style={{ height: 310, color: '#8c8c8c', fontSize: 14 }}>
+                  选择处室后点击生成，系统将自动撰写年度综合考评体检报告。
+                </div>
+              )}
+              {generating && (
+                <div className="flex items-center justify-center" style={{ height: 310, color: '#1a365d', fontSize: 14 }}>
+                  正在汇总年度结果、计算同类平均、识别优势与短板...
+                </div>
+              )}
+              {reportGenerated && (
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: '#1a365d', marginBottom: 8 }}>
+                    关于{currentRecord.department}2025年度综合考评体检报告
+                  </div>
+                  <div style={{ fontSize: 14, color: '#333', lineHeight: '24px' }}>
+                    根据2025年度综合考评工作安排，{currentRecord.department}年度总成绩{currentRecord.score}分，
+                    {scoreDiff >= 0 ? '高于' : '低于'}同类平均分{averageScore}分{Math.abs(scoreDiff)}分，排名第{currentRecord.rank}位，评价等级为{currentRecord.level}。
+                    系统结合党的建设、工作实绩、依法行政、履职测评和加减分情况，形成如下体检结论。
+                  </div>
+                  <Row gutter={10} style={{ marginTop: 14 }}>
+                    {currentRecord.dimensions.map(item => {
+                      const avg = getDimensionAverage(item.name)
+                      return (
+                        <Col span={8} key={item.name} style={{ marginBottom: 10 }}>
+                          <div style={{ padding: 10, borderRadius: 8, background: item.score >= avg ? '#f6ffed' : '#fff7e6', border: `1px solid ${item.score >= avg ? '#b7eb8f' : '#ffd591'}` }}>
+                            <div className="flex items-center justify-between" style={{ marginBottom: 6 }}>
+                              <span style={{ fontSize: 12, color: '#666' }}>{item.name}</span>
+                              <span style={{ fontSize: 14, fontWeight: 700, color: item.score >= avg ? '#52c41a' : '#d4a853' }}>{item.score}</span>
+                            </div>
+                            <Progress percent={Math.min(Math.round((item.score / item.maxScore) * 100), 100)} showInfo={false} size="small" strokeColor={item.score >= avg ? '#52c41a' : '#d4a853'} />
+                            <div style={{ fontSize: 11, color: '#8c8c8c', marginTop: 4 }}>同类平均：{avg}</div>
+                          </div>
+                        </Col>
+                      )
+                    })}
+                  </Row>
+                  <Divider style={{ margin: '8px 0 12px' }} />
+                  <Row gutter={12}>
+                    <Col span={12}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: '#1a365d', marginBottom: 6 }}>优势事项</div>
+                      <div style={{ fontSize: 13, color: '#555', lineHeight: '22px' }}>
+                        {topDimensions.length ? `${topDimensions.join('、')}表现高于同类平均。` : '暂无明显高于同类平均的优势指标。'}
+                        {currentRecord.highlights.map(item => ` ${item}。`).join('')}
+                      </div>
+                    </Col>
+                    <Col span={12}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: '#8a5a00', marginBottom: 6 }}>关注事项</div>
+                      <div style={{ fontSize: 13, color: '#555', lineHeight: '22px' }}>
+                        {weakDimensions.length ? `${weakDimensions.join('、')}低于同类平均，需重点改进。` : '各项指标整体保持稳定。'}
+                        {currentRecord.improvements.map(item => ` ${item}。`).join('')}
+                      </div>
+                    </Col>
+                  </Row>
+                  <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: '#fdf8ef', border: '1px solid #f2dfb8' }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#8a5a00', marginBottom: 6 }}>整改建议</div>
+                    <div style={{ fontSize: 13, color: '#555', lineHeight: '22px' }}>
+                      建议围绕低于平均的指标建立问题清单，按季度跟踪整改；对扣分事项补充过程佐证材料，对可争取加分事项提前谋划申报。
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </Col>
+        </Row>
+      </Card>
 
       <div style={{ display: 'flex', gap: 20, minHeight: 'calc(100vh - 260px)' }}>
         <div style={{ width: '60%', display: 'flex', flexDirection: 'column', gap: 16 }}>

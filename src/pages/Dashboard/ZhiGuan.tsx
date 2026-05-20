@@ -1,8 +1,6 @@
 import { Card, Row, Col, Tag, Button, Badge, Typography, Space, Progress, List, message } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { Users, FilePlus, ClipboardList, Clock, AlertTriangle, CheckCircle } from 'lucide-react'
-import { taskData } from '@/mock/taskData'
-import { departmentData, personData } from '@/mock/departmentData'
 
 const { Title, Text } = Typography
 
@@ -12,45 +10,60 @@ const glassCard: React.CSSProperties = {
   borderRadius: 12,
 }
 
-const deptTasks = taskData.filter(t => t.department === '战略部')
-const delayedTasks = deptTasks.filter(t => t.riskLevel === 'red')
-const expiringTasks = deptTasks.filter(t => t.riskLevel === 'yellow')
-const importantProjects = [
-  { name: 'XX产业园项目推进', progress: 65, status: '延期', tag: 'red', person: '张三', deadline: '2025-12-31', lag: 15, suggestion: '参考案例库中「并行推进法」经验，协调信息中心增派资源' },
-  { name: '东南亚投资项目', progress: 42, status: '即将到期', tag: 'orange', person: '张三', deadline: '2025-09-30', lag: 0, suggestion: '' },
-  { name: '招商引资目标', progress: 35, status: '延期', tag: 'red', person: '张三', deadline: '2025-12-31', lag: 22, suggestion: '参考案例库中「专项攻坚模式」，启动专项督办调整策略' },
-  { name: '审批流程优化', progress: 50, status: '进行中', tag: 'blue', person: '李四', deadline: '2025-09-30', lag: 0, suggestion: '' },
+const deptTasks = [
+  { id: 'T-002', name: '研究出台"一带一路"高质量发展实施方案', department: '开放处/空铁处', deadline: '2025-06-30', progress: 75, status: 'in_progress', priority: 'high' },
+  { id: 'T-003', name: '协调保障中央标志性项目落地', department: '市疏整促专项办', deadline: '2025-12-31', progress: 45, status: 'in_progress', priority: 'high' },
+  { id: 'T-005', name: '制定营商环境6.0版改革实施方案', department: '营商政策处/营商协调处', deadline: '2025-09-30', progress: 40, status: 'in_progress', priority: 'high' },
+  { id: 'T-006', name: '推进碳达峰碳中和政策体系建设', department: '资环处/能源处', deadline: '2025-12-31', progress: 55, status: 'in_progress', priority: 'high' },
+  { id: 'T-009', name: '推动中关村先行先试改革落地', department: '高技术处', deadline: '2025-12-31', progress: 60, status: 'in_progress', priority: 'high' },
+  { id: 'T-010', name: '推进城市更新年度计划', department: '投资处', deadline: '2025-11-30', progress: 50, status: 'in_progress', priority: 'medium' },
+]
+const delayedTasks = deptTasks.filter(t => t.progress < 50)
+const expiringTasks = deptTasks.filter(t => t.deadline === '2025-06-30')
+
+const deptLoadData = [
+  { name: '市京津冀协同办', taskCount: 2, completedCount: 1, loadRate: 85 },
+  { name: '开放处/空铁处', taskCount: 1, completedCount: 0, loadRate: 75 },
+  { name: '营商政策处/营商协调处', taskCount: 1, completedCount: 0, loadRate: 70 },
+  { name: '资环处/能源处', taskCount: 1, completedCount: 0, loadRate: 80 },
+  { name: '高技术处', taskCount: 1, completedCount: 0, loadRate: 60 },
+  { name: '投资处', taskCount: 1, completedCount: 0, loadRate: 50 },
+  { name: '市疏整促专项办', taskCount: 1, completedCount: 0, loadRate: 65 },
+  { name: '价格处/价综处', taskCount: 1, completedCount: 1, loadRate: 30 },
 ]
 
 const workloadOption = {
-  tooltip: { trigger: 'axis' as const, axisPointer: { type: 'shadow' as const } },
-  grid: { left: 60, right: 40, top: 10, bottom: 20 },
+  tooltip: {
+    trigger: 'axis' as const,
+    axisPointer: { type: 'shadow' as const },
+    formatter: (params: { name: string; value: number }[]) => {
+      const item = deptLoadData.find(d => d.name === params[0]?.name)
+      if (!item) return ''
+      return `${item.name}<br/>任务数：${item.taskCount}<br/>已完成：${item.completedCount}<br/>负载率：${item.loadRate}%`
+    },
+  },
+  grid: { left: 120, right: 50, top: 10, bottom: 20 },
   xAxis: { type: 'value' as const, max: 100, axisLabel: { color: '#8c8c8c', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(0,0,0,0.06)' } } },
-  yAxis: { type: 'category' as const, data: personData.map(p => p.name), axisLabel: { color: '#333', fontSize: 13 }, axisLine: { show: false }, axisTick: { show: false } },
+  yAxis: { type: 'category' as const, data: deptLoadData.map(d => d.name), axisLabel: { color: '#333', fontSize: 12 }, axisLine: { show: false }, axisTick: { show: false } },
   series: [{
     type: 'bar',
-    data: personData.map(p => ({
-      value: p.workload,
+    data: deptLoadData.map(d => ({
+      value: d.loadRate,
       itemStyle: {
-        color: p.workload >= 100 ? '#ef4444' : p.workload >= 80 ? '#f59e0b' : '#3b82f6',
+        color: d.loadRate >= 80 ? '#f59e0b' : d.loadRate >= 60 ? '#3b82f6' : '#22c55e',
         borderRadius: [0, 4, 4, 0],
       },
     })),
-    barWidth: 18,
+    barWidth: 16,
     label: {
       show: true,
       position: 'right' as const,
       color: '#333',
       fontSize: 12,
-      formatter: (params: { value: number }) => {
-        if (params.value >= 100) return `${params.value}% 建议调整`
-        return `${params.value}%`
-      },
+      formatter: (params: { value: number }) => `${params.value}%`,
     },
   }],
 }
-
-const statusColorMap: Record<string, string> = { red: '#ef4444', orange: '#f59e0b', blue: '#3b82f6' }
 
 export default function ZhiGuan() {
   return (
@@ -59,13 +72,13 @@ export default function ZhiGuan() {
         <div>
           <Title level={3} style={{ color: '#1a365d', margin: 0 }}>
             <ClipboardList size={22} style={{ marginRight: 8, verticalAlign: -3, color: '#3b82f6' }} />
-            智管助手 · 战略部工作台
+            智管助手 · 发改委工作台
           </Title>
           <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
-            李总，本部门在办项目
-            <Text style={{ color: '#3b82f6', fontWeight: 600 }}>12个</Text>，
-            其中<Text style={{ color: '#ef4444', fontWeight: 600 }}>2个延期</Text>，
-            <Text style={{ color: '#f59e0b', fontWeight: 600 }}>3个即将到期</Text>
+            李主任，当前在办任务
+            <Text style={{ color: '#3b82f6', fontWeight: 600 }}>6项</Text>，
+            其中<Text style={{ color: '#ef4444', fontWeight: 600 }}>{delayedTasks.length}项滞后</Text>，
+            <Text style={{ color: '#f59e0b', fontWeight: 600 }}>{expiringTasks.length}项即将到期</Text>
           </Text>
         </div>
         <Badge count={3}>
@@ -75,10 +88,10 @@ export default function ZhiGuan() {
 
       <Row gutter={16} style={{ marginBottom: 20 }}>
         {[
-          { label: '在办项目', value: 12, color: '#3b82f6', icon: <ClipboardList size={20} color="#3b82f6" /> },
-          { label: '延期项目', value: 2, color: '#ef4444', icon: <AlertTriangle size={20} color="#ef4444" />, pulse: true },
-          { label: '即将到期', value: 3, color: '#f59e0b', icon: <Clock size={20} color="#f59e0b" /> },
-          { label: '本月新增', value: 5, color: '#22c55e', icon: <FilePlus size={20} color="#22c55e" /> },
+          { label: '在办任务', value: deptTasks.length, color: '#3b82f6', icon: <ClipboardList size={20} color="#3b82f6" /> },
+          { label: '滞后任务', value: delayedTasks.length, color: '#ef4444', icon: <AlertTriangle size={20} color="#ef4444" />, pulse: true },
+          { label: '即将到期', value: expiringTasks.length, color: '#f59e0b', icon: <Clock size={20} color="#f59e0b" /> },
+          { label: '涉及处室', value: 8, color: '#22c55e', icon: <Users size={20} color="#22c55e" /> },
         ].map((item, i) => (
           <Col span={6} key={i}>
             <Card style={glassCard} styles={{ body: { padding: 16 } }}>
@@ -104,26 +117,21 @@ export default function ZhiGuan() {
           <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>重点项目跟踪</Text>} style={glassCard}
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
             <List
-              dataSource={importantProjects}
-              renderItem={(p) => (
+              dataSource={deptTasks}
+              renderItem={(t) => (
                 <List.Item style={{ border: 'none', padding: '10px 0' }}>
                   <div style={{ width: '100%', padding: 12, background: 'rgba(0,0,0,0.04)', borderRadius: 8 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                      <Text style={{ color: '#1a365d', fontWeight: 600 }}>{p.name}</Text>
-                      <Tag color={p.tag} style={{ margin: 0 }}>{p.status}</Tag>
+                      <Text style={{ color: '#1a365d', fontWeight: 600 }}>{t.name}</Text>
+                      <Tag color={t.priority === 'high' ? 'red' : 'blue'} style={{ margin: 0 }}>{t.priority === 'high' ? '重点' : '常规'}</Tag>
                     </div>
-                    <Progress percent={p.progress} strokeColor={statusColorMap[p.tag] || '#3b82f6'} trailColor="#f0f0f0" size="small" />
+                    <Progress percent={t.progress} strokeColor={t.progress < 50 ? '#ef4444' : t.progress < 70 ? '#f59e0b' : '#3b82f6'} trailColor="#f0f0f0" size="small" />
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-                      <Text style={{ color: '#8c8c8c', fontSize: 12 }}>负责人：{p.person} ｜ 截止：{p.deadline}</Text>
-                      {p.lag > 0 && (
-                        <Text style={{ color: '#ef4444', fontSize: 12, fontWeight: 600 }}>滞后{p.lag}%</Text>
+                      <Text style={{ color: '#8c8c8c', fontSize: 12 }}>牵头处室：{t.department} ｜ 截止：{t.deadline}</Text>
+                      {t.progress < 50 && (
+                        <Text style={{ color: '#ef4444', fontSize: 12, fontWeight: 600 }}>进度滞后</Text>
                       )}
                     </div>
-                    {p.suggestion && (
-                      <div style={{ marginTop: 8, padding: '6px 10px', background: 'rgba(239,68,68,0.08)', borderRadius: 6, borderLeft: '3px solid #ef4444' }}>
-                        <Text style={{ color: '#fbbf24', fontSize: 12 }}>💡 {p.suggestion}</Text>
-                      </div>
-                    )}
                   </div>
                 </List.Item>
               )}
@@ -131,13 +139,13 @@ export default function ZhiGuan() {
           </Card>
         </Col>
         <Col span={10}>
-          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>人员工作负荷</Text>} style={glassCard}
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>处室任务负载</Text>} style={glassCard}
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
-            <ReactECharts option={workloadOption} style={{ height: 260 }} />
+            <ReactECharts option={workloadOption} style={{ height: 320 }} />
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 8 }}>
-              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#3b82f6', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>正常</Text></Space>
-              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#f59e0b', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>偏高</Text></Space>
-              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#ef4444', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>超载</Text></Space>
+              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#22c55e', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>正常(&lt;60%)</Text></Space>
+              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#3b82f6', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>适中(60-80%)</Text></Space>
+              <Space size={4}><span style={{ width: 10, height: 10, borderRadius: 2, background: '#f59e0b', display: 'inline-block' }} /><Text style={{ color: '#8c8c8c', fontSize: 12 }}>偏高(&ge;80%)</Text></Space>
             </div>
           </Card>
         </Col>

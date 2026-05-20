@@ -3,8 +3,6 @@ import { Card, Row, Col, Tag, Button, Badge, Typography, Space, message } from '
 import ReactECharts from 'echarts-for-react'
 import { Shield, AlertTriangle, TrendingUp, TrendingDown, Eye, Zap, Star, Award, Bell } from 'lucide-react'
 import { taskData } from '@/mock/taskData'
-import { departmentData } from '@/mock/departmentData'
-import { performanceData } from '@/mock/performanceData'
 
 const { Title, Text } = Typography
 
@@ -16,9 +14,6 @@ const glassCard: React.CSSProperties = {
 
 const redTasks = taskData.filter(t => t.riskLevel === 'red')
 const yellowTasks = taskData.filter(t => t.riskLevel === 'yellow')
-const sortedDepts = [...departmentData].sort((a, b) => b.score - a.score)
-const topDepts = sortedDepts.slice(0, 3)
-const bottomDepts = sortedDepts.slice(-2).reverse()
 
 const ringOption = (value: number, color: string) => ({
   series: [{
@@ -52,14 +47,14 @@ const gaugeOption = {
     anchor: { show: false },
     title: { show: true, offsetCenter: [0, '60%'], fontSize: 14, color: '#8c8c8c' },
     detail: { valueAnimation: true, fontSize: 32, fontWeight: 700, color: '#f59e0b', offsetCenter: [0, '20%'], formatter: '{value}%' },
-    data: [{ value: 78, name: '战略目标综合完成率' }],
+    data: [{ value: 68, name: '战略目标综合完成率' }],
   }],
 }
 
 const aiSuggestions = [
-  { icon: <Zap size={16} color="#f59e0b" />, title: '加速数据治理项目', desc: '该项目即将超期，建议协调信息中心增加资源投入，参考XX数字化项目并行推进经验' },
-  { icon: <AlertTriangle size={16} color="#ef4444" />, title: '关注招商引资缺口', desc: '当前完成率仅35%，距10亿目标差距较大，建议启动专项督办并调整策略' },
-  { icon: <TrendingUp size={16} color="#22c55e" />, title: '推广财务部经验', desc: '财务部连续两季度排名第一，其预算管控和流程优化经验值得全集团推广' },
+  { icon: <AlertTriangle size={16} color="#ef4444" />, title: '资环处碳达峰任务预警', desc: '资环处碳达峰任务已触发红灯，建议立即召开专题协调会' },
+  { icon: <Zap size={16} color="#f59e0b" />, title: '营商政策处改革方案滞后', desc: '营商政策处改革方案制定进度滞后，建议增加人员投入' },
+  { icon: <TrendingUp size={16} color="#22c55e" />, title: '投资处城市更新项目关注', desc: '投资处城市更新项目开工率不足50%，建议调整项目优先级' },
 ]
 
 const medalColors = ['#f59e0b', '#94a3b8', '#cd7f32']
@@ -81,7 +76,7 @@ export default function ZhiCe() {
             智策助手 · 领导驾驶舱
           </Title>
           <Text style={{ color: '#666', fontSize: 14, marginTop: 6, display: 'block' }}>
-            张总，{greeting}！当前重点关注：
+            主任，{greeting}！当前重点关注：
             <Text style={{ color: '#ef4444', fontWeight: 600 }}>{redTasks.length}个红灯项目</Text>，
             <Text style={{ color: '#f59e0b', fontWeight: 600 }}>2项临近节点</Text>
           </Text>
@@ -93,10 +88,10 @@ export default function ZhiCe() {
 
       <Row gutter={16} style={{ marginBottom: 20 }}>
         {[
-          { label: '战略目标完成率', value: 78, color: '#3b82f6', icon: <Shield size={20} color="#3b82f6" /> },
-          { label: '重点项目达成率', value: 92, color: '#22c55e', icon: <Award size={20} color="#22c55e" /> },
-          { label: '风险项目', value: redTasks.length, color: '#ef4444', icon: <AlertTriangle size={20} color="#ef4444" />, pulse: true },
-          { label: '待办事项', value: 12, color: '#f59e0b', icon: <Eye size={20} color="#f59e0b" /> },
+          { label: '战略目标完成率', value: 68, color: '#3b82f6', icon: <Shield size={20} color="#3b82f6" />, unit: '%' },
+          { label: '重点项目达成率', value: 72, color: '#22c55e', icon: <Award size={20} color="#22c55e" />, unit: '%' },
+          { label: '风险项目', value: 2, color: '#ef4444', icon: <AlertTriangle size={20} color="#ef4444" />, pulse: true, unit: '个' },
+          { label: '待决策事项', value: 3, color: '#f59e0b', icon: <Eye size={20} color="#f59e0b" />, unit: '项' },
         ].map((item, i) => (
           <Col span={6} key={i}>
             <Card style={glassCard} styles={{ body: { padding: 16 } }}>
@@ -105,7 +100,7 @@ export default function ZhiCe() {
                   <Text style={{ color: '#8c8c8c', fontSize: 13 }}>{item.label}</Text>
                   <div style={{ fontSize: i < 2 ? 28 : 36, fontWeight: 700, color: item.color, marginTop: 4,
                     animation: item.pulse ? 'pulse 2s infinite' : undefined }}>
-                    {item.value}{i < 2 ? '%' : '个'}
+                    {item.value}{item.unit}
                   </div>
                 </div>
                 {i < 2 ? (
@@ -163,52 +158,31 @@ export default function ZhiCe() {
           </Card>
         </Col>
         <Col span={10}>
-          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>部门红黑榜</Text>} style={glassCard}
+          <Card title={<Text style={{ color: '#1a365d', fontWeight: 600 }}>处室效能排名</Text>} style={glassCard}
             styles={{ header: { borderBottom: '1px solid #f0f0f0' }, body: { padding: '12px 16px' } }}>
-            <Text style={{ color: '#22c55e', fontWeight: 600, fontSize: 13 }}>🏆 红榜 · 表彰</Text>
-            {topDepts.map((d, i) => {
-              const perf = performanceData.find(p => p.department === d.name)
-              const trendUp = perf && perf.score >= 88
-              return (
-                <div key={d.id} style={{ display: 'flex', alignItems: 'center', padding: '10px 12px', background: 'rgba(34,197,94,0.06)', borderRadius: 8, marginTop: 8 }}>
-                  <span style={{ fontSize: 22, fontWeight: 700, color: medalColors[i], width: 32, textAlign: 'center' }}>
-                    {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}
-                  </span>
-                  <div style={{ flex: 1, marginLeft: 12 }}>
-                    <Text style={{ color: '#1a365d', fontWeight: 600 }}>{d.name}</Text>
-                    <Text style={{ color: '#8c8c8c', fontSize: 12, marginLeft: 8 }}>负责人：{d.head}</Text>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <Text style={{ color: '#22c55e', fontWeight: 700, fontSize: 18 }}>{d.score}</Text>
-                    <div style={{ color: trendUp ? '#22c55e' : '#ef4444', fontSize: 12 }}>
-                      {trendUp ? <TrendingUp size={12} style={{ verticalAlign: -1 }} /> : <TrendingDown size={12} style={{ verticalAlign: -1 }} />}
-                      {trendUp ? '↑' : '↓'}
-                    </div>
+            {[
+              { name: '市京津冀协同办', score: 92, medal: '🥇' },
+              { name: '高技术处', score: 90, medal: '🥈' },
+              { name: '开放处', score: 88, medal: '🥉' },
+              { name: '人事处', score: 87, medal: '4' },
+              { name: '办公室', score: 85, medal: '5' },
+            ].map((d, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '10px 12px', background: i < 3 ? 'rgba(34,197,94,0.06)' : 'rgba(0,0,0,0.02)', borderRadius: 8, marginTop: i === 0 ? 0 : 8 }}>
+                <span style={{ fontSize: i < 3 ? 22 : 16, fontWeight: 700, color: i < 3 ? medalColors[i] : '#8c8c8c', width: 32, textAlign: 'center' }}>
+                  {d.medal}
+                </span>
+                <div style={{ flex: 1, marginLeft: 12 }}>
+                  <Text style={{ color: '#1a365d', fontWeight: 600 }}>{d.name}</Text>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <Text style={{ color: i < 3 ? '#22c55e' : '#f59e0b', fontWeight: 700, fontSize: 18 }}>{d.score}</Text>
+                  <div style={{ color: i < 3 ? '#22c55e' : '#f59e0b', fontSize: 12 }}>
+                    {i < 3 ? <TrendingUp size={12} style={{ verticalAlign: -1 }} /> : <TrendingDown size={12} style={{ verticalAlign: -1 }} />}
+                    {i < 3 ? '↑' : '↓'}
                   </div>
                 </div>
-              )
-            })}
-            <Text style={{ color: '#ef4444', fontWeight: 600, fontSize: 13, display: 'block', marginTop: 16 }}>⚠️ 黑榜 · 预警</Text>
-            {bottomDepts.map((d, i) => {
-              const perf = performanceData.find(p => p.department === d.name)
-              const trendDown = perf && perf.score < 85
-              return (
-                <div key={d.id} style={{ display: 'flex', alignItems: 'center', padding: '10px 12px', background: 'rgba(239,68,68,0.06)', borderRadius: 8, marginTop: 8 }}>
-                  <span style={{ fontSize: 18, width: 32, textAlign: 'center' }}>⚠️</span>
-                  <div style={{ flex: 1, marginLeft: 12 }}>
-                    <Text style={{ color: '#1a365d', fontWeight: 600 }}>{d.name}</Text>
-                    <Text style={{ color: '#8c8c8c', fontSize: 12, marginLeft: 8 }}>负责人：{d.head}</Text>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <Text style={{ color: '#ef4444', fontWeight: 700, fontSize: 18 }}>{d.score}</Text>
-                    <div style={{ color: trendDown ? '#ef4444' : '#22c55e', fontSize: 12 }}>
-                      {trendDown ? <TrendingDown size={12} style={{ verticalAlign: -1 }} /> : <TrendingUp size={12} style={{ verticalAlign: -1 }} />}
-                      {trendDown ? '↓' : '↑'}
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+              </div>
+            ))}
           </Card>
         </Col>
       </Row>

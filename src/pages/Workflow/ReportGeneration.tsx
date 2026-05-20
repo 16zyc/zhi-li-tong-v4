@@ -355,18 +355,20 @@ export default function ReportGeneration() {
       const content = getReportContent(aiReportType, aiSelectedDepts)
       setAiReportContent(content)
       setAiGenerating(false)
-      let index = 0
+      setAiDisplayedContent(content.slice(0, 1))
+      let index = 1
       const typeNext = () => {
         if (index < content.length) {
-          setAiDisplayedContent(content.slice(0, index + 1))
-          index++
-          typewriterTimerRef.current = setTimeout(typeNext, 15)
+          const nextIndex = Math.min(index + 2, content.length)
+          setAiDisplayedContent(content.slice(0, nextIndex))
+          index = nextIndex
+          typewriterTimerRef.current = setTimeout(typeNext, 10)
         } else {
           setAiReportDone(true)
         }
       }
-      typeNext()
-    }, 3000)
+      typewriterTimerRef.current = setTimeout(typeNext, 100)
+    }, 2000)
   }, [aiReportType, aiSelectedDepts, aiGenerating])
 
   const handleSend = () => {
@@ -591,12 +593,12 @@ export default function ReportGeneration() {
               overflowY: 'auto',
             }}
           >
-            {aiGenerating ? (
+            {aiGenerating && !aiDisplayedContent ? (
               <div className="flex items-center justify-center" style={{ height: 160, color: '#1a365d', fontSize: 14 }}>
                 正在汇总年度结果、计算同类平均、识别优势与短板...
               </div>
             ) : (
-              aiDisplayedContent
+              <>{aiDisplayedContent}<span style={{ animation: 'blink 1s infinite', color: '#1a365d' }}>▌</span></>
             )}
           </div>
           {aiReportDone && (

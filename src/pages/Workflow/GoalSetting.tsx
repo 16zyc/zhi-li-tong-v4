@@ -111,6 +111,23 @@ const defaultTaskInput = demoTaskSamples[0].value
 const defaultTargetInput = '现代化首都都市圈空间协同规划：6月底前完成征求意见，9月底前正式印发。'
 const defaultProgressInput = '当前进展：已完成部门征求意见并经委党组会审定，已报送市政府常务会议待审议，尚未正式印发。佐证材料包括委党组会会议纪要、市政府常务会议审议请示。'
 
+const aiTaskOptions = [
+  { value: 'task-2', label: '积极融入"一带一路"，出台落实"八项行动"的具体措施' },
+  { value: 'task-5', label: '深化营商环境改革，落实新一轮改革任务' },
+  { value: 'task-6', label: '推进碳达峰碳中和，完善双碳"1+N"政策体系' },
+  { value: 'task-9', label: '加快国际科技创新中心建设，推动中关村先行先试改革' },
+]
+
+const aiGoalTexts: Record<string, string> = {
+  'task-2': `📋 目标名称：出台"一带一路"高质量发展实施方案\n\n📌 量化指标：\n• 一季度完成实施方案初稿\n• 二季度征求相关部门意见并修改完善\n• 三季度正式印发实施\n• 搭建综合服务平台，注册企业数达到100家\n\n⏰ 时间节点：\n• 2025年3月31日前完成初稿\n• 2025年6月30日前正式印发\n• 2025年9月30日前平台上线\n\n✅ 考评对齐：\n• 对应考评方案"高效履职"指标第3项\n• 权重占比：5分/45分\n\n🔍 SMART校验：\n✅ 具体性(S)：目标明确，有具体交付物\n✅ 可衡量(M)：有量化指标（企业注册数100家）\n✅ 可达成(A)：与处室职责匹配，资源可保障\n✅ 相关性(R)：与考评方案和政府工作报告对齐\n⚠️ 时限性(T)：建议增加季度里程碑检查点`,
+
+  'task-5': `📋 目标名称：制定营商环境6.0版改革实施方案\n\n📌 量化指标：\n• 上半年完成改革方案制定\n• 推进"一业一证"改革扩面至20个行业\n• 企业办事时限压缩30%以上\n• 企业满意度达到85分以上\n\n⏰ 时间节点：\n• 2025年4月30日前完成调研\n• 2025年7月31日前正式印发\n• 2025年12月31日前完成年度评估\n\n✅ 考评对齐：\n• 对应考评方案"高效履职"指标第5项\n• 权重占比：8分/45分\n\n🔍 SMART校验：\n✅ 具体性(S)：改革领域和措施明确\n✅ 可衡量(M)：有时限压缩比例和满意度指标\n✅ 可达成(A)：营商政策处/营商协调处联合推进\n✅ 相关性(R)：营商环境是市政府重点任务\n✅ 时限性(T)：各阶段时间节点清晰`,
+
+  'task-6': `📋 目标名称：完善碳达峰碳中和"1+N"政策体系\n\n📌 量化指标：\n• 出台3项配套政策文件\n• 推进重点领域节能降碳改造项目20个\n• 单位GDP能耗下降3%以上\n• 完成能源消费总量和强度双控目标\n\n⏰ 时间节点：\n• 2025年6月30日前出台2项配套文件\n• 2025年9月30日前完成改造项目中期评估\n• 2025年12月31日前完成年度目标\n\n✅ 考评对齐：\n• 对应考评方案"高效履职"指标第7项\n• 权重占比：6分/45分\n\n🔍 SMART校验：\n✅ 具体性(S)：政策文件数量和改造项目数明确\n✅ 可衡量(M)：有能耗下降百分比指标\n⚠️ 可达成(A)：当前进度30%滞后，建议增加资源投入\n✅ 相关性(R)：双碳是国家战略任务\n✅ 时限性(T)：时间节点明确但偏紧`,
+
+  'task-9': `📋 目标名称：加快国际科技创新中心建设实施方案\n\n📌 量化指标：\n• 推动中关村先行先试改革措施落地10项以上\n• 支持新型研发机构3家以上\n• 科技成果转化金额达到50亿元\n• 高新技术企业新增500家\n\n⏰ 时间节点：\n• 2025年3月31日前发布改革清单\n• 2025年6月30日前完成首批措施落地\n• 2025年12月31日前完成年度目标评估\n\n✅ 考评对齐：\n• 对应考评方案"高效履职"指标第9项\n• 权重占比：7分/45分\n\n🔍 SMART校验：\n✅ 具体性(S)：改革措施数量和机构数明确\n✅ 可衡量(M)：有转化金额和新增企业数指标\n⚠️ 可达成(A)：先行先试改革涉及多部门协调，难度较大\n✅ 相关性(R)：科技创新是高质量发展核心任务\n⚠️ 时限性(T)：改革措施落地周期较长，建议分阶段推进`,
+}
+
 function buildGoalPlan(task: string): GeneratedGoalPlan {
   if (/违法建设|万平方米|平方公里|指标/.test(task)) {
     return {
@@ -223,6 +240,11 @@ export default function GoalSetting() {
   const [targetInput, setTargetInput] = useState(defaultTargetInput)
   const [progressInput, setProgressInput] = useState(defaultProgressInput)
   const [judgement, setJudgement] = useState<ProgressJudgement>(() => judgeProgress(defaultTargetInput, defaultProgressInput))
+  const [aiSelectedTask, setAiSelectedTask] = useState<string | undefined>(undefined)
+  const [aiGenerating, setAiGenerating] = useState(false)
+  const [aiGeneratedGoal, setAiGeneratedGoal] = useState<string>('')
+  const [aiDisplayedGoal, setAiDisplayedGoal] = useState<string>('')
+  const [aiGoalGenerated, setAiGoalGenerated] = useState(false)
 
   const confirmedCount = goals.filter(g => g.status === 'confirmed').length
   const draftCount = goals.filter(g => g.status === 'draft').length
@@ -236,6 +258,30 @@ export default function GoalSetting() {
 
   const handleJudgeProgress = () => {
     setJudgement(judgeProgress(targetInput, progressInput))
+  }
+
+  const handleAiGenerateGoal = () => {
+    if (!aiSelectedTask) return
+    setAiGenerating(true)
+    setAiGoalGenerated(false)
+    setAiDisplayedGoal('')
+
+    setTimeout(() => {
+      const goalText = aiGoalTexts[aiSelectedTask] || ''
+      setAiGeneratedGoal(goalText)
+      setAiGenerating(false)
+      setAiGoalGenerated(true)
+
+      let i = 0
+      const timer = setInterval(() => {
+        if (i < goalText.length) {
+          setAiDisplayedGoal(goalText.slice(0, i + 1))
+          i++
+        } else {
+          clearInterval(timer)
+        }
+      }, 20)
+    }, 2000)
   }
 
   return (
@@ -285,6 +331,47 @@ export default function GoalSetting() {
           </Card>
         </Col>
       </Row>
+
+      <Card title="🤖 AI目标生成器" style={{ borderRadius: 12 }} styles={{ body: { padding: 20 } }}>
+        <div style={{ marginBottom: 16 }}>
+          <Text style={{ fontSize: 14, color: '#666', marginBottom: 8, display: 'block' }}>
+            选择一条已分解的任务，AI将自动制定可量化、可考核的工作目标
+          </Text>
+          <Select
+            style={{ width: '100%' }}
+            placeholder="请选择任务"
+            value={aiSelectedTask}
+            onChange={setAiSelectedTask}
+            options={aiTaskOptions}
+          />
+        </div>
+        <Button type="primary" onClick={handleAiGenerateGoal} loading={aiGenerating} disabled={!aiSelectedTask} style={{ borderRadius: 8, background: '#1a365d' }}>
+          🤖 AI自动制定目标
+        </Button>
+        {aiGoalGenerated && (
+          <Card
+            style={{ marginTop: 16, borderRadius: 10, background: '#f8fafc', border: '1px solid #eef2f7' }}
+            styles={{ body: { padding: '16px 20px' } }}
+          >
+            <div style={{ whiteSpace: 'pre-wrap', fontSize: 14, color: '#1a365d', lineHeight: '24px', fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif' }}>
+              {aiDisplayedGoal}
+              {aiDisplayedGoal.length < aiGeneratedGoal.length && (
+                <span style={{ display: 'inline-block', width: 2, height: 16, background: '#1a365d', marginLeft: 2, verticalAlign: 'middle', animation: 'blink 1s infinite' }} />
+              )}
+            </div>
+            {aiDisplayedGoal.length >= aiGeneratedGoal.length && aiGeneratedGoal.length > 0 && (
+              <div className="flex items-center gap-2" style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid #eef2f7' }}>
+                <Button type="primary" size="small" style={{ borderRadius: 6, background: '#52c41a', borderColor: '#52c41a' }}>
+                  ✅ 采纳此目标
+                </Button>
+                <Button size="small" style={{ borderRadius: 6 }} onClick={handleAiGenerateGoal}>
+                  🔄 重新生成
+                </Button>
+              </div>
+            )}
+          </Card>
+        )}
+      </Card>
 
       <Row gutter={20}>
         <Col span={14}>

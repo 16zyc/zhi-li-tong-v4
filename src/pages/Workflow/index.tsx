@@ -53,8 +53,8 @@ const flowData = [
 
 const outputInputMap: Record<string, { input: string; output: string; example: string }> = {
   capture: { input: '政府工作报告、上级文件、领导批示', output: '任务清单', example: '88条重点任务' },
-  goal: { input: '任务清单 + 考评方案', output: '目标卡', example: '6项年度目标' },
-  decompose: { input: '目标卡 + 处室职责', output: '任务分解表', example: '12项分解到8个处室' },
+  goal: { input: '任务分解表 + 考评方案', output: '目标卡', example: '6项年度目标' },
+  decompose: { input: '任务清单 + 处室职责', output: '任务分解表', example: '12项分解到8个处室' },
   indicator: { input: '任务分解表 + 考评方案', output: '指标体系', example: '24项考核指标' },
   process: { input: '任务分解表 + 指标体系', output: '进度报告', example: '15项任务跟踪' },
   risk: { input: '进度数据 + 阈值规则', output: '风险看板', example: '2红灯3黄灯' },

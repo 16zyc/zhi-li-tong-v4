@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
-import { Card, Tag, Button, Progress, Input, Typography, Row, Col, Select, Divider } from 'antd'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { Card, Tag, Button, Progress, Input, Typography, Row, Col, Select, Divider, message } from 'antd'
 import { ChevronLeft, FileText, Bot, Send, CheckCircle, Clock, Loader, Inbox } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { performanceData } from '@/mock/performanceData'
@@ -72,6 +72,229 @@ const sectionStatusMap: Record<string, boolean> = {
   '预期效果': true,
 }
 
+const reportTypeOptions = [
+  { value: 'annual', label: '年度绩效分析报告' },
+  { value: 'dept', label: '处室画像报告' },
+  { value: 'risk', label: '风险预警专项报告' },
+]
+
+const deptOptions = [
+  { value: '市京津冀协同办', label: '市京津冀协同办' },
+  { value: '高技术处', label: '高技术处' },
+  { value: '开放处', label: '开放处' },
+  { value: '营商政策处', label: '营商政策处' },
+  { value: '资环处', label: '资环处' },
+  { value: '投资处', label: '投资处' },
+  { value: '价格处', label: '价格处' },
+  { value: '办公室', label: '办公室' },
+]
+
+function getReportContent(type: string, depts: string[]): string {
+  const deptList = depts.length ? depts.join('、') : '全委处室'
+  if (type === 'risk') {
+    return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  市发展改革委风险预警专项报告
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+一、风险概览
+
+当前涉及处室：${deptList}
+监控指标总数：42项
+红灯预警：3项  黄灯预警：5项  绿灯正常：34项
+
+二、红灯项目详情
+
+🔴 碳达峰碳中和政策体系建设（资环处）
+   当前进度：30%  目标进度：60%
+   风险等级：高  持续时间：已滞后3个月
+   影响范围：全委双碳工作考核
+
+🔴 营商环境6.0版改革方案（营商政策处）
+   当前进度：40%  目标进度：70%
+   风险等级：高  持续时间：已滞后2个月
+   影响范围：市级营商环境评价
+
+🔴 非首都功能疏解协调保障（市疏整促专项办）
+   当前进度：45%  目标进度：75%
+   风险等级：高  持续时间：已滞后1.5个月
+   影响范围：京津冀协同发展考核
+
+三、黄灯项目详情
+
+🟡 城市更新项目推进（投资处）  进度55%
+🟡 数字经济产业规划（高技术处）  进度60%
+🟡 价格改革配套政策（价格处）  进度58%
+🟡 开放平台建设（开放处）  进度62%
+🟡 机关运行保障（办公室）  进度65%
+
+四、成因分析
+
+1. 政策协调不足：跨处室任务缺乏统一调度机制
+2. 资源配置偏差：部分处室人力和资金保障不到位
+3. 外部环境变化：政策调整和上级要求变更导致进度偏移
+4. 过程管控缺失：日常跟踪和预警机制不健全
+
+五、处置建议
+
+1. 对红灯项目启动专项督办，每周汇报进展
+2. 明确跨处室任务牵头处室和配合机制
+3. 资环处建议增加节能改造资金保障
+4. 营商政策处建议协调法规处加快方案审核
+5. 建立月度风险复盘制度，动态调整处置策略
+
+六、跟踪计划
+
+1. 每周汇总红灯项目进展，报分管领导
+2. 每月召开风险研判会，更新预警等级
+3. 季末评估处置效果，调整下季度重点
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  报告生成时间：2025年XX月XX日
+  数据截止日期：2025年XX月XX日
+  生成方式：AI智能生成
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+  }
+  if (type === 'dept') {
+    return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  市发展改革委处室画像报告
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+涉及处室：${deptList}
+
+一、市京津冀协同办
+
+综合评级：A级  总分：92分
+├─ 党的建设：96分（全委最高）
+├─ 工作实绩：42分
+├─ 依法行政：9分
+├─ 履职测评：14分
+└─ 加分项：+2分
+
+核心优势：
+  ✅ 党建得分全委第一，政治引领作用突出
+  ✅ 京津冀协同发展重大项目按期推进
+  ✅ 创新建立跨区域协调机制
+
+改进方向：
+  ⚠️ 依法行政仍有提升空间
+  ⚠️ 建议加强基层调研频次
+
+二、高技术处
+
+综合评级：A级  总分：90分
+├─ 党的建设：93分
+├─ 工作实绩：41分
+├─ 依法行政：9分
+├─ 履职测评：13分
+└─ 加分项：+3分（创新加分最多）
+
+核心优势：
+  ✅ 创新加分3分，全委最高
+  ✅ 中关村改革方案成效显著
+  ✅ 数字经济产业规划稳步推进
+
+改进方向：
+  ⚠️ 部分项目进度偏慢（黄灯预警）
+  ⚠️ 建议优化项目优先级排序
+
+三、资环处
+
+综合评级：C级  总分：72分
+├─ 党的建设：82分
+├─ 工作实绩：30分
+├─ 依法行政：7分
+├─ 履职测评：11分
+└─ 减分项：-2分
+
+核心优势：
+  ✅ 节能审查流程优化初见成效
+  ✅ 生态文明建设方案按期完成
+
+改进方向：
+  ⚠️ 双碳任务严重滞后（红灯预警）
+  ⚠️ 高效履职扣分较多
+  ⚠️ 建议增加节能改造资金保障
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  报告生成时间：2025年XX月XX日
+  数据截止日期：2025年XX月XX日
+  生成方式：AI智能生成
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+  }
+  return `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  市发展改革委2025年度绩效分析报告
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+一、总体概况
+
+2025年度，全委48个处室单位参与综合考评，其中业务管理类29个、公共服务类9个、直属类10个。考评内容涵盖党的建设、工作实绩、履职测评、加分项和减分项5个方面。
+
+年度考评成绩 = (工作实绩+履职测评+加分-减分) × (党建÷90)
+
+二、处室得分排名
+
+A级处室（2个）：
+  🥇 市京津冀协同办  92分  党建96·履职42·依法9·测评14·加分2
+  🥈 高技术处        90分  党建93·履职41·依法9·测评13·加分3
+
+B级处室（5个）：
+  3. 开放处          88分
+  4. 营商政策处      85分
+  5. 资环处          82分
+  6. 办公室          87分
+  7. 人事处          86分
+
+C级处室（3个）：
+  8. 投资处          78分
+  9. 市疏整促专项办  75分
+  10. 价格处         72分
+
+三、重点任务完成情况
+
+全年重点任务26项，其中：
+  ✅ 已完成：8项（30.8%）
+  🔄 进行中：15项（57.7%）
+  ⚠️ 滞后：3项（11.5%）
+
+滞后任务：
+  🔴 碳达峰碳中和政策体系建设（资环处，进度30%）
+  🔴 营商环境6.0版改革（营商政策处，进度40%）
+  🟡 非首都功能疏解协调保障（市疏整促专项办，进度45%）
+
+四、亮点与短板
+
+🌟 亮点：
+  1. 市京津冀协同办党建得分96，全委最高
+  2. 高技术处创新加分3分，推动中关村改革成效显著
+  3. 开放处依法行政满分，"一带一路"方案按期推进
+
+⚠️ 短板：
+  1. 资环处双碳任务严重滞后，高效履职扣分较多
+  2. 价格处党建得分78，系数拉低总成绩
+  3. 投资处城市更新项目开工率不足50%
+
+五、改进建议
+
+1. 对C级处室启动绩效改进计划，明确季度改进目标
+2. 资环处建议增加节能改造资金保障，协调能源处协同推进
+3. 价格处建议加强党建学习，提升党建系数
+4. 投资处建议调整项目优先级，集中资源推进开工
+5. 建立跨处室协同激励机制，促进A/B级处室帮扶C级处室
+
+六、下年度工作重点
+
+1. 精简整合考评指标，减轻处室负担
+2. 强化日常督促指导和预警提醒
+3. 探索处室协同联动激励机制
+4. 将年终考评压力分担到日常工作
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  报告生成时间：2025年XX月XX日
+  数据截止日期：2025年XX月XX日
+  生成方式：AI智能生成
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+}
+
 export default function ReportGeneration() {
   const navigate = useNavigate()
   const [selectedTemplate, setSelectedTemplate] = useState<string>('R-001')
@@ -83,6 +306,14 @@ export default function ReportGeneration() {
   ])
   const [chatInput, setChatInput] = useState('')
   const chatListRef = useRef<HTMLDivElement>(null)
+  const typewriterTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const [aiReportType, setAiReportType] = useState<string>('annual')
+  const [aiSelectedDepts, setAiSelectedDepts] = useState<string[]>(['市京津冀协同办', '高技术处', '资环处'])
+  const [aiGenerating, setAiGenerating] = useState(false)
+  const [aiReportContent, setAiReportContent] = useState<string>('')
+  const [aiDisplayedContent, setAiDisplayedContent] = useState<string>('')
+  const [aiReportDone, setAiReportDone] = useState(false)
 
   useEffect(() => {
     if (chatListRef.current) {
@@ -109,6 +340,34 @@ export default function ReportGeneration() {
       setReportGenerated(true)
     }, 3000)
   }
+
+  const handleGenerateReport = useCallback(() => {
+    if (aiGenerating) return
+    if (typewriterTimerRef.current) {
+      clearTimeout(typewriterTimerRef.current)
+      typewriterTimerRef.current = null
+    }
+    setAiGenerating(true)
+    setAiReportDone(false)
+    setAiReportContent('')
+    setAiDisplayedContent('')
+    setTimeout(() => {
+      const content = getReportContent(aiReportType, aiSelectedDepts)
+      setAiReportContent(content)
+      setAiGenerating(false)
+      let index = 0
+      const typeNext = () => {
+        if (index < content.length) {
+          setAiDisplayedContent(content.slice(0, index + 1))
+          index++
+          typewriterTimerRef.current = setTimeout(typeNext, 15)
+        } else {
+          setAiReportDone(true)
+        }
+      }
+      typeNext()
+    }, 3000)
+  }, [aiReportType, aiSelectedDepts, aiGenerating])
 
   const handleSend = () => {
     const text = chatInput.trim()
@@ -274,6 +533,100 @@ export default function ReportGeneration() {
           </Col>
         </Row>
       </Card>
+
+      <Card
+        title="🤖 AI报告生成器"
+        style={{ borderRadius: 12, marginBottom: 16, borderLeft: '4px solid #1a365d' }}
+        styles={{ body: { padding: 20 } }}
+      >
+        <Row gutter={16}>
+          <Col span={8}>
+            <div style={{ marginBottom: 8, fontSize: 13, color: '#666' }}>报告类型</div>
+            <Select style={{ width: '100%' }} value={aiReportType} onChange={setAiReportType} options={reportTypeOptions} />
+          </Col>
+          <Col span={8}>
+            <div style={{ marginBottom: 8, fontSize: 13, color: '#666' }}>处室范围</div>
+            <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              value={aiSelectedDepts}
+              onChange={setAiSelectedDepts}
+              options={deptOptions}
+              placeholder="选择处室（可多选）"
+            />
+          </Col>
+          <Col span={8} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            <Button type="primary" size="large" onClick={handleGenerateReport} loading={aiGenerating} style={{ width: '100%', background: '#1a365d', height: 40 }}>
+              🤖 AI生成报告
+            </Button>
+          </Col>
+        </Row>
+      </Card>
+
+      {(aiGenerating || aiDisplayedContent) && (
+        <Card
+          style={{ borderRadius: 12, marginBottom: 16 }}
+          styles={{ body: { padding: 20 } }}
+        >
+          <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 16, fontWeight: 600, color: '#1a365d' }}>
+              {aiGenerating ? '⏳ AI正在分析数据、撰写报告...' : '📄 报告预览'}
+            </div>
+            {aiGenerating && <Tag color="processing" icon={<Loader size={12} />}>生成中</Tag>}
+            {aiReportDone && <Tag color="success" icon={<CheckCircle size={12} />}>生成完成</Tag>}
+          </div>
+          <div
+            style={{
+              background: '#fafbfc',
+              border: '1px solid #eef2f7',
+              borderRadius: 8,
+              padding: '20px 24px',
+              fontFamily: '"SF Mono", "Menlo", "Monaco", "Courier New", monospace',
+              fontSize: 13,
+              lineHeight: '22px',
+              color: '#333',
+              whiteSpace: 'pre-wrap',
+              minHeight: 200,
+              maxHeight: 500,
+              overflowY: 'auto',
+            }}
+          >
+            {aiGenerating ? (
+              <div className="flex items-center justify-center" style={{ height: 160, color: '#1a365d', fontSize: 14 }}>
+                正在汇总年度结果、计算同类平均、识别优势与短板...
+              </div>
+            ) : (
+              aiDisplayedContent
+            )}
+          </div>
+          {aiReportDone && (
+            <div style={{ marginTop: 16, display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+              <Button
+                onClick={() => {
+                  const blob = new Blob([aiReportContent], { type: 'application/msword' })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = `${reportTypeOptions.find(o => o.value === aiReportType)?.label || '报告'}.doc`
+                  a.click()
+                  URL.revokeObjectURL(url)
+                  message.success('Word文件已导出')
+                }}
+                style={{ borderRadius: 8 }}
+              >
+                📥 导出Word
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => message.success('Excel文件已导出')}
+                style={{ borderRadius: 8, background: '#1a365d' }}
+              >
+                📊 导出Excel
+              </Button>
+            </div>
+          )}
+        </Card>
+      )}
 
       <div style={{ display: 'flex', gap: 20, minHeight: 'calc(100vh - 260px)' }}>
         <div style={{ width: '60%', display: 'flex', flexDirection: 'column', gap: 16 }}>

@@ -2,8 +2,8 @@ import type { TaskItem, WorkflowStage } from './types'
 
 export const workflowStages: WorkflowStage[] = [
   { key: 'capture', name: '任务捕获', description: '从政府工作报告、上级文件、领导批示等多渠道自动捕获任务来源', aiCapability: '公文智能解析、批示语义识别、政策文件关联', output: '任务清单', agent: '智策', icon: 'Target' },
-  { key: 'goal', name: '目标制定', description: '基于捕获的任务，结合处室职责和考评方案，制定可量化、可考核的工作目标', aiCapability: '战略目标解码、职责-目标匹配、SMART校验', output: '目标卡', agent: '智策', icon: 'Flag' },
-  { key: 'decompose', name: '任务分解', description: '将年度目标智能拆解为各处室的可执行任务，明确时间节点和量化指标', aiCapability: '职责精准匹配、跨处室协调、时间节点推算', output: '任务分解表', agent: '智管', icon: 'GitBranch' },
+  { key: 'decompose', name: '任务分解', description: '将捕获的任务智能拆解为各处室的可执行任务，明确时间节点和量化指标', aiCapability: '职责精准匹配、跨处室协调、时间节点推算', output: '任务分解表', agent: '智管', icon: 'GitBranch' },
+  { key: 'goal', name: '目标制定', description: '基于分解结果，结合处室职责和考评方案，制定可量化、可考核的工作目标', aiCapability: '战略目标解码、职责-目标匹配、SMART校验', output: '目标卡', agent: '智策', icon: 'Flag' },
   { key: 'indicator', name: '指标生成', description: '基于任务目标和考评方案，自动生成与处室职责匹配的考核指标', aiCapability: '指标-职责关联、权重智能分配、数据源映射', output: '指标体系', agent: '智评', icon: 'BarChart3' },
   { key: 'process', name: '过程跟踪', description: '实时跟踪政策研究、规划编制、项目审批等工作进展', aiCapability: '里程碑识别、材料自动归档、进度智能研判', output: '进度报告', agent: '智办', icon: 'Activity' },
   { key: 'risk', name: '风险预警', description: '监控任务执行异常，对进度滞后、材料缺失等问题提前预警', aiCapability: '进度偏差分析、节点风险预测、自动催办', output: '风险看板', agent: '智巡', icon: 'AlertTriangle' },

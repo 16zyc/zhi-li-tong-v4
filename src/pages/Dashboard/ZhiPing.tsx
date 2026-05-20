@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Card, Table, Tag, Progress, Row, Col, Typography, Space, Badge, Button, message } from 'antd'
+import { useState, useRef, useEffect } from 'react'
+import { Card, Table, Tag, Progress, Row, Col, Typography, Space, Badge, Button, Select, Input, message } from 'antd'
 import ReactECharts from 'echarts-for-react'
 import { Award, Star, TrendingUp, AlertTriangle, CheckCircle, BarChart3, UserCheck } from 'lucide-react'
 import { performanceData, departmentRankHistory } from '@/mock/performanceData'
@@ -58,8 +58,254 @@ const excellenceCandidates = [
   { name: '开放处', dept: '业务管理类', score: 88, reason: '对外开放政策落地顺利，依法行政得分8/10' },
 ]
 
+const evaluatorDepts = [
+  { value: '资环处', label: '资环处' },
+  { value: '投资处', label: '投资处' },
+  { value: '营商政策处', label: '营商政策处' },
+  { value: '价格处', label: '价格处' },
+]
+
+const deptIndicators: Record<string, { name: string; target: string; unit: string }[]> = {
+  '资环处': [
+    { name: '双碳政策文件出台', target: '3项', unit: '项' },
+    { name: '节能降碳改造项目', target: '20个', unit: '个' },
+    { name: '单位GDP能耗下降', target: '3%', unit: '%' },
+    { name: '能源双控目标完成', target: '达标', unit: '' },
+  ],
+  '投资处': [
+    { name: '城市更新年度计划', target: '按期完成', unit: '' },
+    { name: '老旧小区改造开工', target: '100个', unit: '个' },
+    { name: '危旧楼房改建', target: '20万㎡', unit: '万㎡' },
+    { name: '固定资产投资增速', target: '5%', unit: '%' },
+  ],
+  '营商政策处': [
+    { name: '营商环境6.0方案', target: '按期印发', unit: '' },
+    { name: '"一业一证"扩面', target: '20个行业', unit: '个行业' },
+    { name: '企业办事时限压缩', target: '30%', unit: '%' },
+    { name: '企业满意度', target: '85分', unit: '分' },
+  ],
+  '价格处': [
+    { name: '价格监测预警体系', target: '建成运行', unit: '' },
+    { name: '重要商品价格监测覆盖率', target: '95%', unit: '%' },
+    { name: '价格联动机制启动', target: '及时启动', unit: '' },
+    { name: '价格举报处理率', target: '100%', unit: '%' },
+  ],
+}
+
+const defaultIndicatorValues: Record<string, Record<string, string>> = {
+  '资环处': { '双碳政策文件出台': '1项', '节能降碳改造项目': '8个', '单位GDP能耗下降': '1.5%', '能源双控目标完成': '未达标' },
+  '投资处': { '城市更新年度计划': '延迟2个月', '老旧小区改造开工': '65个', '危旧楼房改建': '12万㎡', '固定资产投资增速': '3.2%' },
+  '营商政策处': { '营商环境6.0方案': '已印发', '"一业一证"扩面': '14个行业', '企业办事时限压缩': '22%', '企业满意度': '78分' },
+  '价格处': { '价格监测预警体系': '部分建成', '重要商品价格监测覆盖率': '88%', '价格联动机制启动': '延迟启动', '价格举报处理率': '96%' },
+}
+
+const judgmentResults: Record<string, string> = {
+  '资环处': `📊 资环处 · 2025年度考核研判报告
+
+━━━ 高效履职（45分）━━━
+
+📌 双碳政策文件出台
+  目标：3项 ｜ 实际：1项 ｜ 完成率：33%
+  ❌ 未达标 → 扣3分（差2项未完成）
+  💡 建议：加快剩余2项配套文件起草，争取Q3完成
+
+📌 节能降碳改造项目
+  目标：20个 ｜ 实际：8个 ｜ 完成率：40%
+  ❌ 未达标 → 扣5分（严重滞后）
+  💡 建议：工业领域改造项目需重点推进，建议增加资金保障
+
+📌 单位GDP能耗下降
+  目标：3% ｜ 实际：1.5% ｜ 完成率：50%
+  ⚠️ 部分达标 → 扣2分（差距1.5个百分点）
+  💡 建议：加强重点用能单位监管，推动节能技术改造
+
+📌 能源双控目标完成
+  目标：达标 ｜ 实际：未达标
+  ❌ 未达标 → 扣3分
+
+━━━ 扣分汇总 ━━━
+高效履职：原45分 → 预计31分（扣14分）
+依法行政：预计8/10分（扣2分，规范性文件审核滞后）
+履职测评：预计11/15分
+
+━━━ 综合研判 ━━━
+预计总成绩：(31+8+11+0-1) × (86÷90) = 49 × 0.956 = 46.8分
+等级预判：D级（低于60分）
+⚠️ 风险提示：资环处当前为红灯状态，如不加速推进，年度考评可能降至D级
+
+🎯 改进建议：
+1. 优先推进双碳政策文件出台（Q3前完成2项）
+2. 协调财政增加节能改造资金保障
+3. 加强与能源处协同推进双控目标`,
+
+  '投资处': `📊 投资处 · 2025年度考核研判报告
+
+━━━ 高效履职（45分）━━━
+
+📌 城市更新年度计划
+  目标：按期完成 ｜ 实际：延迟2个月
+  ❌ 未达标 → 扣4分（进度严重滞后）
+  💡 建议：建立月度督办机制，确保Q3前补回进度
+
+📌 老旧小区改造开工
+  目标：100个 ｜ 实际：65个 ｜ 完成率：65%
+  ⚠️ 部分达标 → 扣3分（差35个未开工）
+  💡 建议：加快项目审批流程，协调各区优先保障开工
+
+📌 危旧楼房改建
+  目标：20万㎡ ｜ 实际：12万㎡ ｜ 完成率：60%
+  ⚠️ 部分达标 → 扣3分（差距8万㎡）
+  💡 建议：推动存量危旧楼房纳入改建计划，增加施工力量
+
+📌 固定资产投资增速
+  目标：5% ｜ 实际：3.2% ｜ 完成率：64%
+  ⚠️ 部分达标 → 扣2分（差距1.8个百分点）
+  💡 建议：加大重大项目储备和落地力度，引导社会资本参与
+
+━━━ 扣分汇总 ━━━
+高效履职：原45分 → 预计33分（扣12分）
+依法行政：预计9/10分
+履职测评：预计12/15分
+
+━━━ 综合研判 ━━━
+预计总成绩：(33+9+12+0-0) × (88÷90) = 54 × 0.978 = 52.8分
+等级预判：C级（50-60分区间）
+⚠️ 风险提示：投资处城市更新任务滞后明显，需重点关注项目开工率
+
+🎯 改进建议：
+1. 建立城市更新项目月度调度机制
+2. 加快老旧小区改造审批和资金拨付
+3. 协调住建部门增加危旧楼房改建施工力量
+4. 加大招商引资力度，提升固定资产投资增速`,
+
+  '营商政策处': `📊 营商政策处 · 2025年度考核研判报告
+
+━━━ 高效履职（45分）━━━
+
+📌 营商环境6.0方案
+  目标：按期印发 ｜ 实际：已印发
+  ✅ 达标 → 不扣分
+  💡 亮点：方案按时印发，获市领导批示肯定
+
+📌 "一业一证"扩面
+  目标：20个行业 ｜ 实际：14个行业 ｜ 完成率：70%
+  ⚠️ 部分达标 → 扣2分（差6个行业未覆盖）
+  💡 建议：加快剩余行业调研论证，争取Q3完成扩面
+
+📌 企业办事时限压缩
+  目标：30% ｜ 实际：22% ｜ 完成率：73%
+  ⚠️ 部分达标 → 扣2分（差距8个百分点）
+  💡 建议：推进"一网通办"深度应用，压缩审批环节
+
+📌 企业满意度
+  目标：85分 ｜ 实际：78分 ｜ 完成率：92%
+  ⚠️ 接近达标 → 扣1分（差7分）
+  💡 建议：聚焦企业痛点优化服务流程，提升办事体验
+
+━━━ 扣分汇总 ━━━
+高效履职：原45分 → 预计38分（扣7分）
+依法行政：预计9/10分
+履职测评：预计13/15分
+
+━━━ 综合研判 ━━━
+预计总成绩：(38+9+13+1-0) × (91÷90) = 61 × 1.011 = 61.7分
+等级预判：B级（60-75分区间）
+✅ 整体态势：营商政策处总体进展平稳，6.0方案按期印发是重要加分项
+
+🎯 改进建议：
+1. 加快"一业一证"剩余6个行业扩面落地
+2. 深化"一网通办"改革，压缩企业办事时限
+3. 开展企业满意度专项提升行动，力争达到85分目标`,
+
+  '价格处': `📊 价格处 · 2025年度考核研判报告
+
+━━━ 高效履职（45分）━━━
+
+📌 价格监测预警体系
+  目标：建成运行 ｜ 实际：部分建成
+  ❌ 未达标 → 扣3分（体系未全面运行）
+  💡 建议：加快数据对接和系统调试，确保Q3全面运行
+
+📌 重要商品价格监测覆盖率
+  目标：95% ｜ 实际：88% ｜ 完成率：93%
+  ⚠️ 接近达标 → 扣1分（差7个百分点）
+  💡 建议：扩大监测品种范围，补充新兴商品监测点
+
+📌 价格联动机制启动
+  目标：及时启动 ｜ 实际：延迟启动
+  ❌ 未达标 → 扣3分（联动机制响应不及时）
+  💡 建议：完善价格预警阈值设置，建立自动触发机制
+
+📌 价格举报处理率
+  目标：100% ｜ 实际：96% ｜ 完成率：96%
+  ⚠️ 接近达标 → 扣1分（4%举报未处理）
+  💡 建议：增派处理力量，确保所有举报在规定时限内办结
+
+━━━ 扣分汇总 ━━━
+高效履职：原45分 → 预计37分（扣8分）
+依法行政：预计7/10分（扣3分，价格规范性文件审核滞后）
+履职测评：预计11/15分
+
+━━━ 综合研判 ━━━
+预计总成绩：(37+7+11+0-1) × (84÷90) = 54 × 0.933 = 50.4分
+等级预判：C级（50-60分区间）
+⚠️ 风险提示：价格处依法行政扣分较多，价格联动机制响应不及时可能引发舆情风险
+
+🎯 改进建议：
+1. 加快价格监测预警体系全面运行，确保数据实时对接
+2. 建立价格联动自动触发机制，杜绝延迟启动
+3. 加强规范性文件合法性审核，减少依法行政扣分
+4. 增加举报处理力量，确保100%处理率`,
+}
+
 export default function ZhiPing() {
   const [selectedDept, setSelectedDept] = useState(performanceData[0])
+  const [evaluatorOpen, setEvaluatorOpen] = useState(false)
+  const [evaluatorDept, setEvaluatorDept] = useState<string | undefined>(undefined)
+  const [indicatorValues, setIndicatorValues] = useState<Record<string, string>>({})
+  const [judging, setJudging] = useState(false)
+  const [judgmentResult, setJudgmentResult] = useState<string>('')
+  const [displayedResult, setDisplayedResult] = useState<string>('')
+  const [judgmentDone, setJudgmentDone] = useState(false)
+  const typewriterRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (typewriterRef.current) clearTimeout(typewriterRef.current)
+    }
+  }, [])
+
+  const handleEvaluatorDeptChange = (dept: string) => {
+    setEvaluatorDept(dept)
+    setIndicatorValues(defaultIndicatorValues[dept] || {})
+    setJudgmentResult('')
+    setDisplayedResult('')
+    setJudgmentDone(false)
+  }
+
+  const handleJudge = () => {
+    if (!evaluatorDept) return
+    setJudging(true)
+    setJudgmentResult('')
+    setDisplayedResult('')
+    setJudgmentDone(false)
+    const result = judgmentResults[evaluatorDept] || ''
+    setTimeout(() => {
+      setJudging(false)
+      setJudgmentResult(result)
+      let idx = 0
+      const type = () => {
+        if (idx <= result.length) {
+          setDisplayedResult(result.slice(0, idx))
+          idx += 2
+          typewriterRef.current = setTimeout(type, 15)
+        } else {
+          setJudgmentDone(true)
+        }
+      }
+      type()
+    }, 2000)
+  }
 
   const radarOption = {
     tooltip: {},
@@ -176,6 +422,103 @@ export default function ZhiPing() {
         <span style={{ fontSize: 12, color: '#999' }}>→</span>
         <span style={{ fontSize: 12, color: '#1a365d', fontWeight: 600 }}>智评汇总</span>
       </div>
+
+      <Card
+        title={<span style={{ fontSize: 15, fontWeight: 600 }}>🤖 AI考核研判器</span>}
+        extra={<Button type="link" onClick={() => setEvaluatorOpen(!evaluatorOpen)}>{evaluatorOpen ? '收起' : '展开'}</Button>}
+        style={{ borderRadius: 12, marginBottom: 16 }}
+        styles={{ body: { padding: evaluatorOpen ? 20 : 0, display: evaluatorOpen ? 'block' : 'none' } }}
+      >
+        <div style={{ marginBottom: 16 }}>
+          <Text style={{ color: '#1a365d', fontWeight: 600, marginRight: 12 }}>选择处室</Text>
+          <Select
+            placeholder="请选择需要研判的处室"
+            style={{ width: 240 }}
+            options={evaluatorDepts}
+            value={evaluatorDept}
+            onChange={handleEvaluatorDeptChange}
+          />
+        </div>
+
+        {evaluatorDept && deptIndicators[evaluatorDept] && (
+          <div style={{ marginBottom: 16 }}>
+            <Text style={{ color: '#1a365d', fontWeight: 600, display: 'block', marginBottom: 12 }}>
+              📋 {evaluatorDept} · 考评指标进展录入
+            </Text>
+            <Row gutter={[16, 12]}>
+              {deptIndicators[evaluatorDept].map((ind) => (
+                <Col span={12} key={ind.name}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Text style={{ color: '#666', fontSize: 13, width: 160, flexShrink: 0, textAlign: 'right' }}>
+                      {ind.name}
+                      <Text style={{ color: '#999', fontSize: 11, marginLeft: 4 }}>(目标: {ind.target})</Text>
+                    </Text>
+                    <Input
+                      size="small"
+                      placeholder={`请输入${ind.name}实际进展`}
+                      value={indicatorValues[ind.name] || ''}
+                      onChange={(e) => setIndicatorValues({ ...indicatorValues, [ind.name]: e.target.value })}
+                      style={{ flex: 1 }}
+                    />
+                  </div>
+                </Col>
+              ))}
+            </Row>
+            <div style={{ marginTop: 16, textAlign: 'center' }}>
+              <Button
+                type="primary"
+                loading={judging}
+                onClick={handleJudge}
+                style={{ borderRadius: 8, fontWeight: 600, paddingInline: 32 }}
+              >
+                {judging ? 'AI研判中...' : '🤖 AI自动研判'}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {(judging || displayedResult) && (
+          <div style={{
+            background: 'linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%)',
+            borderRadius: 10,
+            padding: 20,
+            border: '1px solid #e2e8f0',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            {judging && !displayedResult && (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🤖</div>
+                <Text style={{ color: '#3b82f6', fontWeight: 600, fontSize: 15 }}>
+                  AI正在分析考核数据，生成研判报告...
+                </Text>
+                <div style={{ marginTop: 8 }}>
+                  <Text style={{ color: '#999', fontSize: 12 }}>正在比对指标完成情况 · 计算扣分项 · 生成改进建议</Text>
+                </div>
+              </div>
+            )}
+            {displayedResult && (
+              <pre style={{
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace',
+                fontSize: 13,
+                lineHeight: 1.8,
+                color: '#1a365d',
+                margin: 0,
+              }}>
+                {displayedResult}
+                {!judgmentDone && <span style={{ animation: 'blink 1s infinite' }}>▌</span>}
+              </pre>
+            )}
+            {judgmentDone && (
+              <div style={{ marginTop: 16, textAlign: 'center', borderTop: '1px solid #e2e8f0', paddingTop: 12 }}>
+                <Text style={{ color: '#999', fontSize: 12 }}>— 研判报告生成完毕 —</Text>
+              </div>
+            )}
+          </div>
+        )}
+      </Card>
 
       <Row gutter={16} style={{ marginBottom: 20 }}>
         {[
@@ -321,6 +664,7 @@ export default function ZhiPing() {
         .ant-table-thead > tr > th { background: #fafafa !important; color: #8c8c8c !important; border-bottom: 1px solid #f0f0f0 !important; }
         .ant-table-tbody > tr > td { border-bottom: 1px solid #f0f0f0 !important; color: #333 !important; background: transparent !important; }
         .ant-table-tbody > tr:hover > td { background: rgba(0,0,0,0.02) !important; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
       `}</style>
     </div>
   )

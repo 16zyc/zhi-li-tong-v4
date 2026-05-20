@@ -44,9 +44,9 @@ interface ProgressJudgement {
 }
 
 const goals: Goal[] = [
-  { id: 'G-001', name: '京津冀协同发展年度目标', source: '市政府工作报告第2、3项', department: '协同政策处/协同疏解处', deadline: '2025-12-31', status: 'confirmed', indicators: 3, quality: 92, description: '编制协同发展规划，推进非首都功能疏解' },
+  { id: 'G-001', name: '京津冀协同发展年度目标', source: '市政府工作报告第2、3项', department: '市京津冀协同办/市疏整促专项办', deadline: '2025-12-31', status: 'confirmed', indicators: 3, quality: 92, description: '编制协同发展规划，推进非首都功能疏解' },
   { id: 'G-002', name: '"一带一路"高质量发展目标', source: '市政府工作报告第9项', department: '开放处/空铁处', deadline: '2025-06-30', status: 'draft', indicators: 2, quality: 78, description: '出台实施方案，搭建综合服务平台' },
-  { id: 'G-003', name: '营商环境改革目标', source: '市政府工作报告第25项', department: '营商改革处', deadline: '2025-09-30', status: 'review', indicators: 4, quality: 85, description: '制定6.0版改革方案，推进审批制度改革' },
+  { id: 'G-003', name: '营商环境改革目标', source: '市政府工作报告第25项', department: '营商政策处', deadline: '2025-09-30', status: 'review', indicators: 4, quality: 85, description: '制定6.0版改革方案，推进审批制度改革' },
   { id: 'G-004', name: '双碳政策体系建设目标', source: '市政府工作报告第31项', department: '资环处', deadline: '2025-12-31', status: 'confirmed', indicators: 3, quality: 88, description: '完善1+N政策体系，推进节能降碳改造' },
   { id: 'G-005', name: '科技创新中心建设目标', source: '市政府工作报告第15项', department: '高技术处/科创中心', deadline: '2025-12-31', status: 'draft', indicators: 2, quality: 72, description: '推动先行先试改革落地，支持新型研发机构' },
   { id: 'G-006', name: '民生保障目标', source: '市政府工作报告第42、50项', department: '价格处/投资处', deadline: '2025-11-30', status: 'confirmed', indicators: 3, quality: 90, description: '完善价格监测预警，推进城市更新' },

@@ -35,12 +35,12 @@ const recentDocs = [
   { name: 'XX产业园用地预审报告', date: '2025-06-12' },
   { name: '东南亚投资可研报告', date: '2025-06-10' },
   { name: '招商引资季度汇总', date: '2025-06-08' },
-  { name: '战略部周报模板', date: '2025-06-05' },
+  { name: '市京津冀协同办周报模板', date: '2025-06-05' },
 ]
 
 const formFields = [
   { label: '项目名称', value: 'XX产业园项目推进', auto: true },
-  { label: '责任部门', value: '战略部', auto: true },
+  { label: '责任处室', value: '市京津冀协同办', auto: true },
   { label: '报告周期', value: '2025年Q2', auto: true },
   { label: '当前进度', value: '65%', auto: true },
   { label: '风险说明', value: '', auto: false },

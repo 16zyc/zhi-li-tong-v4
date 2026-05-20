@@ -14,11 +14,11 @@ export const workflowStages: WorkflowStage[] = [
 ]
 
 export const taskData: TaskItem[] = [
-  { id: 'T-001', name: '编制京津冀协同发展年度工作要点', stage: 'process', source: '市政府工作报告', department: '协同政策处', responsible: '刘主任', deadline: '2025-03-31', progress: 100, status: 'completed', priority: 'high', description: '制定2025年京津冀协同发展工作要点，明确年度重点任务' },
+  { id: 'T-001', name: '编制京津冀协同发展年度工作要点', stage: 'process', source: '市政府工作报告', department: '市京津冀协同办', responsible: '刘主任', deadline: '2025-03-31', progress: 100, status: 'completed', priority: 'high', description: '制定2025年京津冀协同发展工作要点，明确年度重点任务' },
   { id: 'T-002', name: '研究出台"一带一路"高质量发展实施方案', stage: 'process', source: '市政府工作报告第9项', department: '开放处', responsible: '陈处长', deadline: '2025-06-30', progress: 75, status: 'in_progress', priority: 'high', description: '研究制定北京市融入"一带一路"高质量发展实施方案' },
   { id: 'T-003', name: '深化营商环境6.0版改革', stage: 'decompose', source: '市政府工作报告第25项', department: '营商政策处', responsible: '王处长', deadline: '2025-09-30', progress: 40, status: 'in_progress', priority: 'high', riskLevel: 'red', description: '进度40%，方案制定滞后' },
   { id: 'T-004', name: '推进碳达峰碳中和政策体系建设', stage: 'process', source: '市政府工作报告第31项', department: '资环处', responsible: '赵处长', deadline: '2025-12-31', progress: 30, status: 'in_progress', priority: 'high', riskLevel: 'red', description: '进度30%，较计划滞后25%' },
-  { id: 'T-005', name: '编制现代化首都都市圈空间协同规划', stage: 'capture', source: '市政府工作报告第2项', department: '协同政策处', responsible: '刘主任', deadline: '2025-12-31', progress: 0, status: 'pending', priority: 'high', description: '配合自然资源部编制京津冀国土空间规划' },
+  { id: 'T-005', name: '编制现代化首都都市圈空间协同规划', stage: 'capture', source: '市政府工作报告第2项', department: '市京津冀协同办', responsible: '刘主任', deadline: '2025-12-31', progress: 0, status: 'pending', priority: 'high', description: '配合自然资源部编制京津冀国土空间规划' },
   { id: 'T-006', name: '推进节能降碳改造', stage: 'risk', source: '市政府工作报告第31项', department: '资环处', responsible: '赵处长', deadline: '2025-11-30', progress: 55, status: 'in_progress', priority: 'high', riskLevel: 'yellow', description: '进度55%，子项进度不均衡' },
   { id: 'T-007', name: 'Q2处室绩效考核评分', stage: 'evaluate', source: '考评方案', department: '人事处', responsible: '孙处长', deadline: '2025-07-15', progress: 60, status: 'in_progress', priority: 'medium', description: '完成Q2季度各处室绩效考核评分工作' },
   { id: 'T-008', name: '年度重点任务目标制定', stage: 'goal', source: '考评方案', department: '办公室', responsible: '李主任', deadline: '2025-02-28', progress: 100, status: 'completed', priority: 'high', description: '基于政府工作报告和考评方案，制定年度重点任务目标' },

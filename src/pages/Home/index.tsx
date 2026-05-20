@@ -22,24 +22,24 @@ const topDepts = sortedDepts.slice(0, 3)
 const bottomDepts = sortedDepts.slice(-2).reverse()
 
 const aiSuggestions = [
-  { icon: <AlertTriangle size={14} />, text: '行政部连续两季度下降，建议查看画像报告', type: 'warning' as const },
-  { icon: <TrendingDown size={14} />, text: '信息中心数字化转型进度滞后，需重点关注', type: 'error' as const },
-  { icon: <Target size={14} />, text: '招商引资目标完成率仅35%，建议加强推进力度', type: 'info' as const },
-  { icon: <CheckCircle size={14} />, text: '财务部预算执行率95%，可推广优秀经验', type: 'success' as const },
+  { icon: <AlertTriangle size={14} />, text: '办公室连续两季度下降，建议查看画像报告', type: 'warning' as const },
+  { icon: <TrendingDown size={14} />, text: '经济信息中心数字化转型进度滞后，需重点关注', type: 'error' as const },
+  { icon: <Target size={14} />, text: '投资处重点项目完成率仅35%，建议加强推进力度', type: 'info' as const },
+  { icon: <CheckCircle size={14} />, text: '法规处预算执行率95%，可推广优秀经验', type: 'success' as const },
 ]
 
 const pfmAiSuggestions = [
   { icon: <AlertTriangle size={14} />, text: '3个部门本月考核材料尚未提交，请及时催收', type: 'warning' as const },
   { icon: <CheckCircle size={14} />, text: '上季度绩效评分已完成92%，剩余8%待审核', type: 'success' as const },
   { icon: <Target size={14} />, text: '知识库新增12条绩效指标解读，建议学习', type: 'info' as const },
-  { icon: <FileSearch size={14} />, text: '行政部考核数据异常波动，建议核实', type: 'error' as const },
+  { icon: <FileSearch size={14} />, text: '办公室考核数据异常波动，建议核实', type: 'error' as const },
 ]
 
 const pflAiSuggestions = [
   { icon: <AlertTriangle size={14} />, text: '3个红灯项目需要领导关注决策', type: 'warning' as const },
-  { icon: <TrendingDown size={14} />, text: '招商引资进度严重滞后，建议专题研究', type: 'error' as const },
+  { icon: <TrendingDown size={14} />, text: '投资处项目进度严重滞后，建议专题研究', type: 'error' as const },
   { icon: <Target size={14} />, text: '年度战略目标完成率78%，预计可按期达成', type: 'info' as const },
-  { icon: <CheckCircle size={14} />, text: '财务部预算执行优秀，可考虑推广经验', type: 'success' as const },
+  { icon: <CheckCircle size={14} />, text: '法规处预算执行优秀，可考虑推广经验', type: 'success' as const },
 ]
 
 const adminStatCards = [
@@ -311,12 +311,12 @@ function PfmHome({ navigate }: { navigate: ReturnType<typeof useNavigate> }) {
             </div>
             <div className="px-6 py-4">
               {[
-                { name: '行政部', status: '已完成', percent: 100, color: '#52c41a' },
-                { name: '财务部', status: '审核中', percent: 80, color: '#1890ff' },
-                { name: '信息中心', status: '待提交', percent: 45, color: '#faad14' },
-                { name: '招商部', status: '待提交', percent: 20, color: '#ff4d4f' },
-                { name: '规划部', status: '审核中', percent: 75, color: '#1890ff' },
-                { name: '人事部', status: '已完成', percent: 100, color: '#52c41a' },
+                { name: '办公室', status: '已完成', percent: 100, color: '#52c41a' },
+                { name: '法规处', status: '审核中', percent: 80, color: '#1890ff' },
+                { name: '经济信息中心', status: '待提交', percent: 45, color: '#faad14' },
+                { name: '投资处', status: '待提交', percent: 20, color: '#ff4d4f' },
+                { name: '营商政策处', status: '审核中', percent: 75, color: '#1890ff' },
+                { name: '人事处', status: '已完成', percent: 100, color: '#52c41a' },
               ].map(item => (
                 <div key={item.name} className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid #fafafa' }}>
                   <div className="flex items-center gap-3">

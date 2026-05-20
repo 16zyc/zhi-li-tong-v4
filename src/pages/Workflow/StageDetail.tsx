@@ -80,7 +80,7 @@ const riskCards = [
 const evaluateBarOption = () => ({
   tooltip: { trigger: 'axis' as const },
   grid: { left: 40, right: 20, top: 20, bottom: 30 },
-  xAxis: { type: 'category' as const, data: ['协同政策处', '开放处', '营商改革处', '资环处', '高技术处', '投资处'], axisLabel: { fontSize: 11 } },
+  xAxis: { type: 'category' as const, data: ['市京津冀协同办', '开放处', '营商政策处', '资环处', '高技术处', '投资处'], axisLabel: { fontSize: 11 } },
   yAxis: { type: 'value' as const, max: 100, axisLabel: { fontSize: 11 } },
   series: [{
     type: 'bar', barWidth: 28,

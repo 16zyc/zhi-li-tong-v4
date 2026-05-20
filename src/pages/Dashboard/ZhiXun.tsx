@@ -12,7 +12,7 @@ const glassCard: React.CSSProperties = {
   borderRadius: 12,
 }
 
-const auditRelatedTasks = taskData.filter(t => t.stage === 'verify' || t.department === '审计部')
+const auditRelatedTasks = taskData.filter(t => t.stage === 'verify' || t.department === '评督处（审计处）')
 
 const verifyTasks = [
   { id: 'V-001', name: 'XX产业园资金使用核验', project: 'XX产业园项目推进', type: '现场核验', status: 'pending', deadline: '2025-07-15' },
@@ -23,11 +23,11 @@ const verifyTasks = [
 ]
 
 const issues = [
-  { id: 'I-001', name: 'XX产业园资金拨付超期', status: '待整改', dept: '战略部', deadline: '2025-07-10', level: 'high' },
-  { id: 'I-002', name: '数据治理项目文档缺失', status: '整改中', dept: '信息中心', deadline: '2025-07-20', level: 'medium' },
-  { id: 'I-003', name: '东南亚投资风险评估不完整', status: '待整改', dept: '战略部', deadline: '2025-07-25', level: 'high' },
+  { id: 'I-001', name: 'XX产业园资金拨付超期', status: '待整改', dept: '市京津冀协同办', deadline: '2025-07-10', level: 'high' },
+  { id: 'I-002', name: '数据治理项目文档缺失', status: '整改中', dept: '经济信息中心', deadline: '2025-07-20', level: 'medium' },
+  { id: 'I-003', name: '东南亚投资风险评估不完整', status: '待整改', dept: '市京津冀协同办', deadline: '2025-07-25', level: 'high' },
   { id: 'I-004', name: '审批流程节点超时', status: '已整改', dept: '审批部', deadline: '2025-06-28', level: 'low' },
-  { id: 'I-005', name: '人力资源培训记录缺失', status: '整改中', dept: '人力资源部', deadline: '2025-07-30', level: 'medium' },
+  { id: 'I-005', name: '人力资源培训记录缺失', status: '整改中', dept: '人事处', deadline: '2025-07-30', level: 'medium' },
 ]
 
 const deptHeadMap = Object.fromEntries(departmentData.map(d => [d.name, d.head]))
@@ -43,7 +43,7 @@ const complianceData = [
 const recentRecords = [
   { time: '2025-06-14 16:30', action: '完成XX产业园现场核验', result: '发现2项问题，已提交整改通知', icon: <Camera size={14} color="#3b82f6" /> },
   { time: '2025-06-13 10:15', action: '审核东南亚投资可研报告', result: '风险评估不完整，退回补充', icon: <FileCheck size={14} color="#22c55e" /> },
-  { time: '2025-06-12 14:00', action: '数据治理项目材料核验', result: '3份文档缺失，已通知信息中心', icon: <Search size={14} color="#f59e0b" /> },
+  { time: '2025-06-12 14:00', action: '数据治理项目材料核验', result: '3份文档缺失，已通知经济信息中心', icon: <Search size={14} color="#f59e0b" /> },
   { time: '2025-06-11 09:30', action: '审批流程合规检查', result: '合规率达标，无异常', icon: <CheckCircle size={14} color="#22c55e" /> },
   { time: '2025-06-10 15:45', action: 'Q2财务报表审计', result: '数据一致，审计通过', icon: <Shield size={14} color="#8b5cf6" /> },
 ]

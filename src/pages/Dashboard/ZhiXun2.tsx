@@ -16,7 +16,7 @@ const glassCard: React.CSSProperties = {
 const quickQuestions = [
   { question: '今年KPI是什么？', source: '指标库', icon: <TrendingUp size={18} color="#3b82f6" />, color: '#3b82f6' },
   { question: '项目审批流程是什么？', source: '知识库·业务流程', icon: <FileText size={18} color="#22c55e" />, color: '#22c55e' },
-  { question: '战略部去年得分多少？', source: '绩效库', icon: <GraduationCap size={18} color="#8b5cf6" />, color: '#8b5cf6' },
+  { question: '市京津冀协同办去年得分多少？', source: '绩效库', icon: <GraduationCap size={18} color="#8b5cf6" />, color: '#8b5cf6' },
   { question: '有没有类似成功案例？', source: '经验案例库', icon: <Lightbulb size={18} color="#f59e0b" />, color: '#f59e0b' },
 ]
 
@@ -24,7 +24,7 @@ const recentUpdates = [
   { time: '2025-06-15', title: '《投资管理办法》更新', category: '制度文件', color: '#3b82f6' },
   { time: '2025-06-14', title: '审批提速"五步工作法"入库', category: '最佳实践', color: '#22c55e' },
   { time: '2025-06-13', title: 'Q2绩效考核指标发布', category: '指标更新', color: '#8b5cf6' },
-  { time: '2025-06-12', title: '跨部门协作"1+3"机制入库', category: '最佳实践', color: '#22c55e' },
+  { time: '2025-06-12', title: '跨处室协作"1+3"机制入库', category: '最佳实践', color: '#22c55e' },
   { time: '2025-06-11', title: '《审计监督办法》修订', category: '制度文件', color: '#3b82f6' },
 ]
 

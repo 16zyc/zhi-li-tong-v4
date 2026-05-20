@@ -158,7 +158,8 @@ function buildGoalPlan(task: string): GeneratedGoalPlan {
 
 function judgeProgress(target: string, progress: string): ProgressJudgement {
   const targetNeedsIssue = /印发|出台/.test(target)
-  const hasIssued = /已印发|正式印发|发布实施/.test(progress)
+  const hasNegativeIssue = /尚未正式印发|未正式印发|未印发|未出台|尚未出台/.test(progress)
+  const hasIssued = !hasNegativeIssue && /已印发|正式印发|发布实施|已出台/.test(progress)
   const hasSubmitted = /报送|待审议|会议待审|常务会议/.test(progress)
   const hasDraft = /起草|征求意见|党组会|审定/.test(progress)
 

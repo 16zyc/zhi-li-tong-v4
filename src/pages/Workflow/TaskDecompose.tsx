@@ -34,93 +34,127 @@ interface DuplicateDetail {
 }
 
 const duplicateResults = {
-  duplicate: 2,
-  similar: 3,
-  newTasks: 5,
+  duplicate: 1,
+  similar: 1,
+  newTasks: 8,
   details: [
-    { id: 1, type: 'duplicate' as const, existingTask: 'T-001 编制京津冀协同发展年度工作要点' },
-    { id: 3, type: 'similar' as const, existingTask: 'T-015 非首都功能疏解协调保障' },
-    { id: 8, type: 'similar' as const, existingTask: 'T-001 编制京津冀协同发展年度工作要点' },
-    { id: 9, type: 'duplicate' as const, existingTask: 'T-013 推动中关村先行先试改革落地' },
-    { id: 10, type: 'similar' as const, existingTask: 'T-014 城市更新年度计划制定' },
+    { id: 8, type: 'duplicate' as const, existingTask: 'T-001 编制京津冀国土空间规划（职责交叉）' },
+    { id: 10, type: 'similar' as const, existingTask: 'T-003 中央标志性项目落地（执行关联）' },
   ],
 }
 
 const decomposedTasks: DecomposedTask[] = [
   {
-    id: 1, task: '配合编制京津冀国土空间规划，会同天津、河北编制现代化首都都市圈空间协同规划',
+    id: 1,
+    task: '配合自然资源部编制京津冀国土空间规划，会同天津、河北编制现代化首都都市圈空间协同规划',
     source: '市政府工作报告重点任务清单第2项',
     objective: '1.配合市规划自然资源委提出本市关于京津冀国土空间规划有关意见\n2.发挥京津冀联合办工作机制作用，配合编制现代化首都都市圈空间协同规划',
-    systemDept: '协同政策处', actualDept: '协同政策处', deptSource: 'system',
-    status: 'duplicate', duplicateInfo: '与已有任务"T-001 编制京津冀协同发展年度工作要点"重复',
-    sourceFile: '政府工作报告',
+    systemDept: '市京津冀协同办',
+    actualDept: '市京津冀协同办',
+    deptSource: 'system',
+    status: 'decomposed',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 2, task: '积极融入、主动服务共建"一带一路"，出台落实"八项行动"的具体措施',
+    id: 2,
+    task: '积极融入、主动服务共建"一带一路"，出台落实"八项行动"的具体措施，参与"空中丝绸之路"建设',
     source: '市政府工作报告重点任务清单第9项',
-    objective: '1.一季度研究出台北京市积极融入共建"一带一路"高质量发展实施方案\n2.搭建"一带一路"综合服务平台，建立企业服务机制',
-    systemDept: '开放处', actualDept: '开放处/空铁处', deptSource: 'historical',
-    status: 'cross_dept', sourceFile: '政府工作报告',
+    objective: '1.一季度研究出台北京市积极融入共建"一带一路"高质量发展实施方案\n2.搭建"一带一路"综合服务平台，建立企业服务机制\n3.制定本市"一带一路"建设项目库管理办法',
+    systemDept: '开放处',
+    actualDept: '开放处、空铁处',
+    deptSource: 'historical',
+    status: 'cross_dept',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 3, task: '支持、协调和保障中央标志性项目落地，完成第二批市属行政事业单位搬迁',
+    id: 3,
+    task: '支持、协调和保障中央标志性项目落地，完成第二批市属行政事业单位搬迁',
     source: '市政府工作报告重点任务清单第13项',
-    objective: '1.加强与国家发改委沟通衔接\n2.协调市国资委、市教委、市卫健委等部门，主动对接搬迁单位',
-    systemDept: '协同疏解处', actualDept: '协同疏解处', deptSource: 'system',
-    status: 'similar', duplicateInfo: '与已有任务"T-015 非首都功能疏解协调保障"相似',
-    sourceFile: '政府工作报告',
+    objective: '1.加强与国家发改委沟通衔接，协调保障中央标志性项目落地\n2.协调市国资委、市教委、市卫健委等部门，主动对接搬迁单位\n3.完成第二批市属行政事业单位搬迁',
+    systemDept: '市疏整促专项办',
+    actualDept: '市疏整促专项办',
+    deptSource: 'system',
+    status: 'pending_confirm',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 4, task: '加快重点产业集聚区建设，推动数字经济标杆城市建设',
+    id: 4,
+    task: '加快重点产业集聚区建设，推动数字经济标杆城市建设',
     source: '市政府工作报告重点任务清单第18项',
-    objective: '1.制定数字经济标杆城市建设年度工作要点\n2.推进重点产业集聚区基础设施建设和项目落地',
-    systemDept: '社会处', actualDept: '审批处', deptSource: 'historical',
-    status: 'decomposed', sourceFile: '营商环境行动计划',
+    objective: '1.制定数字经济标杆城市建设年度工作要点\n2.推进重点产业集聚区基础设施建设和项目落地\n3.推动高级别自动驾驶示范区扩区运行',
+    systemDept: '社会处',
+    actualDept: '高技术处',
+    deptSource: 'historical',
+    status: 'decomposed',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 5, task: '深化营商环境改革，落实新一轮改革任务',
+    id: 5,
+    task: '深化营商环境改革，落实新一轮改革任务',
     source: '市政府工作报告重点任务清单第25项',
-    objective: '1.制定营商环境6.0版改革实施方案\n2.推进审批制度改革，提升政务服务效能',
-    systemDept: '营商改革处', actualDept: '营商改革处', deptSource: 'system',
-    status: 'decomposed', sourceFile: '营商环境行动计划',
+    objective: '1.制定营商环境6.0版改革实施方案\n2.推进审批制度改革，提升政务服务效能\n3.推动"一业一证"改革扩面',
+    systemDept: '营商政策处',
+    actualDept: '营商政策处、营商协调处',
+    deptSource: 'historical',
+    status: 'cross_dept',
+    sourceFile: '营商环境行动计划',
   },
   {
-    id: 6, task: '推进碳达峰碳中和，完善双碳"1+N"政策体系',
+    id: 6,
+    task: '推进碳达峰碳中和，完善双碳"1+N"政策体系',
     source: '市政府工作报告重点任务清单第31项',
-    objective: '1.出台碳达峰实施方案配套文件\n2.推进重点领域节能降碳改造',
-    systemDept: '资环处', actualDept: '资环处', deptSource: 'historical',
-    status: 'decomposed', sourceFile: '政府工作报告',
+    objective: '1.出台碳达峰实施方案配套文件\n2.推进重点领域节能降碳改造\n3.完善能源消费总量和强度双控制度',
+    systemDept: '资环处',
+    actualDept: '资环处、能源处',
+    deptSource: 'historical',
+    status: 'cross_dept',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 7, task: '加强重要民生商品保供稳价，做好价格监测预警',
+    id: 7,
+    task: '加强重要民生商品保供稳价，做好价格监测预警',
     source: '市政府工作报告重点任务清单第42项',
-    objective: '1.完善价格监测预警体系\n2.落实社会救助和保障标准与物价上涨挂钩联动机制',
-    systemDept: '价格处', actualDept: '价格处', deptSource: 'system',
-    status: 'pending_confirm', sourceFile: '民生实事任务',
+    objective: '1.完善价格监测预警体系\n2.落实社会救助和保障标准与物价上涨挂钩联动机制\n3.做好重要民生商品保供稳价',
+    systemDept: '价格处',
+    actualDept: '价格处、价综处',
+    deptSource: 'historical',
+    status: 'decomposed',
+    sourceFile: '民生实事任务文件',
   },
   {
-    id: 8, task: '推动京津冀协同发展，支持雄安新区建设',
+    id: 8,
+    task: '推动京津冀协同发展，支持雄安新区建设',
     source: '市政府工作报告重点任务清单第3项',
-    objective: '1.制定年度京津冀协同发展工作要点\n2.推进雄安新区"三校一院"交钥匙项目后续工作',
-    systemDept: '协同政策处', actualDept: '协同政策处', deptSource: 'system',
-    status: 'similar', duplicateInfo: '与已有任务"T-001 编制京津冀协同发展年度工作要点"相似',
-    sourceFile: '政府工作报告',
+    objective: '1.制定年度京津冀协同发展工作要点\n2.推进雄安新区"三校一院"交钥匙项目后续工作\n3.推动通州区与北三县一体化发展',
+    systemDept: '市京津冀协同办',
+    actualDept: '市京津冀协同办',
+    deptSource: 'system',
+    status: 'duplicate',
+    duplicateInfo: '与第1项任务"编制京津冀国土空间规划"存在职责交叉',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 9, task: '加快国际科技创新中心建设，推动中关村先行先试改革',
+    id: 9,
+    task: '加快国际科技创新中心建设，推动中关村先行先试改革',
     source: '市政府工作报告重点任务清单第15项',
-    objective: '1.推动中关村24条先行先试改革措施落地\n2.支持新型研发机构建设',
-    systemDept: '高技术处', actualDept: '高技术处/科创中心', deptSource: 'historical',
-    status: 'duplicate', duplicateInfo: '与已有任务"T-013 推动中关村先行先试改革落地"重复',
-    sourceFile: '政府工作报告',
+    objective: '1.推动中关村24条先行先试改革措施落地\n2.支持新型研发机构开展有组织科研\n3.推进"三城一区"建设',
+    systemDept: '高技术处',
+    actualDept: '高技术处',
+    deptSource: 'system',
+    status: 'decomposed',
+    sourceFile: '政府工作报告重点任务清单',
   },
   {
-    id: 10, task: '推进城市更新行动，加快老旧小区改造',
+    id: 10,
+    task: '推进城市更新行动，加快老旧小区改造',
     source: '市政府工作报告重点任务清单第50项',
-    objective: '1.制定城市更新年度计划\n2.推进老旧小区改造新开工项目',
-    systemDept: '投资处', actualDept: '投资处', deptSource: 'system',
-    status: 'similar', duplicateInfo: '与已有任务"T-014 城市更新年度计划制定"相似',
-    sourceFile: '民生实事任务',
+    objective: '1.制定城市更新年度计划\n2.推进老旧小区改造新开工项目\n3.启动危旧楼房改建和简易楼腾退',
+    systemDept: '投资处',
+    actualDept: '投资处',
+    deptSource: 'system',
+    status: 'similar',
+    duplicateInfo: '与第3项任务"中央标志性项目落地"存在执行层面关联',
+    sourceFile: '民生实事任务文件',
   },
 ]
 
@@ -133,9 +167,9 @@ const statusMap: Record<string, { color: string; label: string }> = {
 }
 
 const baseKnowledgeList = [
-  { key: 'evaluation', title: '市发展改革委2025年度综合考评实施方案', desc: '包含考评对象、指标、方式' },
-  { key: 'departments', title: '全委各处室职责目录', desc: '各处室名称及职责描述' },
-  { key: 'history', title: '往年任务分配记录', desc: '用于查重和优先级判断' },
+  { key: 'evaluation', title: '市发展改革委2025年度综合考评实施方案', desc: '48个处室单位，3类考评' },
+  { key: 'departments', title: '全委各处室职责目录', desc: '29个业务管理类+9个公共服务类+10个直属单位' },
+  { key: 'history', title: '往年任务分配记录', desc: '2024年度任务处室分配记录' },
 ]
 
 interface TaskFile {
@@ -151,15 +185,15 @@ const availableFiles: TaskFile[] = [
   { key: 'culture', title: '全国文化中心建设工作要点及分工', count: 28 },
 ]
 
-const aiSuggestedGoals = [
-  { id: 1, goal: '数字经济发展监测体系建设', dept: '高技术处', reason: '数字经济标杆城市需配套监测机制' },
-  { id: 2, goal: '营商环境数字化评估平台搭建', dept: '营商改革处', reason: '6.0版改革需量化评估支撑' },
-  { id: 3, goal: '京津冀产业协同发展跟踪评估', dept: '协同政策处', reason: '协同发展需建立跟踪评估闭环' },
+const aiGeneratedGoals = [
+  { id: 'AI-001', name: '编制"十五五"规划前期研究方案', department: '规划处', reason: '考评方案明确"十五五"规划为重点任务，当前未分解' },
+  { id: 'AI-002', name: '建立招商引资统筹协调机制', department: '产业处', reason: '考评方案要求招商引资指标，当前未覆盖' },
+  { id: 'AI-003', name: '推进市委巡视整改落实', department: '办公室', reason: '考评方案将巡视整改纳入重点任务，当前未分解' },
 ]
 
 const deptTaskMap: Record<string, { dept: string; tasks: DecomposedTask[] }> = {}
 decomposedTasks.forEach(t => {
-  const depts = t.actualDept.split('/')
+  const depts = t.actualDept.split(/[\/、]/)
   depts.forEach(d => {
     const trimmed = d.trim()
     if (!deptTaskMap[trimmed]) {
@@ -170,14 +204,14 @@ decomposedTasks.forEach(t => {
 })
 
 const mockReplies: Record<string, string> = {
-  分解: '任务分解已基于市政府工作报告重点任务清单、发改委综合考评实施方案、各处室职责目录及往年任务分配记录四份材料完成。共生成10条分解结果，涉及8个处室。查重发现2条完全重复、3条相似任务。系统建议处室与往年分配有1处不一致（第4条：系统建议社会处，往年分配审批处），已采用往年优先原则。',
-  查重: '查重结果：与已有任务完全重复2条（#1京津冀国土空间规划、#9中关村先行先试改革），相似3条（#3中央标志性项目、#8京津冀协同发展、#10城市更新行动），全新5条。建议对重复任务进行合并处理，相似任务需确认是否需要独立保留。',
-  跨处室: '当前有2条跨处室协作任务：\n1. 开放处/空铁处——积极融入"一带一路"（第9项），涉及国际经贸和航空两个领域；\n2. 高技术处/科创中心——国际科技创新中心建设（第15项），涉及产业和科研两个方向。\n建议召开跨处室协调会明确主次责任。',
-  待确认: '当前有1条待确认任务：\n1. 价格处——民生商品保供稳价（第42项），需确认与市场监管部门的协作边界。\n建议尽快与相关处室沟通确认。',
-  处室: '本次分解涉及8个处室：协同政策处（2项）、开放处/空铁处（1项）、协同疏解处（1项）、审批处（1项）、营商改革处（1项）、资环处（1项）、价格处（1项）、高技术处/科创中心（1项）、投资处（1项）。其中1处采用了往年优先分配原则。',
-  考评: '根据发改委综合考评实施方案，分解结果已与考评指标对齐。总量校验显示10/12项已覆盖，尚有2项未分解。3项目标缺少量化指标，建议补充。4个处室（法规处、人事处、机关党委、离退休处）暂无任务分配。',
-  优先级: '往年优先原则已应用于1条任务：\n第4条"数字经济标杆城市建设"——系统建议社会处，但往年分配为审批处，已采用往年分配。该原则确保处室职责的连续性和稳定性，避免频繁调整带来的执行风险。',
-  目标审核: '目标审核结果：\n✅ 总量校验：10/12项已覆盖，2项待补充\n✅ 往年对比：新增3项、延续7项、调整2项\n⚠️ 处室覆盖：8/12个处室已分配，4个处室无任务\n⚠️ 可量化性：3项目标缺少量化指标\n建议点击"AI自主制定目标"补充缺失项。',
+  分解: '任务分解已基于市政府工作报告重点任务清单、发改委综合考评实施方案、各处室职责目录及往年任务分配记录四份材料完成。共生成10条分解结果，涉及8个处室。查重发现1条重复、1条相似任务。系统建议处室与往年分配有1处不一致（第4条：系统建议社会处，往年分配高技术处），已采用往年优先原则。',
+  查重: '查重结果：与已有任务完全重复1条（#8推动京津冀协同发展，与"编制京津冀国土空间规划"职责交叉），相似1条（#10城市更新行动，与"中央标志性项目落地"执行关联），全新8条。建议对重复任务进行合并处理，相似任务需确认是否需要独立保留。',
+  跨处室: '当前有3条跨处室协作任务：\n1. 开放处、空铁处——积极融入"一带一路"（第9项），涉及国际经贸和航空两个领域；\n2. 营商政策处、营商协调处——深化营商环境改革（第25项），涉及政策制定和协调推进；\n3. 资环处、能源处——推进碳达峰碳中和（第31项），涉及资源节约和能源管理。\n建议召开跨处室协调会明确主次责任。',
+  待确认: '当前有1条待确认任务：\n1. 市疏整促专项办——中央标志性项目落地（第13项），需确认与相关部门的协作边界。\n建议尽快与相关处室沟通确认。',
+  处室: '本次分解涉及8个处室/专项办：市京津冀协同办（2项）、开放处/空铁处（1项）、市疏整促专项办（1项）、高技术处（1项）、营商政策处/营商协调处（1项）、资环处/能源处（1项）、价格处/价综处（1项）、投资处（1项）。其中1处采用了往年优先分配原则（第4条：系统建议社会处，往年分配高技术处）。',
+  考评: '根据发改委综合考评实施方案，分解结果已与考评指标对齐。总量校验显示10/26项重点任务已覆盖（38%），尚有16项未分解。3项目标缺少量化指标（第3、8、10项），建议补充。处室覆盖8/29个业务管理类处室。',
+  优先级: '往年优先原则已应用于1条任务：\n第4条"数字经济标杆城市建设"——系统建议社会处，但往年分配为高技术处，已采用往年分配。该原则确保处室职责的连续性和稳定性，避免频繁调整带来的执行风险。',
+  目标审核: '目标审核结果：\n✅ 总量校验：分解任务10项，覆盖考评方案26项重点任务中的10项（38%）\n✅ 往年对比：与2024年相比，新增3项、延续5项、调整2项\n✅ 处室覆盖：涉及8/29个业务管理类处室\n⚠️ 可量化性：3项目标缺少明确量化指标（第3、8、10项）\n建议点击"AI自主制定目标"补充缺失项。',
 }
 
 function getMockReply(input: string): string {
@@ -206,7 +240,7 @@ export default function TaskDecompose() {
   const [taskBookVisible, setTaskBookVisible] = useState(false)
   const [taskBookType, setTaskBookType] = useState<'full' | 'dept'>('full')
   const [aiGoalsVisible, setAiGoalsVisible] = useState(false)
-  const [adoptedGoals, setAdoptedGoals] = useState<number[]>([])
+  const [adoptedGoals, setAdoptedGoals] = useState<string[]>([])
   const chatListRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -262,12 +296,12 @@ export default function TaskDecompose() {
     setTaskBookVisible(true)
   }
 
-  const handleAdoptGoal = (id: number) => {
+  const handleAdoptGoal = (id: string) => {
     setAdoptedGoals(prev => [...prev, id])
     message.success('已采纳该目标')
   }
 
-  const handleIgnoreGoal = (id: number) => {
+  const handleIgnoreGoal = (id: string) => {
     setAdoptedGoals(prev => prev.filter(g => g !== id))
   }
 
@@ -285,7 +319,7 @@ export default function TaskDecompose() {
   const pendingCount = decomposedTasks.filter(t => t.status === 'pending_confirm').length
   const duplicateCount = decomposedTasks.filter(t => t.status === 'duplicate').length
   const similarCount = decomposedTasks.filter(t => t.status === 'similar').length
-  const deptSet = new Set(decomposedTasks.flatMap(t => t.actualDept.split('/').map(d => d.trim())))
+  const deptSet = new Set(decomposedTasks.flatMap(t => t.actualDept.split(/[\/、]/).map(d => d.trim())))
 
   const columns = [
     { title: '序号', dataIndex: 'id', key: 'id', width: 50, align: 'center' as const },
@@ -583,7 +617,7 @@ export default function TaskDecompose() {
                     <span style={{ fontSize: 12, color: '#595959' }}>总量校验：分解任务总数 vs 考评方案要求</span>
                   </div>
                   <div style={{ fontSize: 13, fontWeight: 500, color: '#1a365d', paddingLeft: 22 }}>
-                    10/12项已覆盖
+                    分解任务10项，覆盖考评方案26项重点任务中的10项（38%）
                   </div>
                 </Col>
                 <Col span={12}>
@@ -592,18 +626,18 @@ export default function TaskDecompose() {
                     <span style={{ fontSize: 12, color: '#595959' }}>往年对比</span>
                   </div>
                   <div style={{ fontSize: 13, fontWeight: 500, color: '#1a365d', paddingLeft: 22 }}>
-                    新增3项、延续7项、调整2项
+                    与2024年相比，新增3项、延续5项、调整2项
                   </div>
                 </Col>
               </Row>
               <Row gutter={16} style={{ marginTop: 8 }}>
                 <Col span={12}>
                   <div className="flex items-center gap-2" style={{ marginBottom: 6 }}>
-                    <AlertTriangle size={14} color="#faad14" />
+                    <CheckCircle size={14} color="#52c41a" />
                     <span style={{ fontSize: 12, color: '#595959' }}>处室覆盖</span>
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 500, color: '#faad14', paddingLeft: 22 }}>
-                    8/12个处室已分配任务，4个处室无任务
+                  <div style={{ fontSize: 13, fontWeight: 500, color: '#1a365d', paddingLeft: 22 }}>
+                    涉及8/29个业务管理类处室
                   </div>
                 </Col>
                 <Col span={12}>
@@ -612,7 +646,7 @@ export default function TaskDecompose() {
                     <span style={{ fontSize: 12, color: '#595959' }}>目标可量化性</span>
                   </div>
                   <div style={{ fontSize: 13, fontWeight: 500, color: '#faad14', paddingLeft: 22 }}>
-                    3项目标缺少量化指标
+                    3项目标缺少明确量化指标（第3、8、10项）
                   </div>
                 </Col>
               </Row>
@@ -641,7 +675,7 @@ export default function TaskDecompose() {
               </div>
               {aiGoalsVisible && (
                 <div style={{ marginTop: 10 }}>
-                  {aiSuggestedGoals.map(g => (
+                  {aiGeneratedGoals.map(g => (
                     <div
                       key={g.id}
                       className="flex items-center justify-between"
@@ -653,8 +687,8 @@ export default function TaskDecompose() {
                     >
                       <div>
                         <div style={{ fontSize: 13, fontWeight: 500, color: '#1a365d' }}>
-                          建议新增：{g.goal}
-                          <Tag color="purple" style={{ marginLeft: 6, fontSize: 11 }}>{g.dept}</Tag>
+                          建议新增：{g.name}
+                          <Tag color="purple" style={{ marginLeft: 6, fontSize: 11 }}>{g.department}</Tag>
                         </div>
                         <div style={{ fontSize: 11, color: '#8c8c8c', marginTop: 2 }}>{g.reason}</div>
                       </div>
